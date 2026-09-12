@@ -42,3 +42,21 @@ body {
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
+
+/* ══════════════════════════════════════════════════════════════
+   IMPRESSION · utilisee par GabaritDocument (bulletins, recus,
+   certificats, listes). Tout ce qui n'est pas le document disparait.
+   ══════════════════════════════════════════════════════════════ */
+@media print {
+  body {
+    background: #fff;
+  }
+  aside,
+  header {
+    display: none !important;
+  }
+  main {
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+}

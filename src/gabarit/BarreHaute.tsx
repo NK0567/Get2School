@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { LogOut, RotateCcw } from 'lucide-react'
+import { Link } from 'react-router'
 import { api } from '../socle/api/client'
 import { reinitialiserBase } from '../socle/simulation/base'
 import { useContexteScolaire } from '../socle/etat/useContexteScolaire'
@@ -7,6 +8,7 @@ import { useSession } from '../socle/etat/useSession'
 import { LIBELLE_ROLE, ROLES } from '../socle/modeles/communs'
 import type { Role } from '../socle/modeles/communs'
 import type { AnneeScolaire } from '../socle/modeles/administration'
+import { initiales } from '../communs'
 
 export function BarreHaute() {
   const { utilisateur, roleActif, changerRole, deconnecter } = useSession()
@@ -25,6 +27,7 @@ export function BarreHaute() {
         value={anneeId ?? ''}
         onChange={(e) => definirAnnee(e.target.value)}
         className="border-line bg-surface text-ink h-9 rounded-lg border px-2.5 text-[13px]"
+        title="Annee scolaire"
       >
         {annees?.map((a) => (
           <option key={a.id} value={a.id}>
@@ -37,6 +40,7 @@ export function BarreHaute() {
         value={periodeId ?? ''}
         onChange={(e) => definirPeriode(e.target.value)}
         className="border-line bg-surface text-ink h-9 rounded-lg border px-2.5 text-[13px]"
+        title="Periode"
       >
         <option value="">Toutes les periodes</option>
         {anneeCourante?.periods.map((p) => (
@@ -47,7 +51,7 @@ export function BarreHaute() {
       </select>
 
       <div className="ml-auto flex items-center gap-3">
-        {/* Selecteur de role : outil de demonstration, retire en production. */}
+        {/* Outil de demonstration : retire en production. */}
         <select
           value={roleActif ?? ''}
           onChange={(e) => changerRole(e.target.value as Role)}
@@ -69,12 +73,20 @@ export function BarreHaute() {
           <RotateCcw className="h-4 w-4" />
         </button>
 
-        <div className="text-right text-[13px] leading-tight">
-          <div className="text-ink font-medium">
-            {utilisateur?.firstName} {utilisateur?.lastName}
+        <Link
+          to="/profil"
+          className="hover:bg-canvas flex items-center gap-2.5 rounded-lg px-1.5 py-1 transition"
+        >
+          <div className="bg-primary-50 text-primary flex h-8 w-8 items-center justify-center rounded-full text-[11px] font-semibold">
+            {initiales(utilisateur?.firstName, utilisateur?.lastName)}
           </div>
-          <div className="text-muted text-xs">{roleActif && LIBELLE_ROLE[roleActif]}</div>
-        </div>
+          <div className="text-right text-[13px] leading-tight max-md:hidden">
+            <div className="text-ink font-medium">
+              {utilisateur?.firstName} {utilisateur?.lastName}
+            </div>
+            <div className="text-muted text-xs">{roleActif && LIBELLE_ROLE[roleActif]}</div>
+          </div>
+        </Link>
 
         <button
           onClick={deconnecter}

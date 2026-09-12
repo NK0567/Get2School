@@ -49,7 +49,13 @@ Le sélecteur de rôle en haut à droite permet de basculer sans se reconnecter,
 |---|---|---|
 | `src/socle/api/`, `src/socle/etat/`, `src/socle/gardes/`, `src/socle/services/` | Boris | lecture seule |
 | `src/socle/simulation/base.ts`, `index.ts` | Boris | lecture seule |
-| `src/ui/`, `src/gabarit/` (hors `menu/`) | Boris | lecture seule |
+| `src/ui/`, `src/communs/`, `src/gabarit/` (hors `menu/`) | Boris | lecture seule |
+| `src/modules/erreurs/`, `src/modules/profil/` | Boris | lecture seule |
+| `src/modules/tableaux-de-bord/pages/`, `registre.ts` | Boris | lecture seule |
+| `src/modules/tableaux-de-bord/administration.tsx` | Boris | lecture seule |
+| `src/modules/tableaux-de-bord/scolarite.tsx` | Alida | lecture seule |
+| `src/modules/tableaux-de-bord/academique.tsx` | Fabrice | lecture seule |
+| `src/routes/routes-communes.tsx` | Boris | lecture seule |
 | `src/routes/index.tsx`, `src/App.tsx`, `src/main.tsx`, `src/index.css` | Boris | lecture seule |
 | `package.json`, `vite.config.ts`, `tsconfig*.json`, `eslint.config.js` | Boris | lecture seule |
 | `src/socle/modeles/administration.ts` | Boris | lecture seule |
@@ -74,6 +80,7 @@ Les conflits ne viennent jamais des écrans, ils viennent des fichiers que tout 
 | Besoin commun | Découpage |
 |---|---|
 | Déclarer une route | `src/routes/routes-<lot>.tsx`, assemblés par `routes/index.tsx` |
+| Ajouter un bloc au tableau de bord | `src/modules/tableaux-de-bord/<lot>.tsx`, associés par `registre.ts` |
 | Ajouter une entrée de menu | `src/gabarit/menu/menu-<lot>.ts`, assemblés par `menu/index.ts` |
 | Déclarer un type métier | `src/socle/modeles/<domaine>.ts` |
 | Ajouter des données de démonstration | `src/socle/simulation/donnees-<lot>.ts` |
@@ -122,10 +129,42 @@ Un push par jour travaillé au minimum. Une branche qui vit plus de quatre jours
 
 ## 6. Comment on écrit un écran
 
-L'écran de référence est **`src/modules/utilisateurs/pages/ListeUtilisateurs.tsx`**. Copiez-le, ne réinventez rien. Il montre déjà :
+L'écran de référence est **`src/modules/utilisateurs/pages/ListeUtilisateurs.tsx`**. Copiez-le, ne réinventez rien. Il fait 120 lignes parce que le gabarit commun s'occupe du reste.
+
+### La base commune, à utiliser systématiquement
+
+Tout est exporté depuis `src/communs` :
+
+```ts
+import { GabaritListe, GabaritFiche, GabaritDocument } from '@/communs'
+import { ChampRecherche, Pagination, BadgeStatut, LigneInfo, GrilleInfos } from '@/communs'
+import { SelecteurClasse, SelecteurMatiere, SelecteurEnseignant, SelecteurPeriode } from '@/communs'
+import { useDebounce, usePagination } from '@/communs'
+import { formaterDate, formaterMontant, formaterMoyenne, formaterRang, formaterNomComplet } from '@/communs'
+import { texteRequis, emailValide, telephoneValide, montantValide, motifRequis, noteValide } from '@/communs'
+```
+
+| Brique | Ce qu'elle vous évite |
+|---|---|
+| `GabaritListe` | Réécrire les quatre états, l'ordre des blocs et la pagination sur chaque liste |
+| `GabaritFiche` | Réécrire les onglets. C'est ce qui permet à la fiche élève d'être alimentée par les trois lots |
+| `GabaritDocument` | Réécrire l'en-tête institutionnel, le QR code, la référence et le format A4 |
+| `BadgeStatut` | Choisir une couleur vous-même. La table statut → couleur est imposée par la charte |
+| `SelecteurClasse` et les autres | Recoder un menu de classes qui ne filtrerait pas sur l'année courante |
+| `formaterMontant`, `formaterMoyenne` | Trois façons différentes d'afficher `14,25` et `125 000 FCFA` |
+| `useDebounce` | Un appel API à chaque frappe dans un champ de recherche |
+| `useTri`, `useConfirmation` | Recréer les mêmes couples d'états sur chaque écran |
+| `MenuActions` | La colonne d'actions à trois points, imposée par la charte |
+| `GraphiqueLignes`, `GraphiqueBarres` | Configurer Recharts et retrouver les couleurs de la charte |
+| `exporterCsv` | Un export illisible dans Excel français (séparateur et accents) |
+| `Alerte` | Un bandeau maison. À réserver aux messages qui dépendent des données affichées |
+
+**Si une brique vous manque, demandez-la à Boris. Ne la créez pas dans votre module.** Une fonction utile écrite dans `modules/eleves/` sera recopiée par les deux autres, et vous aurez trois versions divergentes.
+
+Il montre déjà :
 
 - les quatre états exigés (chargement, données, liste vide, erreur) ;
-- les filtres et la pagination ;
+- les filtres avec recherche retardée ;
 - le contrôle de rôle ;
 - la modale de création avec validation Zod et messages en français ;
 - le toast de confirmation ;

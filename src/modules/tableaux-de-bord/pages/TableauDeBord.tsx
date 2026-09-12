@@ -1,18 +1,20 @@
+/**
+ * Tableau de bord · PROPRIETAIRE : Boris · FIGE
+ *
+ * La rangee de statistiques est commune a tous les roles. Le bloc du dessous
+ * depend du role et vit dans le fichier du lot concerne (voir registre.ts).
+ */
 import { useQuery } from '@tanstack/react-query'
 import { GraduationCap, School, UserCog, Users } from 'lucide-react'
 import { api } from '../../../socle/api/client'
-import { CarteStat, EnteteDePage } from '../../../ui'
 import { useSession } from '../../../socle/etat/useSession'
 import { LIBELLE_ROLE } from '../../../socle/modeles/communs'
-import type { Classe, Eleve, Enseignant } from '../../../socle/modeles/scolarite'
 import type { Page } from '../../../socle/modeles/communs'
 import type { Utilisateur } from '../../../socle/modeles/administration'
+import type { Classe, Eleve, Enseignant } from '../../../socle/modeles/scolarite'
+import { CarteStat, EnteteDePage } from '../../../ui'
+import { BLOC_PAR_ROLE } from '../registre'
 
-/**
- * Tableau de bord commun. Chaque lot ajoute ici SON propre composant de
- * tableau de bord par role, dans son propre fichier, pour eviter les
- * conflits sur cette page.
- */
 export default function TableauDeBord() {
   const roleActif = useSession((e) => e.roleActif)
 
@@ -33,6 +35,8 @@ export default function TableauDeBord() {
     queryFn: async () => (await api.get<Page<Utilisateur>>('/users', { params: { taille: 1 } })).data,
   })
 
+  const Bloc = roleActif ? BLOC_PAR_ROLE[roleActif] : null
+
   return (
     <>
       <EnteteDePage titre="Tableau de bord" sousTitre={roleActif ? LIBELLE_ROLE[roleActif] : undefined} />
@@ -50,11 +54,13 @@ export default function TableauDeBord() {
           icone={<UserCog className="h-5 w-5" />}
         />
         <CarteStat
-          libelle="Comptes actifs"
+          libelle="Comptes"
           valeur={utilisateurs?.total ?? 0}
           icone={<Users className="h-5 w-5" />}
         />
       </div>
+
+      {Bloc && <Bloc />}
     </>
   )
 }

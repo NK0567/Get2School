@@ -23,7 +23,7 @@ export default defineConfig([
     // Ces fichiers exportent volontairement autre chose que des composants :
     // tables de routes, hook de toast. La regle de rafraichissement rapide
     // ne s'y applique pas.
-    files: ['src/routes/**/*.tsx', 'src/ui/Toast.tsx'],
+    files: ['src/routes/**/*.tsx', 'src/ui/Toast.tsx', 'src/communs/**/*.ts'],
     rules: { 'react-refresh/only-export-components': 'off' },
   },
 ])
