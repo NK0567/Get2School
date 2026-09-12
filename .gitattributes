@@ -1,0 +1,4 @@
+* text=auto eol=lf
+
+# Fichier genere : evite un conflit illisible a chaque npm install.
+package-lock.json -diff linguist-generated=true

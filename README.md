@@ -1,75 +1,114 @@
-# React + TypeScript + Vite
+# Get2School
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Plateforme SaaS de gestion, de communication et de pilotage des établissements scolaires.
+Maquette interactive, phase Conception et Maquettage.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Démarrer
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Puis `direction@lyceebafoussam.cm` avec n'importe quel mot de passe.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Commande | Effet |
+|---|---|
+| `npm run dev` | Serveur de développement |
+| `npm run build` | Build de production |
+| `npm run verifier` | TypeScript + ESLint + Prettier |
+| `npm run format` | Reformate le code |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+**Lisez `CONTRIBUTING.md` avant votre premier commit.** Il contient la table de propriété des fichiers et la règle du jeu à trois.
+
+---
+
+## Stack
+
+| Couche | Choix |
+|---|---|
+| Framework | React 19 + Vite + TypeScript |
+| Style | Tailwind CSS 4, charte dans `src/index.css` |
+| Routage | React Router |
+| État serveur | TanStack Query |
+| État global | Zustand |
+| Formulaires | React Hook Form + Zod |
+| Interface | Design system maison + Headless UI + lucide-react |
+| Backend cible | Spring Boot 3, PostgreSQL, JWT |
+
+---
+
+## Le backend n'existe pas encore, et ça ne se voit pas
+
+Les modules appellent une vraie instance axios sur `/api/v1/**`. Un adaptateur intercepte ces requêtes et répond depuis une base en mémoire persistée dans `localStorage`, avec 300 ms de latence pour que les états de chargement soient visibles.
 
 ```
+composant → hook React Query → api.ts du module → axios → simulation → localStorage
+```
+
+Le jour où Spring Boot est en ligne, on retire l'appel à `installerSimulation()` dans `src/main.tsx`. **Aucun composant, aucun hook, aucun fichier `api.ts` ne change.** C'est la raison pour laquelle personne ne doit lire la simulation depuis un écran.
+
+---
+
+## Architecture
+
+```
+src/
+├── socle/                  fondations · Boris
+│   ├── api/                instance axios unique
+│   ├── simulation/         base en mémoire + routes simulées par lot
+│   ├── modeles/            contrat de données, un fichier par domaine
+│   ├── etat/               session, année et période courantes
+│   ├── gardes/             authentification, rôles
+│   └── services/           journal d'audit, notifications
+├── ui/                     design system · Boris
+├── gabarit/                coquille, barres, menu découpé par lot
+├── routes/                 tables de routes découpées par lot
+└── modules/                un dossier par module métier
+        └── <module>/
+            ├── pages/       écrans routés
+            ├── composants/  composants du module
+            ├── hooks/       React Query
+            └── api.ts       appels HTTP
+```
+
+Le découpage par lot des fichiers autrement partagés (routes, menu, modèles, données, endpoints simulés) est ce qui rend les fusions indolores. Détail dans `CONTRIBUTING.md`, section 4.
+
+---
+
+## Répartition
+
+| Lot | Personne | Modules |
+|---|---|---|
+| A | Boris | authentification, utilisateurs, établissement, années scolaires, journal d'audit, recherche, annonces, notifications, modèles de documents, centre documentaire |
+| B | Alida | élèves, inscriptions, enseignants, classes, matières, salles, affectations, emploi du temps, frais, paiements, reçus, finances |
+| C | Fabrice | évaluations, planning, notes, calculs, bulletins, absences, discipline, analyses |
+
+---
+
+## État d'avancement
+
+**Livré**
+
+- Projet, dépendances, configuration TypeScript, ESLint, Prettier
+- Charte graphique en variables Tailwind
+- Design system : bouton, champ, sélecteur, badge, tableau, modale, dialogue de confirmation, toast, en-tête de page, état vide, squelette, carte statistique
+- Coquille applicative : barre latérale filtrée par rôle, sélecteur d'année et de période, sélecteur de rôle de démonstration, réinitialisation des données
+- Contrat de données complet des trois lots
+- Base simulée avec persistance et endpoints du lot A
+- Gardes d'authentification et de rôle
+- Service de journalisation d'audit
+- Connexion, tableau de bord
+- **Écran de référence** : `/utilisateurs`, patron à copier pour toutes les listes
+
+**À construire**
+
+Les routes des lots B et C affichent un écran « en construction ». Chacun remplace les siennes au fur et à mesure, dans son propre fichier de routes.
+
+---
+
+## Rappel de périmètre
+
+Hors périmètre de cette version : application mobile, chatbot, comptes parents, Data Warehouse, Power BI, génération automatique d'emploi du temps. Ces sujets restent dans le mémoire comme perspectives.

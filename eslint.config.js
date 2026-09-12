@@ -19,4 +19,11 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  {
+    // Ces fichiers exportent volontairement autre chose que des composants :
+    // tables de routes, hook de toast. La regle de rafraichissement rapide
+    // ne s'y applique pas.
+    files: ['src/routes/**/*.tsx', 'src/ui/Toast.tsx'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
 ])

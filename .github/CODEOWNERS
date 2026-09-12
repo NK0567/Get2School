@@ -1,0 +1,71 @@
+# Proprietaires du code Get2School
+# GitHub demande automatiquement la relecture du proprietaire d'un fichier
+# des qu'une PR le modifie. Remplacez les identifiants par les vrais comptes.
+
+# Boris (@boris) · integrateur : socle, design system, gabarit, configuration
+/src/socle/                         @boris
+/src/ui/                            @boris
+/src/gabarit/                       @boris
+/src/routes/index.tsx               @boris
+/src/App.tsx                        @boris
+/src/main.tsx                       @boris
+/src/index.css                      @boris
+/package.json                       @boris
+/package-lock.json                  @boris
+/vite.config.ts                     @boris
+/tsconfig*.json                     @boris
+/eslint.config.js                   @boris
+
+# Fichiers partages, decoupes par lot
+/src/socle/modeles/administration.ts          @boris
+/src/socle/modeles/scolarite.ts               @alida
+/src/socle/modeles/finances.ts                @alida
+/src/socle/modeles/academique.ts              @fabrice
+/src/socle/simulation/donnees-administration.ts @boris
+/src/socle/simulation/donnees-scolarite.ts    @alida
+/src/socle/simulation/donnees-academique.ts   @fabrice
+/src/socle/simulation/routes-administration.ts  @boris
+/src/socle/simulation/routes-scolarite.ts     @alida
+/src/socle/simulation/routes-academique.ts    @fabrice
+/src/routes/routes-administration.tsx         @boris
+/src/routes/routes-scolarite.tsx              @alida
+/src/routes/routes-academique.tsx             @fabrice
+/src/gabarit/menu/menu-administration.ts      @boris
+/src/gabarit/menu/menu-scolarite.ts           @alida
+/src/gabarit/menu/menu-academique.ts          @fabrice
+
+# Modules · lot A (Boris)
+/src/modules/authentification/      @boris
+/src/modules/utilisateurs/          @boris
+/src/modules/etablissement/         @boris
+/src/modules/annees-scolaires/      @boris
+/src/modules/journal-audit/         @boris
+/src/modules/recherche/             @boris
+/src/modules/annonces/              @boris
+/src/modules/notifications/         @boris
+/src/modules/modeles-documents/     @boris
+/src/modules/documents/             @boris
+
+# Modules · lot B (Alida)
+/src/modules/eleves/                @alida
+/src/modules/inscriptions/          @alida
+/src/modules/enseignants/           @alida
+/src/modules/classes/               @alida
+/src/modules/matieres/              @alida
+/src/modules/salles/                @alida
+/src/modules/affectations/          @alida
+/src/modules/emploi-du-temps/       @alida
+/src/modules/frais/                 @alida
+/src/modules/paiements/             @alida
+/src/modules/recus/                 @alida
+/src/modules/finances/              @alida
+
+# Modules · lot C (Fabrice)
+/src/modules/evaluations/           @fabrice
+/src/modules/planning/              @fabrice
+/src/modules/notes/                 @fabrice
+/src/modules/calculs/               @fabrice
+/src/modules/bulletins/             @fabrice
+/src/modules/absences/              @fabrice
+/src/modules/discipline/            @fabrice
+/src/modules/analyses/              @fabrice
