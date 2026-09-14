@@ -108,6 +108,8 @@ Le découpage par lot des fichiers autrement partagés (routes, menu, modèles, 
 - Authentification : connexion, mot de passe oublié, réinitialisation, politique de mot de passe, sessions ouvertes, expiration d'inactivité
 - Centre documentaire : catalogue de 11 types, génération unitaire et en lot, annulation avec motif, modèles documentaires, aperçu imprimable
 - Vérification publique : `/v/:reference`, sans authentification, cible des QR codes imprimés
+- Annonces : rédaction, ciblage avec comptage des destinataires, diffusion, retrait avec motif
+- Notifications : centre, compteur dans la barre haute, catalogue de types partagé entre les trois lots
 
 **À construire**
 

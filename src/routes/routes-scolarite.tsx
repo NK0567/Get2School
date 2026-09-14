@@ -4,7 +4,7 @@ import EnConstruction from '../modules/EnConstruction'
 
 export const routesScolarite: RouteObject[] = [
   { path: 'eleves', element: <EnConstruction titre="Eleves" /> },
-  { path: 'élèves/nouveau', element: <EnConstruction titre="Nouvel élève" /> },
+  { path: 'eleves/nouveau', element: <EnConstruction titre="Nouvel élève" /> },
   { path: 'eleves/:id', element: <EnConstruction titre="Fiche élève" /> },
   { path: 'inscriptions', element: <EnConstruction titre="Inscriptions" /> },
   { path: 'enseignants', element: <EnConstruction titre="Enseignants" /> },

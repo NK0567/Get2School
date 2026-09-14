@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
-    "verifier": "tsc -b && eslint . && prettier --check \"src/**/*.{ts,tsx}\""
+    "verifier": "tsc -b && eslint . && prettier --check \"src/**/*.{ts,tsx}\" && node outils/verifier-ecrans.mjs"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.10",

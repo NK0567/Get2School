@@ -9,6 +9,7 @@ import { LIBELLE_ROLE, ROLES } from '../socle/modeles/communs'
 import type { Role } from '../socle/modeles/communs'
 import type { AnneeScolaire } from '../socle/modeles/administration'
 import { initiales } from '../communs'
+import { ClocheNotifications } from '../modules/notifications/composants/ClocheNotifications'
 
 export function BarreHaute() {
   const { utilisateur, roleActif, changerRole, deconnecter } = useSession()
@@ -64,6 +65,8 @@ export function BarreHaute() {
             </option>
           ))}
         </select>
+
+        <ClocheNotifications />
 
         <button
           onClick={reinitialiserBase}

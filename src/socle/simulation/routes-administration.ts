@@ -13,6 +13,7 @@ import type {
   Notification,
   Utilisateur,
 } from '../modeles/administration'
+import type { Affectation, Classe, Enseignant } from '../modeles/scolarite'
 import { ajouter, collection, majParId, paginer, parametres, parId, remplacer } from './base'
 
 export function routesAdministration(s: MockAdapter) {
@@ -528,10 +529,215 @@ export function routesAdministration(s: MockAdapter) {
     ]
   })
 
-  s.onGet(/^\/announcements(\?.*)?$/).reply((config) => [
-    200,
-    paginer(collection<Annonce>('annonces'), parametres(config)),
-  ])
-
   s.onGet(/^\/notifications(\?.*)?$/).reply(() => [200, collection<Notification>('notifications')])
+
+  /* ── Annonces ─────────────────────────────────────────── */
+
+  /**
+   * Résolution de l'audience. Sans espace parent dans cette version, les
+   * destinataires sont des comptes du personnel : cibler une classe revient
+   * à cibler les enseignants qui y sont affectés.
+   */
+  const resoudreAudience = (audienceType: string, audienceRefs: string[]): Utilisateur[] => {
+    const utilisateurs = collection<Utilisateur>('utilisateurs').filter((u) => u.isActive)
+
+    if (audienceType === 'ALL_STAFF') return utilisateurs
+    if (audienceType === 'ALL_TEACHERS') return utilisateurs.filter((u) => u.role === 'TEACHER')
+
+    if (audienceType === 'CLASS' || audienceType === 'LEVEL') {
+      const classes = collection<Classe>('classes')
+      const classesCiblees =
+        audienceType === 'CLASS'
+          ? classes.filter((c) => audienceRefs.includes(c.id))
+          : classes.filter((c) => audienceRefs.includes(c.level))
+
+      const enseignantIds = new Set(
+        collection<Affectation>('affectations')
+          .filter((a) => classesCiblees.some((c) => c.id === a.classId))
+          .map((a) => a.teacherId),
+      )
+      const comptes = new Set(
+        collection<Enseignant>('enseignants')
+          .filter((e) => enseignantIds.has(e.id) && e.userId)
+          .map((e) => e.userId as string),
+      )
+      return utilisateurs.filter((u) => comptes.has(u.id))
+    }
+
+    return utilisateurs.filter((u) => audienceRefs.includes(u.id))
+  }
+
+  s.onPost('/announcements/audience').reply((config) => {
+    const { audienceType, audienceRefs } = JSON.parse(config.data ?? '{}')
+    const destinataires = resoudreAudience(audienceType, audienceRefs ?? [])
+    return [
+      200,
+      {
+        nombre: destinataires.length,
+        apercu: destinataires.slice(0, 3).map((u) => `${u.firstName} ${u.lastName}`),
+      },
+    ]
+  })
+
+  s.onGet(/^\/announcements(\?.*)?$/).reply((config) => {
+    const p = parametres(config)
+    const statut = p.get('statut')
+    let liste = [...collection<Annonce>('annonces')].sort((a, b) =>
+      (b.publishedAt ?? '').localeCompare(a.publishedAt ?? ''),
+    )
+    if (statut) liste = liste.filter((a) => a.status === statut)
+    return [200, paginer(liste, p)]
+  })
+
+  s.onGet(/^\/announcements\/[\w-]+$/).reply((config) => {
+    const id = (config.url ?? '').split('/').pop() as string
+    const annonce = parId<Annonce>('annonces', id)
+    return annonce ? [200, annonce] : [404, { message: 'Annonce introuvable.' }]
+  })
+
+  s.onPost('/announcements').reply((config) => {
+    const corps = JSON.parse(config.data ?? '{}')
+    if (String(corps.title ?? '').trim().length < 5) {
+      return [422, { message: 'Le titre est trop court.' }]
+    }
+    const annonce: Annonce = {
+      id: `ann-${nanoid(6)}`,
+      establishmentId: 'etb-1',
+      authorId: 'usr-1',
+      status: 'DRAFT',
+      ...corps,
+    }
+    ajouter('annonces', annonce)
+    return [201, annonce]
+  })
+
+  s.onPatch(/^\/announcements\/[\w-]+\/publish$/).reply((config) => {
+    const id = (config.url ?? '').split('/')[2]
+    const annonce = parId<Annonce>('annonces', id)
+    if (!annonce) return [404, { message: 'Annonce introuvable.' }]
+    if (annonce.status === 'PUBLISHED') {
+      return [409, { message: 'Cette annonce a déjà été diffusée.' }]
+    }
+
+    const destinataires = resoudreAudience(annonce.audienceType, annonce.audienceRefs)
+    if (destinataires.length === 0) {
+      return [422, { message: "Aucun destinataire : l'annonce ne serait lue par personne." }]
+    }
+
+    // La diffusion produit une notification par destinataire. Le corps de la
+    // notification reprend le titre, jamais le contenu intégral : le message
+    // se lit sur l'écran des annonces.
+    for (const destinataire of destinataires) {
+      ajouter<Notification>('notifications', {
+        id: `not-${nanoid(6)}`,
+        establishmentId: 'etb-1',
+        recipientUserId: destinataire.id,
+        type: 'ANNONCE_PUBLIEE',
+        title: annonce.title,
+        body:
+          annonce.priority === 'URGENT'
+            ? 'Annonce urgente de la direction. Consultez-la sans tarder.'
+            : 'Une nouvelle annonce a été diffusée.',
+        linkRoute: '/communication/annonces',
+        isRead: false,
+        createdAt: new Date().toISOString(),
+      })
+    }
+
+    return [
+      200,
+      majParId<Annonce>('annonces', id, {
+        status: 'PUBLISHED',
+        publishedAt: new Date().toISOString(),
+      }),
+    ]
+  })
+
+  s.onPatch(/^\/announcements\/[\w-]+\/withdraw$/).reply((config) => {
+    const id = (config.url ?? '').split('/')[2]
+    const { motif } = JSON.parse(config.data ?? '{}')
+    if (String(motif ?? '').trim().length < 5) {
+      return [422, { message: 'Le motif du retrait est obligatoire.' }]
+    }
+    const annonce = parId<Annonce>('annonces', id)
+    if (!annonce) return [404, { message: 'Annonce introuvable.' }]
+    if (annonce.status !== 'PUBLISHED') {
+      return [409, { message: 'Seule une annonce diffusée peut être retirée.' }]
+    }
+
+    // Les notifications non lues de cette annonce disparaissent ; celles déjà
+    // lues sont conservées, on ne réécrit pas l'historique d'un destinataire.
+    const restantes = collection<Notification>('notifications').filter(
+      (n) => !(n.type === 'ANNONCE_PUBLIEE' && n.title === annonce.title && !n.isRead),
+    )
+    remplacer('notifications', restantes)
+
+    return [200, majParId<Annonce>('annonces', id, { status: 'WITHDRAWN' as Annonce['status'] })]
+  })
+
+  /* ── Notifications ────────────────────────────────────── */
+
+  // Destinataire courant déduit du jeton. Côté Spring Boot, il vient du JWT
+  // et n'est jamais accepté en paramètre de requête.
+  const destinataireCourant = (config: { headers?: unknown }) => {
+    const entetes = (config.headers ?? {}) as Record<string, string>
+    const jeton = String(entetes.Authorization ?? '').replace('Bearer ', '')
+    return jeton.startsWith('demo.') ? jeton.slice(5) : 'usr-1'
+  }
+
+  s.onGet(/^\/notifications(\?.*)?$/).reply((config) => {
+    const p = parametres(config)
+    const lues = p.get('isRead')
+    const moi = destinataireCourant(config)
+
+    let liste = collection<Notification>('notifications')
+      .filter((n) => n.recipientUserId === moi)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+
+    if (lues !== null && lues !== '') liste = liste.filter((n) => String(n.isRead) === lues)
+    return [200, liste]
+  })
+
+  s.onGet('/notifications/unread-count').reply((config) => {
+    const moi = destinataireCourant(config)
+    const nombre = collection<Notification>('notifications').filter(
+      (n) => n.recipientUserId === moi && !n.isRead,
+    ).length
+    return [200, { nombre }]
+  })
+
+  s.onPost('/notifications').reply((config) => {
+    const demande = JSON.parse(config.data ?? '{}')
+    for (const destinataire of demande.destinataires ?? []) {
+      ajouter<Notification>('notifications', {
+        id: `not-${nanoid(6)}`,
+        establishmentId: 'etb-1',
+        recipientUserId: destinataire,
+        type: demande.type,
+        title: demande.titre,
+        body: demande.corps,
+        linkRoute: demande.lien,
+        isRead: false,
+        createdAt: new Date().toISOString(),
+      })
+    }
+    return [201]
+  })
+
+  s.onPatch('/notifications/read-all').reply((config) => {
+    const moi = destinataireCourant(config)
+    remplacer(
+      'notifications',
+      collection<Notification>('notifications').map((n) =>
+        n.recipientUserId === moi ? { ...n, isRead: true } : n,
+      ),
+    )
+    return [204]
+  })
+
+  s.onPatch(/^\/notifications\/[\w-]+\/read$/).reply((config) => {
+    const id = (config.url ?? '').split('/')[2]
+    const maj = majParId<Notification>('notifications', id, { isRead: true })
+    return maj ? [200, maj] : [404, { message: 'Notification introuvable.' }]
+  })
 }

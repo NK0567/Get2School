@@ -119,7 +119,11 @@ git pull --rebase origin develop
 npm run verifier
 ```
 
-`npm run verifier` lance TypeScript, ESLint et Prettier. Si ça ne passe pas chez toi, ça ne passera pas en relecture.
+`npm run verifier` lance TypeScript, ESLint, Prettier et le contrôle des écrans. Si ça ne passe pas chez toi, ça ne passera pas en relecture.
+
+Le contrôle des écrans (`outils/verifier-ecrans.mjs`) vérifie que chaque fichier de `pages/` est déclaré dans une table de routes, et que chaque entrée de menu pointe vers une route existante. Il existe parce qu'un module entier a été livré une fois sans être routé : le code compilait, le lint passait, et les écrans étaient inaccessibles. Un défaut invisible pour le compilateur doit être détecté par un contrôle explicite.
+
+**Les chemins d'URL ne portent jamais d'accents.** `analyses/evolution`, pas `analyses/évolution`. Ils doivent rester copiables, saisissables au clavier et stables dans un lien partagé. Les libellés affichés, eux, sont accentués normalement.
 
 Les PR vont vers `develop`, relues par au moins une autre personne. La description dit : ce qui est fait, les US couvertes, comment tester.
 

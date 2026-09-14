@@ -17,6 +17,7 @@ const ReinitialiserMotDePasse = lazy(
   () => import('../modules/authentification/pages/ReinitialiserMotDePasse'),
 )
 const PageErreurRoutage = lazy(() => import('../modules/erreurs/pages/PageErreurRoutage'))
+const VerificationDocument = lazy(() => import('../modules/documents/pages/VerificationDocument'))
 
 function Attente() {
   return <SqueletteTableau lignes={5} />
@@ -35,6 +36,15 @@ function envelopper(element: React.ReactNode) {
 }
 
 export const routeur = createBrowserRouter([
+  {
+    // Accessible sans authentification : c'est la cible des QR codes imprimés.
+    path: '/v/:reference',
+    element: (
+      <Suspense fallback={<Attente />}>
+        <VerificationDocument />
+      </Suspense>
+    ),
+  },
   {
     path: '/mot-de-passe-oublie',
     element: (

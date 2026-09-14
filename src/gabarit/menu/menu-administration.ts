@@ -56,7 +56,13 @@ export const menuAdministration: GroupeMenu[] = [
         libelle: 'Centre documentaire',
         chemin: '/documents',
         icone: FileText,
-        roles: ['SCHOOL_ADMIN', 'ADMIN', 'SECRETARY'],
+        roles: ['SCHOOL_ADMIN', 'ADMIN', 'SECRETARY', 'ACADEMIC_HEAD', 'ACCOUNTANT'],
+      },
+      {
+        libelle: 'Modèles documentaires',
+        chemin: '/documents/modeles',
+        icone: FileText,
+        roles: ['SCHOOL_ADMIN'],
       },
       {
         libelle: 'Annonces',

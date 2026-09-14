@@ -11,6 +11,13 @@ const ParametresEtablissement = lazy(() => import('../modules/etablissement/page
 const ListeAnneesScolaires = lazy(() => import('../modules/annees-scolaires/pages/ListeAnneesScolaires'))
 const PeriodesAnnee = lazy(() => import('../modules/annees-scolaires/pages/PeriodesAnnee'))
 const JournalAudit = lazy(() => import('../modules/journal-audit/pages/JournalAudit'))
+const CentreDocumentaire = lazy(() => import('../modules/documents/pages/CentreDocumentaire'))
+const GenerationLot = lazy(() => import('../modules/documents/pages/GenerationLot'))
+const ApercuDocument = lazy(() => import('../modules/documents/pages/ApercuDocument'))
+const ModelesDocuments = lazy(() => import('../modules/modeles-documents/pages/ModelesDocuments'))
+const ListeAnnonces = lazy(() => import('../modules/annonces/pages/ListeAnnonces'))
+const RedigerAnnonce = lazy(() => import('../modules/annonces/pages/RedigerAnnonce'))
+const CentreNotifications = lazy(() => import('../modules/notifications/pages/CentreNotifications'))
 const TableauDeBord = lazy(() => import('../modules/tableaux-de-bord/pages/TableauDeBord'))
 
 export const routesAdministration: RouteObject[] = [
@@ -25,7 +32,7 @@ export const routesAdministration: RouteObject[] = [
     ),
   },
   {
-    path: 'établissement/configuration',
+    path: 'etablissement/configuration',
     element: (
       <ExigeRole roles={['SCHOOL_ADMIN']}>
         <AssistantConfiguration />
@@ -33,7 +40,7 @@ export const routesAdministration: RouteObject[] = [
     ),
   },
   {
-    path: 'établissement/identité',
+    path: 'etablissement/identite',
     element: (
       <ExigeRole roles={['SCHOOL_ADMIN', 'ADMIN']}>
         <IdentiteEtablissement />
@@ -41,7 +48,7 @@ export const routesAdministration: RouteObject[] = [
     ),
   },
   {
-    path: 'établissement/paramètres',
+    path: 'etablissement/parametres',
     element: (
       <ExigeRole roles={['SCHOOL_ADMIN']}>
         <ParametresEtablissement />
@@ -57,7 +64,7 @@ export const routesAdministration: RouteObject[] = [
     ),
   },
   {
-    path: 'années-scolaires/:id/périodes',
+    path: 'annees-scolaires/:id/periodes',
     element: (
       <ExigeRole roles={['SCHOOL_ADMIN', 'ADMIN']}>
         <PeriodesAnnee />
@@ -73,7 +80,53 @@ export const routesAdministration: RouteObject[] = [
     ),
   },
   { path: 'recherche', element: <EnConstruction titre="Recherche globale" /> },
-  { path: 'documents', element: <EnConstruction titre="Centre documentaire" /> },
-  { path: 'communication/annonces', element: <EnConstruction titre="Annonces" /> },
-  { path: 'notifications', element: <EnConstruction titre="Notifications" /> },
+  {
+    path: 'documents',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN', 'ADMIN', 'SECRETARY', 'ACADEMIC_HEAD', 'ACCOUNTANT']}>
+        <CentreDocumentaire />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'documents/modeles',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN']}>
+        <ModelesDocuments />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'documents/generation-lot',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN', 'ADMIN', 'SECRETARY', 'ACADEMIC_HEAD']}>
+        <GenerationLot />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'documents/:id/apercu',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN', 'ADMIN', 'SECRETARY', 'ACADEMIC_HEAD', 'ACCOUNTANT']}>
+        <ApercuDocument />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'communication/annonces',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN', 'ADMIN']}>
+        <ListeAnnonces />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'communication/annonces/nouvelle',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN', 'ADMIN']}>
+        <RedigerAnnonce />
+      </ExigeRole>
+    ),
+  },
+  { path: 'notifications', element: <CentreNotifications /> },
 ]
