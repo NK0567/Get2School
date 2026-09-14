@@ -67,16 +67,16 @@ export function donneesAdministration() {
   ]
 
   const modelesDocuments: ModeleDocument[] = [
-    { id: 'tpl-1', establishmentId: ETB, type: 'BULLETIN', name: 'Bulletin standard', isActive: true },
-    { id: 'tpl-2', establishmentId: ETB, type: 'RECEIPT', name: 'Reçu de paiement', isActive: true },
-    {
-      id: 'tpl-3',
-      establishmentId: ETB,
-      type: 'CERTIFICATE',
-      name: 'Certificat de scolarité',
-      isActive: true,
-    },
-    { id: 'tpl-4', establishmentId: ETB, type: 'LIST', name: 'Liste officielle', isActive: true },
+    tpl('tpl-1', 'BULLETIN', 'Bulletin standard', true),
+    tpl('tpl-2', 'BULLETIN', 'Bulletin détaillé avec moyenne de classe', false),
+    tpl('tpl-3', 'CERTIFICAT_SCOLARITE', 'Certificat de scolarité', true),
+    tpl('tpl-4', 'CARTE_SCOLAIRE', 'Carte scolaire', true),
+    tpl('tpl-5', 'FICHE_ELEVE', 'Fiche individuelle', true),
+    tpl('tpl-6', 'LISTE_CLASSE', 'Liste de classe', true),
+    tpl('tpl-7', 'RELEVE_NOTES', 'Relevé de notes', true),
+    tpl('tpl-8', 'RECU_PAIEMENT', 'Reçu de paiement', true),
+    tpl('tpl-9', 'LISTE_SOLVABILITE', 'Liste de solvabilité', true),
+    tpl('tpl-10', 'ETAT_EFFECTIFS', 'État des effectifs', true),
   ]
 
   const journalAudit: EntreeAudit[] = [
@@ -163,4 +163,8 @@ function trimestres(anneeId: string, an: number, verrouilles: boolean) {
       isLocked: verrouilles,
     },
   ]
+}
+
+function tpl(id: string, type: string, name: string, isActive: boolean): ModeleDocument {
+  return { id, establishmentId: ETB, type, name, isActive }
 }

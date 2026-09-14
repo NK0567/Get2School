@@ -6,12 +6,14 @@ import { nanoid } from 'nanoid'
 import type {
   AnneeScolaire,
   Annonce,
+  DocumentGenere,
   EntreeAudit,
   Etablissement,
+  ModeleDocument,
   Notification,
   Utilisateur,
 } from '../modeles/administration'
-import { ajouter, collection, majParId, paginer, parametres, parId } from './base'
+import { ajouter, collection, majParId, paginer, parametres, parId, remplacer } from './base'
 
 export function routesAdministration(s: MockAdapter) {
   /* ── Authentification ─────────────────────────────────── */
@@ -115,7 +117,7 @@ export function routesAdministration(s: MockAdapter) {
     return [204]
   })
 
-  s.onGet(/\/auth\/password\/reset\/[\w-]+$/).reply((config) => {
+  s.onGet(/^\/auth\/password\/reset\/[\w-]+$/).reply((config) => {
     const jeton = (config.url ?? '').split('/').pop() as string
     const entree = jetons.get(jeton)
     if (!entree || entree.expire < Date.now()) return [200, { valide: false }]
@@ -167,7 +169,7 @@ export function routesAdministration(s: MockAdapter) {
     ],
   ])
 
-  s.onDelete(/\/auth\/sessions\/[\w-]+$/).reply(204)
+  s.onDelete(/^\/auth\/sessions\/[\w-]+$/).reply(204)
 
   /* ── Établissement ────────────────────────────────────── */
   s.onGet('/establishments/current').reply(() => [200, collection<Etablissement>('etablissements')[0]])
@@ -223,7 +225,7 @@ export function routesAdministration(s: MockAdapter) {
   })
 
   /* ── Utilisateurs ─────────────────────────────────────── */
-  s.onGet(/\/users(\?.*)?$/).reply((config) => {
+  s.onGet(/^\/users(\?.*)?$/).reply((config) => {
     const p = parametres(config)
     const recherche = (p.get('recherche') ?? '').toLowerCase()
     const role = p.get('role')
@@ -255,13 +257,13 @@ export function routesAdministration(s: MockAdapter) {
     return [201, utilisateur]
   })
 
-  s.onGet(/\/users\/[\w-]+$/).reply((config) => {
+  s.onGet(/^\/users\/[\w-]+$/).reply((config) => {
     const id = (config.url ?? '').split('/').pop() as string
     const u = parId<Utilisateur>('utilisateurs', id)
     return u ? [200, u] : [404, { message: 'Utilisateur introuvable.' }]
   })
 
-  s.onPatch(/\/users\/[\w-]+\/status$/).reply((config) => {
+  s.onPatch(/^\/users\/[\w-]+\/status$/).reply((config) => {
     const id = (config.url ?? '').split('/')[2]
     const { isActive } = JSON.parse(config.data)
     const maj = majParId<Utilisateur>('utilisateurs', id, { isActive })
@@ -271,7 +273,7 @@ export function routesAdministration(s: MockAdapter) {
   /* ── Années scolaires et périodes ─────────────────────── */
   s.onGet('/school-years').reply(() => [200, collection<AnneeScolaire>('anneesScolaires')])
 
-  s.onGet(/\/school-years\/[\w-]+$/).reply((config) => {
+  s.onGet(/^\/school-years\/[\w-]+$/).reply((config) => {
     const id = (config.url ?? '').split('/').pop() as string
     const annee = parId<AnneeScolaire>('anneesScolaires', id)
     return annee ? [200, annee] : [404, { message: 'Année scolaire introuvable.' }]
@@ -309,7 +311,7 @@ export function routesAdministration(s: MockAdapter) {
 
   // Une seule année ouverte à la fois : la règle est appliquee côté serveur,
   // pas seulement grisee dans l'interface.
-  s.onPatch(/\/school-years\/[\w-]+\/open$/).reply((config) => {
+  s.onPatch(/^\/school-years\/[\w-]+\/open$/).reply((config) => {
     const id = (config.url ?? '').split('/')[2]
     const annee = parId<AnneeScolaire>('anneesScolaires', id)
     if (!annee) return [404, { message: 'Année scolaire introuvable.' }]
@@ -324,7 +326,7 @@ export function routesAdministration(s: MockAdapter) {
   })
 
   // La clôture archive : elle verrouille toutes les périodes et ne supprimé rien.
-  s.onPatch(/\/school-years\/[\w-]+\/close$/).reply((config) => {
+  s.onPatch(/^\/school-years\/[\w-]+\/close$/).reply((config) => {
     const id = (config.url ?? '').split('/')[2]
     const annee = parId<AnneeScolaire>('anneesScolaires', id)
     if (!annee) return [404, { message: 'Année scolaire introuvable.' }]
@@ -339,7 +341,7 @@ export function routesAdministration(s: MockAdapter) {
     ]
   })
 
-  s.onPatch(/\/periods\/[\w-]+\/(lock|unlock)$/).reply((config) => {
+  s.onPatch(/^\/periods\/[\w-]+\/(lock|unlock)$/).reply((config) => {
     const morceaux = (config.url ?? '').split('/')
     const id = morceaux[2]
     const verrouiller = morceaux[3] === 'lock'
@@ -365,7 +367,7 @@ export function routesAdministration(s: MockAdapter) {
   })
 
   /* ── Journal d'audit ──────────────────────────────────── */
-  s.onGet(/\/audit-logs(\?.*)?$/).reply((config) => {
+  s.onGet(/^\/audit-logs(\?.*)?$/).reply((config) => {
     const p = parametres(config)
     const action = p.get('action')
     const userId = p.get('userId')
@@ -398,10 +400,138 @@ export function routesAdministration(s: MockAdapter) {
   })
 
   /* ── Annonces et notifications ────────────────────────── */
-  s.onGet(/\/announcements(\?.*)?$/).reply((config) => [
+  /* ── Centre documentaire ──────────────────────────────── */
+
+  s.onGet('/document-templates').reply(() => [200, collection<ModeleDocument>('modelesDocuments')])
+
+  s.onPatch(/^\/document-templates\/[\w-]+\/activate$/).reply((config) => {
+    const id = (config.url ?? '').split('/')[2]
+    const modele = parId<ModeleDocument>('modelesDocuments', id)
+    if (!modele) return [404, { message: 'Modèle introuvable.' }]
+
+    // Un seul modèle actif par type : activer l'un désactive les autres.
+    const modeles = collection<ModeleDocument>('modelesDocuments')
+    remplacer(
+      'modelesDocuments',
+      modeles.map((m) => (m.type === modele.type ? { ...m, isActive: m.id === id } : m)),
+    )
+    return [200, { ...modele, isActive: true }]
+  })
+
+  s.onGet(/^\/documents(\?.*)?$/).reply((config) => {
+    const p = parametres(config)
+    const type = p.get('type')
+    const statut = p.get('statut')
+
+    let liste = [...collection<DocumentGenere>('documentsGeneres')].sort((a, b) =>
+      b.generatedAt.localeCompare(a.generatedAt),
+    )
+    if (type) liste = liste.filter((d) => d.type === type)
+    if (statut) liste = liste.filter((d) => d.status === statut)
+    return [200, paginer(liste, p)]
+  })
+
+  s.onGet(/^\/documents\/[\w-]+$/).reply((config) => {
+    const id = (config.url ?? '').split('/').pop() as string
+    const document = parId<DocumentGenere>('documentsGeneres', id)
+    return document ? [200, document] : [404, { message: 'Document introuvable.' }]
+  })
+
+  s.onPost('/documents/generate').reply((config) => {
+    const demande = JSON.parse(config.data ?? '{}')
+    const etablissement = collection<Etablissement>('etablissements')[0]
+    const modele = collection<ModeleDocument>('modelesDocuments').find(
+      (m) => m.type === demande.type && m.isActive,
+    )
+
+    const annee = new Date().getFullYear()
+    const prefixeType = String(demande.type ?? 'DOC')
+      .slice(0, 3)
+      .toUpperCase()
+
+    // Compteur par établissement, type et année : la référence doit rester
+    // unique et non réattribuable, y compris après annulation d'un document.
+    const existants = collection<DocumentGenere>('documentsGeneres').filter((d) =>
+      d.reference.startsWith(`${etablissement.code}-${prefixeType}-${annee}-`),
+    )
+    let compteur = existants.length
+
+    const documents: DocumentGenere[] = (demande.cibles ?? []).map(
+      (cible: { id: string; libelle: string }) => {
+        compteur += 1
+        const numero = String(compteur).padStart(5, '0')
+        // Sans modèle actif pour ce type, le document ne peut pas être mis en
+        // page : il est marqué en échec plutôt que produit vide.
+        const statut: DocumentGenere['status'] = modele ? 'GENERATED' : 'FAILED'
+
+        return {
+          id: `doc-${nanoid(8)}`,
+          establishmentId: etablissement.id,
+          reference: `${etablissement.code}-${prefixeType}-${annee}-${numero}`,
+          type: demande.type,
+          templateId: modele?.id ?? '',
+          targetType: 'STUDENT',
+          targetId: cible.libelle,
+          schoolYearId: demande.schoolYearId,
+          periodId: demande.periodId,
+          generatedBy: 'usr-1',
+          generatedAt: new Date().toISOString(),
+          status: statut,
+        }
+      },
+    )
+
+    for (const document of documents) ajouter('documentsGeneres', document)
+
+    return [
+      201,
+      {
+        documents,
+        reussis: documents.filter((d) => d.status === 'GENERATED').length,
+        echoues: documents.filter((d) => d.status === 'FAILED').length,
+      },
+    ]
+  })
+
+  s.onPatch(/^\/documents\/[\w-]+\/cancel$/).reply((config) => {
+    const id = (config.url ?? '').split('/')[2]
+    const { motif } = JSON.parse(config.data ?? '{}')
+    if (String(motif ?? '').trim().length < 5) {
+      return [422, { message: "Le motif d'annulation est obligatoire." }]
+    }
+    const maj = majParId<DocumentGenere>('documentsGeneres', id, { status: 'CANCELLED' })
+    return maj ? [200, maj] : [404, { message: 'Document introuvable.' }]
+  })
+
+  // Route publique : aucune authentification, et surtout aucune donnée
+  // scolaire, financière ou personnelle au-delà du nom du titulaire.
+  s.onGet(/^\/public\/documents\/[\w-]+$/).reply((config) => {
+    const reference = (config.url ?? '').split('/').pop() as string
+    const document = collection<DocumentGenere>('documentsGeneres').find((d) => d.reference === reference)
+    if (!document) return [200, { valide: false }]
+
+    const etablissement = collection<Etablissement>('etablissements')[0]
+    const annee = parId<AnneeScolaire>('anneesScolaires', document.schoolYearId)
+
+    return [
+      200,
+      {
+        valide: true,
+        reference: document.reference,
+        type: document.type,
+        etablissement: etablissement.name,
+        anneeScolaire: annee?.label ?? '—',
+        emisLe: document.generatedAt,
+        statut: document.status === 'CANCELLED' ? 'CANCELLED' : 'GENERATED',
+        titulaire: document.targetId,
+      },
+    ]
+  })
+
+  s.onGet(/^\/announcements(\?.*)?$/).reply((config) => [
     200,
     paginer(collection<Annonce>('annonces'), parametres(config)),
   ])
 
-  s.onGet(/\/notifications(\?.*)?$/).reply(() => [200, collection<Notification>('notifications')])
+  s.onGet(/^\/notifications(\?.*)?$/).reply(() => [200, collection<Notification>('notifications')])
 }
