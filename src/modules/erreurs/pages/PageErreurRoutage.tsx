@@ -2,11 +2,11 @@ import { TriangleAlert } from 'lucide-react'
 import { useNavigate, useRouteError } from 'react-router'
 import { Bouton, EtatVide } from '../../../ui'
 
-/** Filet de securite au niveau du routeur. */
+/** Filet de sécurité au niveau du routeur. */
 export default function PageErreurRoutage() {
   const erreur = useRouteError()
   const naviguer = useNavigate()
-  const message = erreur instanceof Error ? erreur.message : "L'application a rencontre un probleme."
+  const message = erreur instanceof Error ? erreur.message : "L'application à rencontre un problème."
 
   return (
     <div className="bg-canvas flex min-h-screen items-center justify-center px-4">

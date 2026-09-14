@@ -1,5 +1,5 @@
 /**
- * Declenchement de notifications depuis un evenement metier · PROPRIETAIRE : Boris
+ * Declenchement de notifications depuis un evenement métier · PROPRIETAIRE : Boris
  */
 import { api } from '../api/client'
 

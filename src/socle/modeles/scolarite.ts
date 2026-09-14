@@ -1,5 +1,5 @@
 /**
- * Modeles du lot B · PROPRIETAIRE : Alida
+ * Modèles du lot B · PROPRIETAIRE : Alida
  * Boris et Fabrice : lecture seule. Ajouter un champ = PR sur ce fichier.
  */
 import type { EntiteEtablissement } from './communs'
@@ -41,7 +41,7 @@ export interface Enseignant extends EntiteEtablissement {
   isActive: boolean
 }
 
-/** La CLASSE au sens pedagogique (Terminale D1), a ne pas confondre avec la salle. */
+/** La CLASSE au sens pédagogique (Terminale D1), a ne pas confondre avec la salle. */
 export interface Classe extends EntiteEtablissement {
   schoolYearId: string
   name: string

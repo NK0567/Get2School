@@ -7,11 +7,11 @@ interface Props<T> {
   titre: string
   sousTitre?: string
   filAriane?: string[]
-  /** Boutons d'action, a droite du titre. */
+  /** Boutons d'action, à droite du titre. */
   actions?: ReactNode
-  /** Barre de filtres. Mettre ChampRecherche en premier, a gauche. */
+  /** Barre de filtres. Mettre ChampRecherche en premier, à gauche. */
   filtres?: ReactNode
-  /** Bandeau d'alerte dependant des donnees, entre les filtres et le tableau. */
+  /** Bandeau d'alerte dependant des données, entre les filtres et le tableau. */
   alerte?: ReactNode
 
   chargement: boolean
@@ -32,8 +32,8 @@ interface Props<T> {
  * Gabarit de page liste · PROPRIETAIRE : Boris
  *
  * Utilisez-le pour TOUTES vos listes. Il impose l'ordre de la charte
- * (en-tete, filtres, tableau, pagination) et gere les quatre etats exiges
- * par la Definition of Done : chargement, donnees, liste vide, erreur.
+ * (en-tête, filtres, tableau, pagination) et géré les quatre états exiges
+ * par la Definition of Done : chargement, données, liste vide, erreur.
  *
  * Vous n'avez plus a y penser, et les trois lots se ressemblent.
  */
@@ -68,15 +68,15 @@ export function GabaritListe<T>({
 
       {!chargement && erreur != null && (
         <EtatVide
-          titre="Impossible de charger ces donnees"
-          description={message ?? 'Reessayez dans un instant.'}
+          titre="Impossible de charger ces données"
+          description={message ?? 'Réessayez dans un instant.'}
         />
       )}
 
       {!chargement && erreur == null && lignes && lignes.length === 0 && (
         <EtatVide
-          titre={vide?.titre ?? 'Aucun resultat'}
-          description={vide?.description ?? 'Modifiez vos criteres de recherche.'}
+          titre={vide?.titre ?? 'Aucun résultat'}
+          description={vide?.description ?? 'Modifiez vos critères de recherche.'}
           icone={vide?.icone}
           action={vide?.action}
         />

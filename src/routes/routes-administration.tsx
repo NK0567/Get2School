@@ -8,6 +8,9 @@ const ListeUtilisateurs = lazy(() => import('../modules/utilisateurs/pages/Liste
 const AssistantConfiguration = lazy(() => import('../modules/etablissement/pages/AssistantConfiguration'))
 const IdentiteEtablissement = lazy(() => import('../modules/etablissement/pages/IdentiteEtablissement'))
 const ParametresEtablissement = lazy(() => import('../modules/etablissement/pages/ParametresEtablissement'))
+const ListeAnneesScolaires = lazy(() => import('../modules/annees-scolaires/pages/ListeAnneesScolaires'))
+const PeriodesAnnee = lazy(() => import('../modules/annees-scolaires/pages/PeriodesAnnee'))
+const JournalAudit = lazy(() => import('../modules/journal-audit/pages/JournalAudit'))
 const TableauDeBord = lazy(() => import('../modules/tableaux-de-bord/pages/TableauDeBord'))
 
 export const routesAdministration: RouteObject[] = [
@@ -22,7 +25,7 @@ export const routesAdministration: RouteObject[] = [
     ),
   },
   {
-    path: 'etablissement/configuration',
+    path: 'établissement/configuration',
     element: (
       <ExigeRole roles={['SCHOOL_ADMIN']}>
         <AssistantConfiguration />
@@ -30,7 +33,7 @@ export const routesAdministration: RouteObject[] = [
     ),
   },
   {
-    path: 'etablissement/identite',
+    path: 'établissement/identité',
     element: (
       <ExigeRole roles={['SCHOOL_ADMIN', 'ADMIN']}>
         <IdentiteEtablissement />
@@ -38,15 +41,37 @@ export const routesAdministration: RouteObject[] = [
     ),
   },
   {
-    path: 'etablissement/parametres',
+    path: 'établissement/paramètres',
     element: (
       <ExigeRole roles={['SCHOOL_ADMIN']}>
         <ParametresEtablissement />
       </ExigeRole>
     ),
   },
-  { path: 'annees-scolaires', element: <EnConstruction titre="Annees scolaires" /> },
-  { path: 'journal-audit', element: <EnConstruction titre="Journal d'audit" /> },
+  {
+    path: 'annees-scolaires',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN', 'ADMIN']}>
+        <ListeAnneesScolaires />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'années-scolaires/:id/périodes',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN', 'ADMIN']}>
+        <PeriodesAnnee />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'journal-audit',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN']}>
+        <JournalAudit />
+      </ExigeRole>
+    ),
+  },
   { path: 'recherche', element: <EnConstruction titre="Recherche globale" /> },
   { path: 'documents', element: <EnConstruction titre="Centre documentaire" /> },
   { path: 'communication/annonces', element: <EnConstruction titre="Annonces" /> },

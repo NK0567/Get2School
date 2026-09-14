@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 
 /**
- * Etat de pagination commun. Remet la page a zero des qu'un filtre change :
+ * État de pagination commun. Remet la page a zéro des qu'un filtre change :
  * c'est la source d'un bug classique (page 4 d'une liste qui n'en a plus qu'une).
  */
 export function usePagination(taille = 10) {

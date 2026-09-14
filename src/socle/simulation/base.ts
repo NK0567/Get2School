@@ -1,8 +1,8 @@
 /**
- * Base de donnees simulee · PROPRIETAIRE : Boris
+ * Base de données simulee · PROPRIETAIRE : Boris
  *
  * Stockage en memoire, persiste dans localStorage. Chaque lot fournit ses
- * collections dans son propre fichier donnees-<lot>.ts : personne n'edite
+ * collections dans son propre fichier données-<lot>.ts : personne n'edite
  * un fichier commun, donc aucune fusion ne se croise ici.
  */
 
@@ -17,7 +17,7 @@ export function initialiserBase(graine: Collections) {
   if (enregistre) {
     try {
       base = JSON.parse(enregistre) as Collections
-      // Une collection ajoutee depuis le dernier enregistrement doit apparaitre.
+      // Une collection ajoutée depuis le dernier enregistrement doit apparaitre.
       for (const [nom, valeurs] of Object.entries(graine)) {
         if (!base[nom]) base[nom] = valeurs
       }
@@ -39,7 +39,7 @@ export function reinitialiserBase() {
   location.reload()
 }
 
-/** Acces type a une collection. */
+/** Accès type a une collection. */
 export function collection<T>(nom: string): T[] {
   return (base[nom] ?? []) as T[]
 }
@@ -81,8 +81,22 @@ export function paginer<T>(liste: T[], parametres: URLSearchParams) {
   return { contenu: liste.slice(debut, debut + taille), total: liste.length, page, taille }
 }
 
-/** Extrait les parametres de requete d'une URL simulee. */
-export function parametres(url?: string): URLSearchParams {
-  const qs = (url ?? '').split('?')[1] ?? ''
-  return new URLSearchParams(qs)
+/**
+ * Extrait les paramètres d'une requête simulée.
+ *
+ * Axios place les paramètres passés via `{ params }` dans `config.params`, et
+ * non dans l'URL. Lire uniquement l'URL laisse passer silencieusement tous les
+ * filtres : on lit donc les deux sources.
+ */
+export function parametres(config: { url?: string; params?: unknown }): URLSearchParams {
+  const resultat = new URLSearchParams((config.url ?? '').split('?')[1] ?? '')
+
+  const params = config.params
+  if (params && typeof params === 'object') {
+    for (const [cle, valeur] of Object.entries(params as Record<string, unknown>)) {
+      if (valeur === undefined || valeur === null || valeur === '') continue
+      resultat.set(cle, String(valeur))
+    }
+  }
+  return resultat
 }

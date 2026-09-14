@@ -102,6 +102,10 @@ Le découpage par lot des fichiers autrement partagés (routes, menu, modèles, 
 - Service de journalisation d'audit
 - Connexion, tableau de bord
 - **Écran de référence** : `/utilisateurs`, patron à copier pour toutes les listes
+- Établissement : identité, paramètres de calcul, assistant de configuration initiale
+- Années scolaires : cycle de vie, périodes, verrouillage avec motif obligatoire
+- Journal d'audit : filtres, comparaison avant/après, export
+- Authentification : connexion, mot de passe oublié, réinitialisation, politique de mot de passe, sessions ouvertes, expiration d'inactivité
 
 **À construire**
 

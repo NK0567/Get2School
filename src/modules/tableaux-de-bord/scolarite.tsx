@@ -1,5 +1,5 @@
 /**
- * Bloc de tableau de bord des roles de scolarite et de finance · PROPRIETAIRE : Alida
+ * Bloc de tableau de bord des rôles de scolarité et de finance · PROPRIETAIRE : Alida
  * Affiche pour SECRETARY et ACCOUNTANT.
  *
  * A construire : inscriptions du jour, dossiers incomplets, encaissements de
@@ -12,8 +12,8 @@ export function TableauDeBordScolarite() {
   return (
     <div className="mt-5">
       <EtatVide
-        titre="Tableau de bord scolarite et finance"
-        description="Bloc a construire dans le lot B : inscriptions recentes, dossiers incomplets, encaissements et taux de recouvrement."
+        titre="Tableau de bord scolarité et finance"
+        description="Bloc à construire dans le lot B : inscriptions recentes, dossiers incomplets, encaissements et taux de recouvrement."
         icone={<Wallet className="h-8 w-8" />}
       />
     </div>

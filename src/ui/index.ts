@@ -5,7 +5,7 @@
  *   import { Bouton, Tableau, EtatVide } from '@/ui'
  *
  * Personne ne recode un bouton. Un composant manquant se demande a
- * l'integrateur, il ne se cree pas dans un dossier de module.
+ * l'integrateur, il ne se créé pas dans un dossier de module.
  */
 export { cn } from './cn'
 

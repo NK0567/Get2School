@@ -7,7 +7,7 @@
  *
  *   page  →  hook React Query  →  api.ts  →  axios  →  simulation
  *
- * Y figurent : les quatre etats, la recherche retardee, le tri, la
+ * Y figurent : les quatre états, la recherche retardee, le tri, la
  * pagination, le menu d'actions, la confirmation nommee, le toast, l'export
  * et l'appel au journal d'audit.
  */
@@ -57,18 +57,18 @@ export default function ListeUtilisateurs() {
   const actionsDe = (u: Utilisateur): ActionMenu[] => [
     u.isActive
       ? {
-          libelle: 'Desactiver le compte',
+          libelle: 'Désactiver le compte',
           icone: <Ban className="h-4 w-4" />,
           destructif: true,
           onClick: () => desactivation.demander(u),
         }
       : {
-          libelle: 'Reactiver le compte',
+          libelle: 'Réactiver le compte',
           icone: <CircleCheck className="h-4 w-4" />,
           onClick: () => void changerStatut.mutateAsync({ utilisateur: u, actif: true }),
         },
     {
-      libelle: 'Reinitialiser le mot de passe',
+      libelle: 'Réinitialiser le mot de passe',
       onClick: () => {},
       desactiveeCar: 'Disponible quand le backend sera en ligne',
     },
@@ -94,7 +94,7 @@ export default function ListeUtilisateurs() {
     },
     {
       cle: 'connexion',
-      entete: 'Derniere connexion',
+      entete: 'Dernière connexion',
       triable: true,
       rendu: (u) => (
         <span className="text-muted tabular-nums">
@@ -161,7 +161,7 @@ export default function ListeUtilisateurs() {
                 setRole(e.target.value as Role | '')
                 reinitialiser()
               }}
-              placeholder="Tous les roles"
+              placeholder="Tous les rôles"
               options={ROLES.map((r) => ({ valeur: r, libelle: LIBELLE_ROLE[r] }))}
             />
           </>
@@ -174,7 +174,7 @@ export default function ListeUtilisateurs() {
         tri={tri}
         onTri={basculer}
         vide={{
-          titre: 'Aucun utilisateur ne correspond a ces criteres',
+          titre: 'Aucun utilisateur ne correspond à ces critères',
           description: 'Modifiez la recherche ou creez un nouveau compte.',
           icone: <UserPlus className="h-8 w-8" />,
           action: <Bouton onClick={() => setCreationOuverte(true)}>Nouvel utilisateur</Bouton>,
@@ -187,14 +187,14 @@ export default function ListeUtilisateurs() {
       <DialogueConfirmation
         ouverte={desactivation.ouverte}
         onFermer={desactivation.annuler}
-        titre="Desactiver ce compte"
+        titre="Désactiver ce compte"
         message={`${formaterNomComplet(desactivation.cible?.firstName, desactivation.cible?.lastName)} ne pourra plus se connecter. Ses donnees et son historique sont conserves.`}
-        libelleAction="Desactiver le compte"
+        libelleAction="Désactiver le compte"
         chargement={changerStatut.isPending}
         onConfirmer={async () => {
           if (!desactivation.cible) return
           await changerStatut.mutateAsync({ utilisateur: desactivation.cible, actif: false })
-          toast('succes', 'Le compte a ete desactive.')
+          toast('succes', 'Le compte à été désactivé.')
           desactivation.annuler()
         }}
       />

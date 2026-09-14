@@ -12,6 +12,10 @@ import { routesAcademique } from './routes-academique'
 import { routesCommunes } from './routes-communes'
 
 const PageConnexion = lazy(() => import('../modules/authentification/pages/PageConnexion'))
+const MotDePasseOublie = lazy(() => import('../modules/authentification/pages/MotDePasseOublie'))
+const ReinitialiserMotDePasse = lazy(
+  () => import('../modules/authentification/pages/ReinitialiserMotDePasse'),
+)
 const PageErreurRoutage = lazy(() => import('../modules/erreurs/pages/PageErreurRoutage'))
 
 function Attente() {
@@ -19,7 +23,7 @@ function Attente() {
 }
 
 /**
- * Chaque ecran est enveloppe dans une frontiere d'erreur : un plantage dans
+ * Chaque écran est enveloppe dans une frontiere d'erreur : un plantage dans
  * un module ne fait pas tomber toute l'application pendant une demonstration.
  */
 function envelopper(element: React.ReactNode) {
@@ -31,6 +35,22 @@ function envelopper(element: React.ReactNode) {
 }
 
 export const routeur = createBrowserRouter([
+  {
+    path: '/mot-de-passe-oublie',
+    element: (
+      <Suspense fallback={<Attente />}>
+        <MotDePasseOublie />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/reinitialiser-mot-de-passe',
+    element: (
+      <Suspense fallback={<Attente />}>
+        <ReinitialiserMotDePasse />
+      </Suspense>
+    ),
+  },
   {
     path: '/connexion',
     element: (

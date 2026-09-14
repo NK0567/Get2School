@@ -23,7 +23,7 @@ interface Props {
 /**
  * Gabarit de fiche a onglets · PROPRIETAIRE : Boris
  *
- * Sert notamment a la fiche eleve, qui est alimentee par les trois lots :
+ * Sert notamment à la fiche élève, qui est alimentee par les trois lots :
  * chacun fournit son onglet sans toucher aux autres.
  */
 export function GabaritFiche({ titre, sousTitre, filAriane, retour, badges, actions, onglets }: Props) {

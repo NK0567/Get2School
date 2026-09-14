@@ -1,8 +1,8 @@
 /**
  * Formatage commun aux trois lots · PROPRIETAIRE : Boris
  *
- * Personne ne reformate une date ou un montant a la main dans un ecran.
- * Un affichage different d'un module a l'autre se voit immediatement en
+ * Personne ne reformate une date ou un montant à la main dans un écran.
+ * Un affichage different d'un module à l'autre se voit immédiatement en
  * soutenance.
  */
 import { format, formatDistanceToNow, parseISO } from 'date-fns'
@@ -34,7 +34,7 @@ export function formaterMontant(valeur?: number | null, devise = 'FCFA') {
 
 /**
  * 14,25 · deux decimales, virgule francaise.
- * Une matiere non notee renvoie un tiret, jamais 0,00.
+ * Une matière non notee renvoie un tiret, jamais 0,00.
  */
 export function formaterMoyenne(valeur?: number | null) {
   if (valeur === null || valeur === undefined) return '—'
@@ -48,7 +48,7 @@ export function formaterRang(rang?: number | null, total?: number) {
   return total ? `${rang}${suffixe} / ${total}` : `${rang}${suffixe}`
 }
 
-/** KAMGA Ariane · nom en majuscules, prenom en capitale initiale. */
+/** KAMGA Ariane · nom en majuscules, prénom en capitale initiale. */
 export function formaterNomComplet(prenom?: string, nom?: string) {
   if (!prenom && !nom) return '—'
   return `${(nom ?? '').toUpperCase()} ${prenom ?? ''}`.trim()

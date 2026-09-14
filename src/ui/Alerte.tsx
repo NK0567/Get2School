@@ -13,10 +13,10 @@ const CONFIG = {
 /**
  * Bandeau d'information EN LIGNE · PROPRIETAIRE : Boris
  *
- * A reserver aux messages qui dependent des donnees affichees : une periode
- * verrouillee, des documents qui expirent, un solde en retard. Un bandeau
- * qui dit toujours la meme chose quelle que soit la donnee n'apporte rien :
- * mettez-le dans la documentation, pas dans l'ecran.
+ * A réserver aux messages qui dependent des données affichées : une période
+ * verrouillée, des documents qui expirent, un solde en retard. Un bandeau
+ * qui dit toujours la même chose quelle que soit la donnée n'apporte rien :
+ * mettez-le dans la documentation, pas dans l'écran.
  */
 export function Alerte({
   ton = 'info',

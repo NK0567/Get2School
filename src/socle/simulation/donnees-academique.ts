@@ -1,8 +1,8 @@
 /**
  * Jeu de demonstration du lot C · PROPRIETAIRE : Fabrice
  *
- * Objectif : trois evaluations notees par matiere et par periode, des absences
- * et des incidents sur une trentaine d'eleves. Le squelette est a completer.
+ * Objectif : trois évaluations notees par matière et par période, des absences
+ * et des incidents sur une trentaine d'élèves. Le squelette est a completer.
  */
 import type { Evaluation, Note } from '../modeles/academique'
 
@@ -19,7 +19,7 @@ export function donneesAcademique() {
       classId: 'cls-1',
       subjectId: 'mat-1',
       teacherId: 'ens-1',
-      title: 'Interrogation 1 · Suites numeriques',
+      title: 'Interrogation 1 · Suites numériques',
       type: 'QUIZ',
       date: '2026-10-05',
       maxGrade: 20,

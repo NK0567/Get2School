@@ -1,5 +1,5 @@
 /**
- * Modeles du lot A · PROPRIETAIRE : Boris
+ * Modèles du lot A · PROPRIETAIRE : Boris
  * Alida et Fabrice : lecture seule.
  */
 import type { EntiteEtablissement, Permission, Role } from './communs'
@@ -8,7 +8,7 @@ export interface ParametresEtablissement {
   periodType: 'TRIMESTER' | 'SEMESTER'
   maxGrade: number
   passingGrade: number
-  /** Effet d'une note sanctionnee sur le calcul de la moyenne. */
+  /** Effet d'une note sanctionnée sur le calcul de la moyenne. */
   penaltyPolicy: 'EXCLUDE_COEFFICIENT' | 'COUNT_AS_ZERO'
   currency: string
   riskWeights: { average: number; trend: number; absence: number; discipline: number }

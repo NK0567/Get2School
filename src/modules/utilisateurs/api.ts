@@ -1,8 +1,8 @@
 /**
  * Appels API du module Utilisateurs · lot A
  *
- * Regle : un module ne parle jamais a la simulation, il parle a l'API.
- * Aucune donnee en dur ici ni dans les composants.
+ * Règle : un module ne parle jamais à la simulation, il parle à l'API.
+ * Aucune donnée en dur ici ni dans les composants.
  */
 import { api } from '../../socle/api/client'
 import type { Page, Permission, Role } from '../../socle/modeles/communs'

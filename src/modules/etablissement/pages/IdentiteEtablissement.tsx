@@ -14,7 +14,7 @@ import {
 import { useEnregistrerIdentite, useEtablissement } from '../hooks/useEtablissement'
 
 const schema = z.object({
-  name: texteRequis("Le nom de l'etablissement", 3),
+  name: texteRequis("Le nom de l'établissement", 3),
   acronym: texteRequis('Le sigle', 2),
   slogan: z.string().optional(),
   address: texteRequis("L'adresse", 3),
@@ -32,8 +32,8 @@ export default function IdentiteEtablissement() {
 
   const { register, handleSubmit, formState } = useForm<Formulaire>({
     resolver: zodResolver(schema),
-    // Les donnees sont chargees avant le montage du formulaire : voir le garde
-    // isLoading plus bas, qui empeche ce composant de rendre un formulaire vide.
+    // Les données sont chargees avant le montage du formulaire : voir le garde
+    // isLoading plus bas, qui empêche ce composant de rendre un formulaire vide.
     values: {
       name: etablissement?.name ?? '',
       acronym: etablissement?.acronym ?? '',
@@ -49,9 +49,9 @@ export default function IdentiteEtablissement() {
     if (!etablissement) return
     try {
       await enregistrer.mutateAsync({ avant: etablissement, modifs: valeurs })
-      toast('succes', "L'identite de l'etablissement a ete enregistree.")
+      toast('succes', "L'identité de l'établissement à été enregistrée.")
     } catch {
-      toast('danger', "L'enregistrement a echoue.")
+      toast('danger', "L'enregistrement à échoué.")
     }
   })
 
@@ -60,9 +60,9 @@ export default function IdentiteEtablissement() {
   return (
     <>
       <EnteteDePage
-        titre="Identite de l'etablissement"
-        sousTitre="Ces informations apparaissent en en-tete de tous les documents generes."
-        filAriane={['Administration', 'Etablissement']}
+        titre="Identité de l'établissement"
+        sousTitre="Ces informations apparaissent en en-tête de tous les documents générés."
+        filAriane={['Administration', 'Établissement']}
         actions={
           <Bouton chargement={enregistrer.isPending} onClick={envoyer}>
             Enregistrer
@@ -75,7 +75,7 @@ export default function IdentiteEtablissement() {
           <h2 className="mb-4 text-base font-semibold">Informations institutionnelles</h2>
           <div className="grid grid-cols-2 gap-4">
             <Champ
-              libelle="Nom de l'etablissement"
+              libelle="Nom de l'établissement"
               requis
               className="col-span-2"
               {...register('name')}
@@ -84,7 +84,7 @@ export default function IdentiteEtablissement() {
             <Champ
               libelle="Sigle"
               requis
-              aide="Sert a composer les matricules et les references de documents"
+              aide="Sert à composer les matricules et les références de documents"
               {...register('acronym')}
               erreur={formState.errors.acronym?.message}
             />
@@ -103,7 +103,7 @@ export default function IdentiteEtablissement() {
               erreur={formState.errors.phone?.message}
             />
             <Champ
-              libelle="Adresse electronique"
+              libelle="Adresse électronique"
               requis
               type="email"
               {...register('email')}
@@ -114,7 +114,7 @@ export default function IdentiteEtablissement() {
         </div>
 
         <div className="border-line bg-surface rounded-xl border p-5">
-          <h2 className="mb-3 text-base font-semibold">Identite numerique</h2>
+          <h2 className="mb-3 text-base font-semibold">Identité numérique</h2>
           <div className="bg-canvas flex flex-col items-center gap-3 rounded-lg p-4">
             <QRCodeSVG
               value={`${location.origin}/v/${etablissement?.institutionalId ?? ''}`}

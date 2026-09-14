@@ -15,7 +15,7 @@ export function SelecteurMatiere({
   valeur,
   onChange,
   libelle,
-  placeholder = 'Toutes les matieres',
+  placeholder = 'Toutes les matières',
   requis,
 }: Props) {
   const { data } = useQuery({

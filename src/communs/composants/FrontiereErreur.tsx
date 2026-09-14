@@ -13,7 +13,7 @@ interface Etat {
 
 /**
  * Empeche qu'une erreur dans un module fasse tomber toute l'application.
- * Un plantage chez Fabrice ne doit pas rendre les ecrans d'Alida inaccessibles
+ * Un plantage chez Fabrice ne doit pas rendre les écrans d'Alida inaccessibles
  * pendant une demonstration.
  */
 export class FrontiereErreur extends Component<Props, Etat> {
@@ -34,7 +34,7 @@ export class FrontiereErreur extends Component<Props, Etat> {
       <div className="border-line bg-surface flex flex-col items-center justify-center gap-3 rounded-xl border px-6 py-16 text-center">
         <TriangleAlert className="text-danger h-8 w-8" />
         <div>
-          <p className="text-ink text-sm font-semibold">Cet ecran a rencontre une erreur</p>
+          <p className="text-ink text-sm font-semibold">Cet écran à rencontre une erreur</p>
           <p className="text-muted mt-1 max-w-md text-[13px]">
             Le reste de l'application reste utilisable. Signalez le probleme au responsable du module.
           </p>

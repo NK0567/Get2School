@@ -21,7 +21,7 @@ interface Props {
   axeX: string
   series: SerieGraphique[]
   hauteur?: number
-  /** Ligne horizontale de reference, typiquement la moyenne de passage. */
+  /** Ligne horizontale de référence, typiquement la moyenne de passage. */
   reference?: { valeur: number; libelle: string }
   domaineY?: [number, number]
 }
@@ -29,8 +29,8 @@ interface Props {
 const PALETTE = ['#1D6FE0', '#D97706', '#16A34A', '#DC2626']
 
 /**
- * Courbe d'evolution · PROPRIETAIRE : Boris
- * Couleurs de la charte, quatre series au maximum : au-dela c'est illisible.
+ * Courbe d'évolution · PROPRIETAIRE : Boris
+ * Couleurs de la charte, quatre séries au maximum : au-dela c'est illisible.
  */
 export function GraphiqueLignes({ donnees, axeX, series, hauteur = 300, reference, domaineY }: Props) {
   return (

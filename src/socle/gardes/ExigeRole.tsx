@@ -1,7 +1,7 @@
 /**
- * Garde de role · PROPRIETAIRE : Boris
+ * Garde de rôle · PROPRIETAIRE : Boris
  *
- * Chaque lot protege ses propres ecrans avec ce composant. Une maquette qui
+ * Chaque lot protege ses propres écrans avec ce composant. Une maquette qui
  * laisse un enseignant ouvrir la caisse est une maquette fausse.
  */
 import type { ReactNode } from 'react'

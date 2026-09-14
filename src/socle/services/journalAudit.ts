@@ -1,9 +1,9 @@
 /**
- * Journalisation des operations sensibles · PROPRIETAIRE : Boris
+ * Journalisation des opérations sensibles · PROPRIETAIRE : Boris
  *
  * Boris fournit l'outil, chaque lot l'appelle depuis ses propres services.
- * RG-14 : note, deverrouillage, operation financiere, permission, decision
- * disciplinaire, archivage et generation de document sont journalises.
+ * RG-14 : note, déverrouillage, opération financiere, permission, décision
+ * disciplinaire, archivage et génération de document sont journalises.
  */
 import { api } from '../api/client'
 import type { ActionAudit } from '../modeles/administration'
@@ -29,6 +29,6 @@ export async function journaliser(demande: DemandeJournalisation) {
       userLabel: utilisateur ? `${utilisateur.firstName} ${utilisateur.lastName}` : 'Inconnu',
     })
   } catch {
-    // La journalisation ne doit jamais faire echouer l'action metier.
+    // La journalisation ne doit jamais faire echouer l'action métier.
   }
 }

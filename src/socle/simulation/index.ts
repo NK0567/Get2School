@@ -1,8 +1,8 @@
 /**
  * Installation de la simulation · PROPRIETAIRE : Boris · FIGE
  *
- * Ce fichier n'evolue que si un lot est ajoute ou retire. Chaque lot ecrit
- * uniquement ses deux fichiers : donnees-<lot>.ts et routes-<lot>.ts.
+ * Ce fichier n'evolue que si un lot est ajouté ou retiré. Chaque lot ecrit
+ * uniquement ses deux fichiers : données-<lot>.ts et routes-<lot>.ts.
  */
 import MockAdapter from 'axios-mock-adapter'
 import { api } from '../api/client'
@@ -29,7 +29,7 @@ export function installerSimulation() {
   routesScolarite(simulateur)
   routesAcademique(simulateur)
 
-  // Toute route non declaree remonte une 404 explicite plutot qu'un silence.
+  // Toute route non déclarée remonte une 404 explicite plutot qu'un silence.
   simulateur.onAny().reply(404, { message: "Cette route n'est pas encore simulee." })
 }
 

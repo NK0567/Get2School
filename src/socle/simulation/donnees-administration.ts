@@ -17,9 +17,9 @@ export function donneesAdministration() {
   const etablissement: Etablissement = {
     id: ETB,
     code: 'LBK',
-    name: 'Lycee Bilingue de Bafoussam',
+    name: 'Lycée Bilingue de Bafoussam',
     acronym: 'LBB',
-    slogan: 'Travail, Rigueur, Reussite',
+    slogan: 'Travail, Rigueur, Réussite',
     address: 'BP 214, Bafoussam',
     phone: '+237 699 00 00 00',
     email: 'contact@lyceebafoussam.cm',
@@ -68,12 +68,12 @@ export function donneesAdministration() {
 
   const modelesDocuments: ModeleDocument[] = [
     { id: 'tpl-1', establishmentId: ETB, type: 'BULLETIN', name: 'Bulletin standard', isActive: true },
-    { id: 'tpl-2', establishmentId: ETB, type: 'RECEIPT', name: 'Recu de paiement', isActive: true },
+    { id: 'tpl-2', establishmentId: ETB, type: 'RECEIPT', name: 'Reçu de paiement', isActive: true },
     {
       id: 'tpl-3',
       establishmentId: ETB,
       type: 'CERTIFICATE',
-      name: 'Certificat de scolarite',
+      name: 'Certificat de scolarité',
       isActive: true,
     },
     { id: 'tpl-4', establishmentId: ETB, type: 'LIST', name: 'Liste officielle', isActive: true },

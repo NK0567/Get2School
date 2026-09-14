@@ -7,11 +7,11 @@ interface Props {
 }
 
 /**
- * Regles de calcul partagees avec le lot C.
+ * Règles de calcul partagees avec le lot C.
  *
  * penaltyPolicy est le reglage le plus important du produit : il decide si le
- * coefficient d'une evaluation sanctionnee reste compte au denominateur de la
- * moyenne, ou s'il en sort. Le moteur de calcul de Fabrice lit ce parametre.
+ * coefficient d'une évaluation sanctionnée reste compte au dénominateur de la
+ * moyenne, ou s'il en sort. Le moteur de calcul de Fabrice lit ce paramètre.
  */
 export function ReglesCalcul({ valeurs, onChange }: Props) {
   const maj = (modifs: Partial<ParametresEtablissement>) => onChange({ ...valeurs, ...modifs })
@@ -20,13 +20,13 @@ export function ReglesCalcul({ valeurs, onChange }: Props) {
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-3 gap-4 max-md:grid-cols-1">
         <Champ
-          libelle="Bareme par defaut"
+          libelle="Barème par défaut"
           requis
           type="number"
           min={1}
           value={valeurs.maxGrade}
           onChange={(e) => maj({ maxGrade: Number(e.target.value) })}
-          aide="Note maximale d'une evaluation"
+          aide="Note maximale d'une évaluation"
         />
         <Champ
           libelle="Moyenne de passage"
@@ -36,7 +36,7 @@ export function ReglesCalcul({ valeurs, onChange }: Props) {
           max={valeurs.maxGrade}
           value={valeurs.passingGrade}
           onChange={(e) => maj({ passingGrade: Number(e.target.value) })}
-          aide="Seuil du taux de reussite"
+          aide="Seuil du taux de réussite"
         />
         <Champ
           libelle="Devise"
@@ -48,13 +48,13 @@ export function ReglesCalcul({ valeurs, onChange }: Props) {
 
       <div>
         <Selecteur
-          libelle="Effet d'une note sanctionnee sur la moyenne"
+          libelle="Effet d'une note sanctionnée sur la moyenne"
           requis
           value={valeurs.penaltyPolicy}
           onChange={(e) => maj({ penaltyPolicy: e.target.value as ParametresEtablissement['penaltyPolicy'] })}
           options={[
             { valeur: 'EXCLUDE_COEFFICIENT', libelle: 'Retirer la note et son coefficient du calcul' },
-            { valeur: 'COUNT_AS_ZERO', libelle: 'Compter la note comme un zero, coefficient inclus' },
+            { valeur: 'COUNT_AS_ZERO', libelle: 'Compter la note comme un zéro, coefficient inclus' },
           ]}
         />
         <Alerte ton="info">

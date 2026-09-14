@@ -197,6 +197,18 @@ Un composant ne fait jamais d'appel `axios` lui-même et ne lit jamais la simula
 
 ---
 
+## 6 bis. Exigences de production
+
+Get2School est destiné à être installé chez des établissements, pas à être montré une fois. Trois conséquences concrètes.
+
+**Le français est correctement accentué.** Toute chaîne affichée à un utilisateur porte ses accents : « Désactiver », « Période », « Élève », « Barème », « Créé le ». Une interface sans accents passe pour un travail inachevé auprès d'un chef d'établissement. Les identifiants du code restent en anglais et sans accents, comme prévu section 9.
+
+**Un contrôle qui n'existe que dans le navigateur n'est pas un contrôle.** Le composant `ExigeRole` masque un écran, il ne protège rien : la même règle devra exister côté Spring Boot. Même chose pour les validations Zod et pour l'isolation entre établissements. Quand vous écrivez une règle métier dans la simulation, écrivez-la comme le serveur devra le faire : refusez la requête, ne vous contentez pas de griser le bouton. Le module Années scolaires en donne l'exemple.
+
+**Aucune action ne réussit en silence.** Une opération qui aboutit produit un toast. Une opération qui échoue affiche la raison, pas un message générique. Une action impossible est désactivée avec une infobulle qui dit pourquoi.
+
+Un écart connu est documenté dans `docs/audit-production.md` : la journalisation d'audit est actuellement écrite par le client, ce qui n'est pas acceptable en exploitation. À traiter à l'arrivée du backend.
+
 ## 7. Interdits
 
 - Une couleur qui n'est pas dans `src/index.css`

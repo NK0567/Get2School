@@ -1,7 +1,7 @@
 /**
  * Jeu de demonstration du lot B · PROPRIETAIRE : Alida
  *
- * Objectif : 240 eleves, 8 classes sur 4 niveaux, 22 enseignants, 12 matieres,
+ * Objectif : 240 élèves, 8 classes sur 4 niveaux, 22 enseignants, 12 matières,
  * 10 salles, des frais a trois tranches et des paiements produisant les quatre
  * statuts financiers. Le squelette ci-dessous est a completer.
  */
@@ -12,14 +12,14 @@ const ANNEE = 'an-2026'
 
 export function donneesScolarite() {
   const matieres: Matiere[] = [
-    m('mat-1', 'Mathematiques', 'MATH', 5),
+    m('mat-1', 'Mathématiques', 'MATH', 5),
     m('mat-2', 'Physique-Chimie', 'PC', 4),
     m('mat-3', 'Sciences de la Vie et de la Terre', 'SVT', 3),
     m('mat-4', 'Francais', 'FR', 3),
     m('mat-5', 'Anglais', 'ANG', 2),
-    m('mat-6', 'Histoire-Geographie', 'HG', 2),
+    m('mat-6', 'Histoire-Géographie', 'HG', 2),
     m('mat-7', 'Philosophie', 'PHILO', 2),
-    m('mat-8', 'Education Physique et Sportive', 'EPS', 1),
+    m('mat-8', 'Éducation Physique et Sportive', 'EPS', 1),
   ]
 
   const salles: Salle[] = [
@@ -45,7 +45,7 @@ export function donneesScolarite() {
   const classes: Classe[] = [
     c('cls-1', 'Terminale D1', 'Terminale', 'D', 55, 'sal-1'),
     c('cls-2', 'Terminale C1', 'Terminale', 'C', 42, 'sal-2'),
-    c('cls-3', 'Premiere D1', 'Premiere', 'D', 60, 'sal-1'),
+    c('cls-3', 'Première D1', 'Premiere', 'D', 60, 'sal-1'),
     c('cls-4', 'Seconde A', 'Seconde', 'A', 58, 'sal-2'),
   ]
 

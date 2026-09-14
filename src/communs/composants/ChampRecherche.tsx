@@ -7,7 +7,7 @@ interface Props {
   className?: string
 }
 
-/** Champ de recherche des barres de filtres. Toujours le premier element a gauche. */
+/** Champ de recherche des barres de filtres. Toujours le premier element à gauche. */
 export function ChampRecherche({ valeur, onChange, placeholder = 'Rechercher...', className }: Props) {
   return (
     <div className={`relative ${className ?? 'w-72'}`}>

@@ -53,7 +53,7 @@ export const menuAcademique: GroupeMenu[] = [
         roles: ['SCHOOL_ADMIN', 'ACADEMIC_HEAD'],
       },
       {
-        libelle: 'Eleves a risque',
+        libelle: 'Élèves à risque',
         chemin: '/analyses/eleves-a-risque',
         icone: LineChart,
         roles: ['SCHOOL_ADMIN', 'ACADEMIC_HEAD'],

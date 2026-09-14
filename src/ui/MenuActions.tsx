@@ -8,14 +8,14 @@ export interface ActionMenu {
   icone?: ReactNode
   onClick: () => void
   destructif?: boolean
-  /** Desactive l'action et explique pourquoi en infobulle. Jamais de lien mort. */
+  /** Désactivé l'action et explique pourquoi en infobulle. Jamais de lien mort. */
   desactiveeCar?: string
 }
 
 /**
  * Menu a trois points des colonnes d'action · PROPRIETAIRE : Boris
- * Impose par la charte : la colonne d'actions est toujours la derniere,
- * alignee a droite.
+ * Impose par la charte : la colonne d'actions est toujours la dernière,
+ * alignee à droite.
  */
 export function MenuActions({ actions }: { actions: ActionMenu[] }) {
   return (

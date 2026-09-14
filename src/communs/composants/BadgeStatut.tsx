@@ -5,8 +5,8 @@ import type { TonBadge } from '../../ui'
  * Correspondance statut / couleur / libelle · PROPRIETAIRE : Boris
  *
  * Imposee par la charte graphique. Aucun module ne recode cette table :
- * si un statut manque, on l'ajoute ici, pas ailleurs. C'est ce qui garantit
- * qu'un eleve « Partiel » a la meme couleur dans les trois lots.
+ * si un statut manque, on l'ajouté ici, pas ailleurs. C'est ce qui garantit
+ * qu'un élève « Partiel » à la même couleur dans les trois lots.
  */
 const TABLE: Record<string, { ton: TonBadge; libelle: string }> = {
   /* Situation financiere · lot B */
@@ -30,12 +30,12 @@ const TABLE: Record<string, { ton: TonBadge; libelle: string }> = {
   VALID: { ton: 'succes', libelle: 'Valide' },
   PENALIZED: { ton: 'danger', libelle: 'Sanctionnee' },
 
-  /* Evaluation · lot C */
+  /* Évaluation · lot C */
   DRAFT: { ton: 'neutre', libelle: 'Brouillon' },
   PUBLISHED: { ton: 'succes', libelle: 'Publiee' },
   LOCKED: { ton: 'info', libelle: 'Verrouillee' },
 
-  /* Annee scolaire · lot A */
+  /* Année scolaire · lot A */
   OPEN: { ton: 'succes', libelle: 'Ouverte' },
   CLOSED: { ton: 'neutre', libelle: 'Cloturee' },
 
@@ -43,7 +43,7 @@ const TABLE: Record<string, { ton: TonBadge; libelle: string }> = {
   ACTIF: { ton: 'succes', libelle: 'Actif' },
   INACTIF: { ton: 'neutre', libelle: 'Desactive' },
 
-  /* Etablissement · lot A */
+  /* Établissement · lot A */
   PENDING: { ton: 'alerte', libelle: 'En attente' },
   ACTIVE: { ton: 'succes', libelle: 'Actif' },
   SUSPENDED: { ton: 'danger', libelle: 'Suspendu' },

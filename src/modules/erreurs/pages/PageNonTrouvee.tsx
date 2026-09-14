@@ -8,7 +8,7 @@ export default function PageNonTrouvee() {
     <div className="flex min-h-[60vh] items-center justify-center">
       <EtatVide
         titre="Cette page n'existe pas"
-        description="Le lien est peut-etre errone, ou l'ecran n'a pas encore ete construit."
+        description="Le lien est peut-être errone, ou l'écran n'a pas encore été construit."
         icone={<FileQuestion className="h-8 w-8" />}
         action={<Bouton onClick={() => naviguer('/tableau-de-bord')}>Retour au tableau de bord</Bouton>}
       />

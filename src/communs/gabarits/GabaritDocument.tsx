@@ -8,7 +8,7 @@ import { Bouton } from '../../ui'
 import { formaterDate } from '../formats'
 
 interface Props {
-  /** Reference unique du document, ex. LBK-BUL-2026-00317 (RG-17). */
+  /** Référence unique du document, ex. LBK-BUL-2026-00317 (RG-17). */
   reference: string
   typeLibelle: string
   anneeScolaire?: string
@@ -18,9 +18,9 @@ interface Props {
 /**
  * Gabarit de document imprimable · PROPRIETAIRE : Boris
  *
- * Format A4, en-tete institutionnel, QR code de verification. Tous les
- * documents du projet passent par ici : bulletin, recu, certificat, liste.
- * Le QR contient uniquement une URL de verification, jamais une donnee
+ * Format A4, en-tête institutionnel, QR code de vérification. Tous les
+ * documents du projet passent par ici : bulletin, reçu, certificat, liste.
+ * Le QR contient uniquement une URL de vérification, jamais une donnée
  * personnelle, une note ou un montant.
  */
 export function GabaritDocument({ reference, typeLibelle, anneeScolaire, children }: Props) {
@@ -53,7 +53,7 @@ export function GabaritDocument({ reference, typeLibelle, anneeScolaire, childre
           </div>
           <div className="text-right">
             <QRCodeSVG value={urlVerification} size={72} level="M" />
-            <div className="text-muted mt-1 text-[9px]">Verification</div>
+            <div className="text-muted mt-1 text-[9px]">Vérification</div>
           </div>
         </div>
 

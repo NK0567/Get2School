@@ -14,7 +14,7 @@ export default function ParametresEtablissement() {
 
   if (isLoading || !etablissement) return <SqueletteTableau lignes={5} />
 
-  // Etat derive : le brouillon n'existe qu'a partir de la premiere modification.
+  // État derive : le brouillon n'existe qu'à partir de la première modification.
   const valeurs = brouillon ?? etablissement.settings
   const setValeurs = setBrouillon
 
@@ -23,28 +23,28 @@ export default function ParametresEtablissement() {
 
   const envoyer = async () => {
     if (valeurs.passingGrade > valeurs.maxGrade) {
-      toast('danger', 'La moyenne de passage ne peut pas depasser le bareme.')
+      toast('danger', 'La moyenne de passage ne peut pas dépasser le barème.')
       return
     }
     if (totalPoids !== 100) {
-      toast('danger', 'Les ponderations du score de risque doivent totaliser 100.')
+      toast('danger', 'Les pondérations du score de risque doivent totaliser 100.')
       return
     }
     try {
       await enregistrer.mutateAsync({ avant: etablissement, parametres: valeurs })
       setBrouillon(null)
-      toast('succes', 'Les parametres ont ete enregistres.')
+      toast('succes', 'Les paramètres ont été enregistres.')
     } catch {
-      toast('danger', "L'enregistrement a echoue.")
+      toast('danger', "L'enregistrement à échoué.")
     }
   }
 
   return (
     <>
       <EnteteDePage
-        titre="Parametres de l'etablissement"
+        titre="Paramètres de l'établissement"
         sousTitre="Ces reglages alimentent les calculs de tous les modules."
-        filAriane={['Administration', 'Etablissement']}
+        filAriane={['Administration', 'Établissement']}
         actions={
           <Bouton chargement={enregistrer.isPending} disabled={!modifie} onClick={envoyer}>
             Enregistrer
@@ -57,7 +57,7 @@ export default function ParametresEtablissement() {
         onglets={[
           {
             cle: 'calcul',
-            libelle: 'Regles de calcul',
+            libelle: 'Règles de calcul',
             contenu: (
               <div className="border-line bg-surface rounded-xl border p-5">
                 <ReglesCalcul valeurs={valeurs} onChange={setValeurs} />
@@ -66,12 +66,12 @@ export default function ParametresEtablissement() {
           },
           {
             cle: 'academique',
-            libelle: 'Decoupage academique',
+            libelle: 'Découpage academique',
             contenu: (
               <div className="border-line bg-surface rounded-xl border p-5">
                 <div className="max-w-sm">
                   <Selecteur
-                    libelle="Decoupage de l'annee"
+                    libelle="Découpage de l'année"
                     requis
                     value={valeurs.periodType}
                     onChange={(e) =>
@@ -83,7 +83,7 @@ export default function ParametresEtablissement() {
                     ]}
                   />
                   <p className="text-muted mt-2 text-xs">
-                    Ce choix s'applique aux annees scolaires creees ensuite. Le nombre de periodes d'une annee
+                    Ce choix s'applique aux années scolaires creees ensuite. Le nombre de périodes d'une annee
                     deja ouverte ne change plus.
                   </p>
                 </div>

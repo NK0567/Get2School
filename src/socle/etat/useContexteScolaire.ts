@@ -1,8 +1,8 @@
 /**
- * Annee scolaire et periode selectionnees · PROPRIETAIRE : Boris
+ * Année scolaire et période selectionnees · PROPRIETAIRE : Boris
  *
- * Tous les ecrans des trois lots filtrent sur ces deux valeurs. Ne jamais
- * relire l'annee depuis un composant : passer par ce store.
+ * Tous les écrans des trois lots filtrent sur ces deux valeurs. Ne jamais
+ * relire l'année depuis un composant : passer par ce store.
  */
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'

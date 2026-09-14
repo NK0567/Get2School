@@ -4,7 +4,7 @@
  * Point d'entree unique :
  *   import { GabaritListe, formaterMontant, BadgeStatut } from '@/communs'
  *
- * Tout ce qui est utilise par plus d'un lot vit ici. Si vous ecrivez une
+ * Tout ce qui est utilisé par plus d'un lot vit ici. Si vous ecrivez une
  * fonction que les autres pourraient reutiliser, demandez son ajout plutot
  * que de la garder dans votre module.
  */
@@ -13,6 +13,8 @@
 export * from './formats'
 export * from './validations'
 export { exporterCsv, nomFichierDate } from './exports'
+export { EXIGENCES, LIBELLE_FORCE, LONGUEUR_MINIMALE, evaluerMotDePasse } from './motDePasse'
+export type { ContexteMotDePasse, EvaluationMotDePasse } from './motDePasse'
 export type { ColonneExport } from './exports'
 
 /* Hooks */
@@ -27,8 +29,9 @@ export { ChampRecherche } from './composants/ChampRecherche'
 export { LigneInfo, GrilleInfos } from './composants/LigneInfo'
 export { BadgeStatut } from './composants/BadgeStatut'
 export { FrontiereErreur } from './composants/FrontiereErreur'
+export { JaugeMotDePasse } from './composants/JaugeMotDePasse'
 
-/* Selecteurs metier partages */
+/* Selecteurs métier partages */
 export { SelecteurClasse } from './selecteurs/SelecteurClasse'
 export { SelecteurMatiere } from './selecteurs/SelecteurMatiere'
 export { SelecteurEnseignant } from './selecteurs/SelecteurEnseignant'

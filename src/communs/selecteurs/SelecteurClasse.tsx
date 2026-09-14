@@ -14,7 +14,7 @@ interface Props {
 
 /**
  * Selecteur de classe partage par les trois lots.
- * Filtre automatiquement sur l'annee scolaire selectionnee dans la barre haute.
+ * Filtre automatiquement sur l'année scolaire sélectionnée dans la barre haute.
  */
 export function SelecteurClasse({
   valeur,

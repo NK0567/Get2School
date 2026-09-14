@@ -1,8 +1,8 @@
 /**
  * Routes communes aux trois lots · PROPRIETAIRE : Boris · FIGE
  *
- * Ecrans disponibles pour tous les roles : profil, acces refuse, page
- * inexistante. Ne pas y ajouter de route metier.
+ * Écrans disponibles pour tous les rôles : profil, accès refusé, page
+ * inexistante. Ne pas y ajouter de route métier.
  */
 import { lazy } from 'react'
 import type { RouteObject } from 'react-router'

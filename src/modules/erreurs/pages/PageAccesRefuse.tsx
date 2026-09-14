@@ -5,8 +5,8 @@ import { useSession } from '../../../socle/etat/useSession'
 import { LIBELLE_ROLE } from '../../../socle/modeles/communs'
 
 /**
- * RG-02 et principe du moindre privilege : un acces refuse est explique,
- * pas silencieux, et il est journalise (voir ExigeRole).
+ * RG-02 et principe du moindre privilege : un accès refusé est explique,
+ * pas silencieux, et il est journalisé (voir ExigeRole).
  */
 export default function PageAccesRefuse() {
   const naviguer = useNavigate()
@@ -15,8 +15,8 @@ export default function PageAccesRefuse() {
   return (
     <div className="flex min-h-[60vh] items-center justify-center">
       <EtatVide
-        titre="Acces refuse"
-        description={`Votre role (${roleActif ? LIBELLE_ROLE[roleActif] : 'inconnu'}) ne permet pas d'ouvrir cet ecran. Cette tentative a ete enregistree dans le journal d'audit.`}
+        titre="Accès refusé"
+        description={`Votre role (${roleActif ? LIBELLE_ROLE[roleActif] : 'inconnu'}) ne permet pas d'ouvrir cet écran. Cette tentative à été enregistrée dans le journal d'audit.`}
         icone={<ShieldOff className="h-8 w-8" />}
         action={<Bouton onClick={() => naviguer('/tableau-de-bord')}>Retour au tableau de bord</Bouton>}
       />

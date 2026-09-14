@@ -27,7 +27,7 @@ export function BarreHaute() {
         value={anneeId ?? ''}
         onChange={(e) => definirAnnee(e.target.value)}
         className="border-line bg-surface text-ink h-9 rounded-lg border px-2.5 text-[13px]"
-        title="Annee scolaire"
+        title="Année scolaire"
       >
         {annees?.map((a) => (
           <option key={a.id} value={a.id}>
@@ -42,10 +42,10 @@ export function BarreHaute() {
         className="border-line bg-surface text-ink h-9 rounded-lg border px-2.5 text-[13px]"
         title="Periode"
       >
-        <option value="">Toutes les periodes</option>
+        <option value="">Toutes les périodes</option>
         {anneeCourante?.periods.map((p) => (
           <option key={p.id} value={p.id}>
-            {p.label} {p.isLocked ? '(verrouillee)' : ''}
+            {p.label} {p.isLocked ? '(verrouillée)' : ''}
           </option>
         ))}
       </select>
@@ -56,7 +56,7 @@ export function BarreHaute() {
           value={roleActif ?? ''}
           onChange={(e) => changerRole(e.target.value as Role)}
           className="border-warning/50 bg-warning/5 text-ink h-9 rounded-lg border border-dashed px-2.5 text-[13px]"
-          title="Changer de role pour tester les permissions"
+          title="Changer de rôle pour tester les permissions"
         >
           {ROLES.map((r) => (
             <option key={r} value={r}>
@@ -68,7 +68,7 @@ export function BarreHaute() {
         <button
           onClick={reinitialiserBase}
           className="text-muted hover:bg-canvas hover:text-ink rounded-lg p-2 transition"
-          title="Reinitialiser les donnees de demonstration"
+          title="Réinitialiser les données de demonstration"
         >
           <RotateCcw className="h-4 w-4" />
         </button>
@@ -89,7 +89,7 @@ export function BarreHaute() {
         </Link>
 
         <button
-          onClick={deconnecter}
+          onClick={() => deconnecter()}
           className="text-muted hover:bg-canvas hover:text-ink rounded-lg p-2 transition"
           title="Se deconnecter"
         >

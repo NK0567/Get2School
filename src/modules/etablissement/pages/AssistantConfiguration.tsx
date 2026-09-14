@@ -1,10 +1,10 @@
 /**
  * Assistant de configuration initiale · lot A (Boris)
  *
- * A la premiere connexion d'un Super Administrateur, l'etablissement reste en
- * statut PENDING tant que ces quatre etapes ne sont pas terminees. C'est le
- * point d'entree du produit : tant qu'il n'a pas ete franchi, aucune donnee
- * scolaire ne peut etre saisie.
+ * A la première connexion d'un Super Administrateur, l'établissement reste en
+ * statut PENDING tant que ces quatre étapes ne sont pas terminees. C'est le
+ * point d'entree du produit : tant qu'il n'a pas été franchi, aucune donnée
+ * scolaire ne peut être saisie.
  */
 import { useState } from 'react'
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
@@ -18,7 +18,7 @@ import { useEtablissement, useTerminerConfiguration } from '../hooks/useEtabliss
 import { IndicateurEtapes } from '../composants/IndicateurEtapes'
 import { ReglesCalcul } from '../composants/ReglesCalcul'
 
-const ETAPES = ['Identite', 'Annee scolaire', 'Regles de calcul', 'Verification']
+const ETAPES = ['Identite', 'Année scolaire', 'Règles de calcul', 'Vérification']
 
 interface Identite {
   name: string
@@ -49,8 +49,8 @@ export default function AssistantConfiguration() {
 
   if (isLoading) return <SqueletteTableau lignes={5} />
 
-  // Etat derive : on part des valeurs de l'etablissement, le brouillon prend le
-  // relais des la premiere saisie. Pas d'effet de synchronisation a maintenir.
+  // État derive : on part des valeurs de l'établissement, le brouillon prend le
+  // relais des la première saisie. Pas d'effet de synchronisation a maintenir.
   const identite = identiteSaisie ?? {
     name: etablissement?.name ?? '',
     acronym: etablissement?.acronym ?? '',
@@ -89,18 +89,18 @@ export default function AssistantConfiguration() {
         academique,
         regles: { ...regles, periodType: academique.periodType },
       })
-      toast('succes', "L'etablissement est configure. Vous pouvez commencer a creer les comptes.")
+      toast('succes', "L'établissement est configuré. Vous pouvez commencer à créer les comptes.")
       naviguer('/utilisateurs')
     } catch {
-      toast('danger', 'La configuration a echoue.')
+      toast('danger', 'La configuration à échoué.')
     }
   }
 
   return (
     <div className="mx-auto max-w-3xl">
       <EnteteDePage
-        titre="Configuration de l'etablissement"
-        sousTitre="Quatre etapes avant de pouvoir utiliser la plateforme."
+        titre="Configuration de l'établissement"
+        sousTitre="Quatre étapes avant de pouvoir utiliser la plateforme."
       />
 
       <IndicateurEtapes etapes={ETAPES} courante={etape} />
@@ -109,7 +109,7 @@ export default function AssistantConfiguration() {
         {etape === 0 && (
           <div className="grid grid-cols-2 gap-4">
             <Champ
-              libelle="Nom de l'etablissement"
+              libelle="Nom de l'établissement"
               requis
               className="col-span-2"
               value={identite.name}
@@ -118,7 +118,7 @@ export default function AssistantConfiguration() {
             <Champ
               libelle="Sigle"
               requis
-              aide="Utilise dans les matricules et les references de documents"
+              aide="Utilisé dans les matricules et les références de documents"
               value={identite.acronym}
               onChange={(e) => setIdentite({ ...identite, acronym: e.target.value.toUpperCase() })}
             />
@@ -142,7 +142,7 @@ export default function AssistantConfiguration() {
               onChange={(e) => setIdentite({ ...identite, phone: e.target.value })}
             />
             <Champ
-              libelle="Adresse electronique"
+              libelle="Adresse électronique"
               requis
               type="email"
               value={identite.email}
@@ -154,7 +154,7 @@ export default function AssistantConfiguration() {
         {etape === 1 && (
           <div className="grid grid-cols-2 gap-4">
             <Champ
-              libelle="Libelle de l'annee"
+              libelle="Libelle de l'année"
               requis
               aide="Format 2026-2027"
               value={academique.anneeLabel}
@@ -173,14 +173,14 @@ export default function AssistantConfiguration() {
               ]}
             />
             <Champ
-              libelle="Debut de l'annee"
+              libelle="Début de l'année"
               requis
               type="date"
               value={academique.startDate}
               onChange={(e) => setAcademique({ ...academique, startDate: e.target.value })}
             />
             <Champ
-              libelle="Fin de l'annee"
+              libelle="Fin de l'année"
               requis
               type="date"
               value={academique.endDate}
@@ -200,17 +200,17 @@ export default function AssistantConfiguration() {
         {etape === 3 && (
           <div className="flex flex-col gap-5">
             <div>
-              <h3 className="text-ink mb-1 text-sm font-semibold">Etablissement</h3>
+              <h3 className="text-ink mb-1 text-sm font-semibold">Établissement</h3>
               <GrilleInfos colonnes={3}>
                 <LigneInfo libelle="Nom">{identite.name}</LigneInfo>
                 <LigneInfo libelle="Sigle">{identite.acronym}</LigneInfo>
                 <LigneInfo libelle="Telephone">{identite.phone}</LigneInfo>
                 <LigneInfo libelle="Adresse">{identite.address}</LigneInfo>
-                <LigneInfo libelle="Adresse electronique">{identite.email}</LigneInfo>
+                <LigneInfo libelle="Adresse électronique">{identite.email}</LigneInfo>
               </GrilleInfos>
             </div>
             <div className="border-line border-t pt-4">
-              <h3 className="text-ink mb-1 text-sm font-semibold">Annee scolaire</h3>
+              <h3 className="text-ink mb-1 text-sm font-semibold">Année scolaire</h3>
               <GrilleInfos colonnes={3}>
                 <LigneInfo libelle="Libelle">{academique.anneeLabel}</LigneInfo>
                 <LigneInfo libelle="Debut">{formaterDate(academique.startDate)}</LigneInfo>
@@ -221,15 +221,15 @@ export default function AssistantConfiguration() {
               </GrilleInfos>
             </div>
             <div className="border-line border-t pt-4">
-              <h3 className="text-ink mb-1 text-sm font-semibold">Regles de calcul</h3>
+              <h3 className="text-ink mb-1 text-sm font-semibold">Règles de calcul</h3>
               <GrilleInfos colonnes={3}>
                 <LigneInfo libelle="Bareme">{regles.maxGrade}</LigneInfo>
                 <LigneInfo libelle="Moyenne de passage">{regles.passingGrade}</LigneInfo>
                 <LigneInfo libelle="Devise">{regles.currency}</LigneInfo>
-                <LigneInfo libelle="Note sanctionnee">
+                <LigneInfo libelle="Note sanctionnée">
                   {regles.penaltyPolicy === 'EXCLUDE_COEFFICIENT'
-                    ? 'Coefficient retire du calcul'
-                    : 'Comptee zero, coefficient inclus'}
+                    ? 'Coefficient retiré du calcul'
+                    : 'Comptée zéro, coefficient inclus'}
                 </LigneInfo>
               </GrilleInfos>
             </div>

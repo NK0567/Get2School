@@ -22,7 +22,7 @@ interface Props {
 
 const PALETTE = ['#1D6FE0', '#D97706', '#16A34A', '#DC2626']
 
-/** Comparaison entre categories · PROPRIETAIRE : Boris */
+/** Comparaison entre catégories · PROPRIETAIRE : Boris */
 export function GraphiqueBarres({ donnees, axeX, series, hauteur = 300, reference, horizontal }: Props) {
   return (
     <ResponsiveContainer width="100%" height={hauteur}>

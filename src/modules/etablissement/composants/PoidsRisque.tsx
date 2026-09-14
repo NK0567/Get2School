@@ -9,7 +9,7 @@ interface Props {
 
 const FACTEURS: { cle: keyof ParametresEtablissement['riskWeights']; libelle: string; aide: string }[] = [
   { cle: 'average', libelle: 'Moyenne generale', aide: 'Poids de la moyenne dans le score' },
-  { cle: 'trend', libelle: 'Tendance', aide: 'Baisse entre deux periodes consecutives' },
+  { cle: 'trend', libelle: 'Tendance', aide: 'Baisse entre deux périodes consecutives' },
   { cle: 'absence', libelle: "Taux d'absence", aide: 'Sature a 20 % de seances manquees' },
   { cle: 'discipline', libelle: 'Incidents disciplinaires', aide: 'Sature a 5 incidents' },
 ]

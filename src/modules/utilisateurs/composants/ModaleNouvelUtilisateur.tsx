@@ -6,11 +6,11 @@ import { LIBELLE_ROLE, ROLES } from '../../../socle/modeles/communs'
 import { useCreerUtilisateur } from '../hooks/useUtilisateurs'
 
 const schema = z.object({
-  firstName: z.string().min(2, 'Le prenom est obligatoire.'),
+  firstName: z.string().min(2, 'Le prénom est obligatoire.'),
   lastName: z.string().min(2, 'Le nom est obligatoire.'),
-  email: z.string().email('Adresse electronique invalide.'),
+  email: z.string().email('Adresse électronique invalide.'),
   phone: z.string().optional(),
-  role: z.enum(ROLES, { message: 'Le role est obligatoire.' }),
+  role: z.enum(ROLES, { message: 'Le rôle est obligatoire.' }),
 })
 
 type Formulaire = z.infer<typeof schema>
@@ -32,10 +32,10 @@ export function ModaleNouvelUtilisateur({ ouverte, onFermer }: { ouverte: boolea
   const envoyer = handleSubmit(async (valeurs) => {
     try {
       await creer.mutateAsync(valeurs)
-      toast('succes', "L'utilisateur a ete cree.")
+      toast('succes', "L'utilisateur à été créé.")
       fermer()
     } catch (erreur) {
-      const message = (erreur as { message?: string })?.message ?? 'La creation a echoue.'
+      const message = (erreur as { message?: string })?.message ?? 'La création à échoué.'
       toast('danger', message)
     }
   })
@@ -65,7 +65,7 @@ export function ModaleNouvelUtilisateur({ ouverte, onFermer }: { ouverte: boolea
         />
         <Champ libelle="Nom" requis {...register('lastName')} erreur={formState.errors.lastName?.message} />
         <Champ
-          libelle="Adresse electronique"
+          libelle="Adresse électronique"
           requis
           type="email"
           {...register('email')}

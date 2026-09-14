@@ -1,8 +1,8 @@
 /**
  * Tableau de bord · PROPRIETAIRE : Boris · FIGE
  *
- * La rangee de statistiques est commune a tous les roles. Le bloc du dessous
- * depend du role et vit dans le fichier du lot concerne (voir registre.ts).
+ * La rangee de statistiques est commune a tous les rôles. Le bloc du dessous
+ * depend du rôle et vit dans le fichier du lot concerne (voir registre.ts).
  */
 import { useQuery } from '@tanstack/react-query'
 import { GraduationCap, School, UserCog, Users } from 'lucide-react'
@@ -43,7 +43,7 @@ export default function TableauDeBord() {
 
       <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-2">
         <CarteStat
-          libelle="Eleves inscrits"
+          libelle="Élèves inscrits"
           valeur={eleves?.total ?? 0}
           icone={<GraduationCap className="h-5 w-5" />}
         />

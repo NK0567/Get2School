@@ -12,12 +12,12 @@ interface Props {
   requis?: boolean
 }
 
-/** Periodes de l'annee scolaire selectionnee, avec mention du verrouillage. */
+/** Périodes de l'année scolaire sélectionnée, avec mention du verrouillage. */
 export function SelecteurPeriode({
   valeur,
   onChange,
   libelle,
-  placeholder = 'Toutes les periodes',
+  placeholder = 'Toutes les périodes',
   requis,
 }: Props) {
   const anneeId = useContexteScolaire((e) => e.anneeId)

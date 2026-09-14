@@ -7,7 +7,7 @@ export interface Colonne<T> {
   entete: string
   rendu: (ligne: T) => ReactNode
   className?: string
-  /** Rend l'en-tete cliquable. Le tri lui-meme est gere par l'appelant. */
+  /** Rend l'en-tête cliquable. Le tri lui-même est géré par l'appelant. */
   triable?: boolean
 }
 

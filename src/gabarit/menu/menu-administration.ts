@@ -35,13 +35,13 @@ export const menuAdministration: GroupeMenu[] = [
     entrees: [
       { libelle: 'Utilisateurs', chemin: '/utilisateurs', icone: Users, roles: ['SCHOOL_ADMIN', 'ADMIN'] },
       {
-        libelle: 'Etablissement',
+        libelle: 'Établissement',
         chemin: '/etablissement/parametres',
         icone: Building2,
         roles: ['SCHOOL_ADMIN'],
       },
       {
-        libelle: 'Annees scolaires',
+        libelle: 'Années scolaires',
         chemin: '/annees-scolaires',
         icone: CalendarRange,
         roles: ['SCHOOL_ADMIN', 'ADMIN'],

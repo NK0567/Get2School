@@ -1,6 +1,6 @@
 /**
  * Types transverses · PROPRIETAIRE : Boris
- * Personne ne modifie ce fichier sans PR validee par l'integrateur.
+ * Personne ne modifie ce fichier sans PR validée par l'integrateur.
  */
 
 export const ROLES = [
@@ -17,9 +17,9 @@ export type Role = (typeof ROLES)[number]
 
 export const LIBELLE_ROLE: Record<Role, string> = {
   PLATFORM_ADMIN: 'Super Administrateur plateforme',
-  SCHOOL_ADMIN: "Super Administrateur d'etablissement",
+  SCHOOL_ADMIN: "Super Administrateur d'établissement",
   ADMIN: 'Administrateur',
-  ACADEMIC_HEAD: 'Responsable pedagogique',
+  ACADEMIC_HEAD: 'Responsable pédagogique',
   SECRETARY: 'Secretaire',
   ACCOUNTANT: 'Comptable',
   TEACHER: 'Enseignant',
@@ -49,7 +49,7 @@ export interface Page<T> {
   taille: number
 }
 
-/** Toute entite rattachee a un etablissement. */
+/** Toute entite rattachée a un établissement. */
 export interface EntiteEtablissement {
   id: string
   establishmentId: string

@@ -1,5 +1,5 @@
 /**
- * Modeles du lot C · PROPRIETAIRE : Fabrice
+ * Modèles du lot C · PROPRIETAIRE : Fabrice
  * Boris et Alida : lecture seule.
  */
 import type { EntiteEtablissement } from './communs'
@@ -23,7 +23,7 @@ export interface Note extends EntiteEtablissement {
   studentId: string
   enrollmentId: string
   value: number | null
-  /** PENALIZED = note sanctionnee avec motif obligatoire, jamais supprimee. */
+  /** PENALIZED = note sanctionnée avec motif obligatoire, jamais supprimée. */
   status: 'VALID' | 'PENALIZED' | 'ABSENT'
   penaltyReason?: string
   comment?: string
@@ -100,7 +100,7 @@ export interface ScoreRisque {
   factors: { average: number; trend: number; absence: number; discipline: number }
 }
 
-/** Contrat fige entre le lot C (contenu) et le lot A (document imprime). */
+/** Contrat figé entre le lot C (contenu) et le lot A (document imprime). */
 export interface DonneesBulletin {
   student: { matricule: string; fullName: string; birthDate: string }
   classroom: { name: string; level: string; series?: string; headcount: number }

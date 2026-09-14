@@ -1,5 +1,5 @@
 /**
- * Appels API du module Etablissement · lot A (Boris)
+ * Appels API du module Établissement · lot A (Boris)
  */
 import { api } from '../../socle/api/client'
 import type { Etablissement, ParametresEtablissement } from '../../socle/modeles/administration'
@@ -19,7 +19,7 @@ export async function enregistrerIdentite(avant: Etablissement, modifs: Identite
   const { data } = await api.put<Etablissement>('/establishments/current', modifs)
   await journaliser({
     action: 'USER_UPDATE',
-    entityType: 'Etablissement',
+    entityType: 'Établissement',
     entityId: avant.id,
     entityLabel: avant.name,
     before: { name: avant.name, phone: avant.phone, email: avant.email },
@@ -51,7 +51,7 @@ export async function terminerConfiguration(demande: DemandeConfiguration) {
   const { data } = await api.post<Etablissement>('/establishments/current/setup', demande)
   await journaliser({
     action: 'YEAR_OPEN',
-    entityType: 'Etablissement',
+    entityType: 'Établissement',
     entityId: data.id,
     entityLabel: data.name,
     after: { status: data.status, annee: demande.academique.anneeLabel },

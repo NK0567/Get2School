@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-/** Couple libelle / valeur des fiches de detail. */
+/** Couple libelle / valeur des fiches de détail. */
 export function LigneInfo({ libelle, children }: { libelle: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-0.5 py-2">

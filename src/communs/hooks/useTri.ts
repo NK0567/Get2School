@@ -2,8 +2,8 @@ import { useCallback, useMemo, useState } from 'react'
 import type { EtatTri } from '../../ui'
 
 /**
- * Tri local d'une liste deja chargee. Pour les grandes listes, le tri se fait
- * cote serveur : on passe alors la cle et le sens en parametres de requete.
+ * Tri local d'une liste déjà chargee. Pour les grandes listes, le tri se fait
+ * côté serveur : on passe alors la clé et le sens en paramètres de requête.
  */
 export function useTri<T>(lignes: T[] | undefined, extracteurs: Record<string, (ligne: T) => unknown>) {
   const [tri, setTri] = useState<EtatTri | undefined>()

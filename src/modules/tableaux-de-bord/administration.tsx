@@ -1,5 +1,5 @@
 /**
- * Bloc de tableau de bord des roles d'administration · PROPRIETAIRE : Boris
+ * Bloc de tableau de bord des rôles d'administration · PROPRIETAIRE : Boris
  * Affiche pour SCHOOL_ADMIN et ADMIN.
  */
 import { useQuery } from '@tanstack/react-query'
@@ -27,7 +27,7 @@ export function TableauDeBordAdministration() {
       </div>
 
       {data && data.contenu.length === 0 ? (
-        <EtatVide titre="Aucune operation enregistree" icone={<ScrollText className="h-8 w-8" />} />
+        <EtatVide titre="Aucune opération enregistrée" icone={<ScrollText className="h-8 w-8" />} />
       ) : (
         <div className="divide-line divide-y">
           {data?.contenu.map((entree) => (

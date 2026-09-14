@@ -1,7 +1,7 @@
 /**
  * Routes simulees du lot C · PROPRIETAIRE : Fabrice
  *
- * Modele a suivre : voir routes-administration.ts.
+ * Modèle a suivre : voir routes-administration.ts.
  */
 import type MockAdapter from 'axios-mock-adapter'
 import type { Evaluation, Note } from '../modeles/academique'
@@ -9,7 +9,7 @@ import { collection, paginer, parametres } from './base'
 
 export function routesAcademique(s: MockAdapter) {
   s.onGet(/\/evaluations(\?.*)?$/).reply((config) => {
-    const p = parametres(config.url)
+    const p = parametres(config)
     const classId = p.get('classId')
     const periodId = p.get('periodId')
     let liste = collection<Evaluation>('evaluations')

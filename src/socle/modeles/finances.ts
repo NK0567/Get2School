@@ -1,5 +1,5 @@
 /**
- * Modeles financiers du lot B · PROPRIETAIRE : Alida
+ * Modèles financiers du lot B · PROPRIETAIRE : Alida
  * Boris et Fabrice : lecture seule.
  */
 import type { EntiteEtablissement } from './communs'
@@ -58,7 +58,7 @@ export interface Recu extends EntiteEtablissement {
 
 export type StatutFinancier = 'PAID' | 'PARTIAL' | 'UNPAID' | 'EXEMPT'
 
-/** Resultat de calcul, jamais stocke en base. */
+/** Résultat de calcul, jamais stocke en base. */
 export interface SituationFinanciere {
   studentId: string
   schoolYearId: string

@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react'
 
 /**
- * Evite de recreer un couple d'etats a chaque action destructive.
+ * Evite de recreer un couple d'états à chaque action destructive.
  *
- *   const suppression = useConfirmation<Eleve>()
+ *   const suppression = useConfirmation<Élève>()
  *   ...
- *   <Bouton onClick={() => suppression.demander(eleve)}>Archiver</Bouton>
+ *   <Bouton onClick={() => suppression.demander(élève)}>Archiver</Bouton>
  *   <DialogueConfirmation
  *     ouverte={suppression.ouverte}
  *     onFermer={suppression.annuler}
