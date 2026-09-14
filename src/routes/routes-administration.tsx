@@ -5,6 +5,9 @@ import { ExigeRole } from '../socle/gardes/ExigeRole'
 import EnConstruction from '../modules/EnConstruction'
 
 const ListeUtilisateurs = lazy(() => import('../modules/utilisateurs/pages/ListeUtilisateurs'))
+const AssistantConfiguration = lazy(() => import('../modules/etablissement/pages/AssistantConfiguration'))
+const IdentiteEtablissement = lazy(() => import('../modules/etablissement/pages/IdentiteEtablissement'))
+const ParametresEtablissement = lazy(() => import('../modules/etablissement/pages/ParametresEtablissement'))
 const TableauDeBord = lazy(() => import('../modules/tableaux-de-bord/pages/TableauDeBord'))
 
 export const routesAdministration: RouteObject[] = [
@@ -18,7 +21,30 @@ export const routesAdministration: RouteObject[] = [
       </ExigeRole>
     ),
   },
-  { path: 'etablissement/parametres', element: <EnConstruction titre="Parametres de l'etablissement" /> },
+  {
+    path: 'etablissement/configuration',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN']}>
+        <AssistantConfiguration />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'etablissement/identite',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN', 'ADMIN']}>
+        <IdentiteEtablissement />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'etablissement/parametres',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN']}>
+        <ParametresEtablissement />
+      </ExigeRole>
+    ),
+  },
   { path: 'annees-scolaires', element: <EnConstruction titre="Annees scolaires" /> },
   { path: 'journal-audit', element: <EnConstruction titre="Journal d'audit" /> },
   { path: 'recherche', element: <EnConstruction titre="Recherche globale" /> },

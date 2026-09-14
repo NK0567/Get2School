@@ -27,6 +27,50 @@ export function routesAdministration(s: MockAdapter) {
   /* ── Etablissement ────────────────────────────────────── */
   s.onGet('/establishments/current').reply(() => [200, collection<Etablissement>('etablissements')[0]])
 
+  s.onPut('/establishments/current').reply((config) => {
+    const etb = collection<Etablissement>('etablissements')[0]
+    const maj = majParId<Etablissement>('etablissements', etb.id, JSON.parse(config.data))
+    return [200, maj]
+  })
+
+  s.onPost('/establishments/current/setup').reply((config) => {
+    const corps = JSON.parse(config.data)
+    const etb = collection<Etablissement>('etablissements')[0]
+
+    const maj = majParId<Etablissement>('etablissements', etb.id, {
+      ...corps.identite,
+      status: 'ACTIVE',
+      settings: corps.regles,
+    })
+
+    // Cree l'annee scolaire de l'assistant si elle n'existe pas encore.
+    const annees = collection<AnneeScolaire>('anneesScolaires')
+    if (!annees.some((a) => a.label === corps.academique.anneeLabel)) {
+      const id = `an-${nanoid(4)}`
+      const nombre = corps.academique.periodType === 'SEMESTER' ? 2 : 3
+      const intitule = corps.academique.periodType === 'SEMESTER' ? 'Semestre' : 'Trimestre'
+      ajouter<AnneeScolaire>('anneesScolaires', {
+        id,
+        establishmentId: etb.id,
+        label: corps.academique.anneeLabel,
+        startDate: corps.academique.startDate,
+        endDate: corps.academique.endDate,
+        status: 'OPEN',
+        periods: Array.from({ length: nombre }, (_, i) => ({
+          id: `${id}-p${i + 1}`,
+          schoolYearId: id,
+          label: `${intitule} ${i + 1}`,
+          order: i + 1,
+          startDate: corps.academique.startDate,
+          endDate: corps.academique.endDate,
+          isLocked: false,
+        })),
+      })
+    }
+
+    return [200, maj]
+  })
+
   s.onPut('/establishments/current/settings').reply((config) => {
     const etb = collection<Etablissement>('etablissements')[0]
     const maj = majParId<Etablissement>('etablissements', etb.id, { settings: JSON.parse(config.data) })
