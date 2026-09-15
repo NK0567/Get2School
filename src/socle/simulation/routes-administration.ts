@@ -13,7 +13,7 @@ import type {
   Notification,
   Utilisateur,
 } from '../modeles/administration'
-import type { Affectation, Classe, Enseignant } from '../modeles/scolarite'
+import type { Affectation, Classe, Eleve, Enseignant, Inscription } from '../modeles/scolarite'
 import { ajouter, collection, majParId, paginer, parametres, parId, remplacer } from './base'
 
 export function routesAdministration(s: MockAdapter) {
@@ -589,6 +589,19 @@ export function routesAdministration(s: MockAdapter) {
     return [200, paginer(liste, p)]
   })
 
+  /* ── Annonces reçues par le compte courant ────────────── */
+
+  s.onGet('/announcements/received').reply((config) => {
+    const moi = destinataireCourant(config)
+    return [
+      200,
+      collection<Annonce>('annonces')
+        .filter((a) => a.status === 'PUBLISHED')
+        .filter((a) => resoudreAudience(a.audienceType, a.audienceRefs).some((u) => u.id === moi))
+        .sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? '')),
+    ]
+  })
+
   s.onGet(/^\/announcements\/[\w-]+$/).reply((config) => {
     const id = (config.url ?? '').split('/').pop() as string
     const annonce = parId<Annonce>('annonces', id)
@@ -638,7 +651,7 @@ export function routesAdministration(s: MockAdapter) {
           annonce.priority === 'URGENT'
             ? 'Annonce urgente de la direction. Consultez-la sans tarder.'
             : 'Une nouvelle annonce a été diffusée.',
-        linkRoute: '/communication/annonces',
+        linkRoute: '/annonces',
         isRead: false,
         createdAt: new Date().toISOString(),
       })
@@ -739,5 +752,148 @@ export function routesAdministration(s: MockAdapter) {
     const id = (config.url ?? '').split('/')[2]
     const maj = majParId<Notification>('notifications', id, { isRead: true })
     return maj ? [200, maj] : [404, { message: 'Notification introuvable.' }]
+  })
+
+  /* ── Recherche globale ────────────────────────────────── */
+
+  /**
+   * Le filtrage par rôle est appliqué ici, côté serveur, et non dans
+   * l'interface : la réponse ne doit pas contenir de résultats qu'un rôle
+   * n'a pas le droit de voir, même s'ils étaient masqués à l'affichage.
+   */
+  const TYPES_PAR_ROLE: Record<string, string[]> = {
+    PLATFORM_ADMIN: ['ELEVE', 'ENSEIGNANT', 'CLASSE', 'UTILISATEUR', 'DOCUMENT'],
+    SCHOOL_ADMIN: ['ELEVE', 'ENSEIGNANT', 'CLASSE', 'UTILISATEUR', 'DOCUMENT'],
+    ADMIN: ['ELEVE', 'ENSEIGNANT', 'CLASSE', 'UTILISATEUR', 'DOCUMENT'],
+    SECRETARY: ['ELEVE', 'ENSEIGNANT', 'CLASSE', 'DOCUMENT'],
+    ACADEMIC_HEAD: ['ELEVE', 'ENSEIGNANT', 'CLASSE', 'DOCUMENT'],
+    ACCOUNTANT: ['ELEVE', 'CLASSE', 'DOCUMENT'],
+    TEACHER: ['ELEVE', 'CLASSE'],
+  }
+
+  s.onGet(/^\/search(\?.*)?$/).reply((config) => {
+    const p = parametres(config)
+    const terme = (p.get('q') ?? '').trim().toLowerCase()
+    if (terme.length < 2) return [200, { resultats: [], total: 0, typesAutorises: [] }]
+
+    const moi = collection<Utilisateur>('utilisateurs').find((u) => u.id === destinataireCourant(config))
+    const typesAutorises = TYPES_PAR_ROLE[moi?.role ?? 'TEACHER'] ?? []
+
+    const demandes = (p.get('types') ?? '').split(',').filter(Boolean)
+    const retenus = demandes.length ? typesAutorises.filter((t) => demandes.includes(t)) : typesAutorises
+
+    const contient = (...champs: (string | undefined)[]) =>
+      champs.some((c) => (c ?? '').toLowerCase().includes(terme))
+
+    const resultats: {
+      type: string
+      id: string
+      titre: string
+      precision?: string
+      route: string
+    }[] = []
+
+    if (retenus.includes('ELEVE')) {
+      const classes = collection<Classe>('classes')
+      const inscriptions = collection<Inscription>('inscriptions')
+      for (const eleve of collection<Eleve>('eleves')) {
+        if (!contient(eleve.firstName, eleve.lastName, eleve.matricule)) continue
+        const inscription = inscriptions.find((i) => i.studentId === eleve.id && i.status === 'ACTIVE')
+        const classe = classes.find((c) => c.id === inscription?.classId)
+        resultats.push({
+          type: 'ELEVE',
+          id: eleve.id,
+          titre: `${eleve.lastName.toUpperCase()} ${eleve.firstName}`,
+          // Matricule et classe suffisent à identifier : ni contact, ni
+          // situation financière, ni résultat scolaire dans un résultat.
+          precision: [eleve.matricule, classe?.name].filter(Boolean).join(' · '),
+          route: `/eleves/${eleve.id}`,
+        })
+      }
+    }
+
+    if (retenus.includes('ENSEIGNANT')) {
+      for (const enseignant of collection<Enseignant>('enseignants')) {
+        if (!contient(enseignant.firstName, enseignant.lastName)) continue
+        resultats.push({
+          type: 'ENSEIGNANT',
+          id: enseignant.id,
+          titre: `${enseignant.lastName.toUpperCase()} ${enseignant.firstName}`,
+          precision: enseignant.isActive ? undefined : 'Compte désactivé',
+          route: `/enseignants/${enseignant.id}`,
+        })
+      }
+    }
+
+    if (retenus.includes('CLASSE')) {
+      for (const classe of collection<Classe>('classes')) {
+        if (!contient(classe.name, classe.level, classe.series)) continue
+        resultats.push({
+          type: 'CLASSE',
+          id: classe.id,
+          titre: classe.name,
+          precision: `${classe.studentCount} élève(s)`,
+          route: `/classes/${classe.id}`,
+        })
+      }
+    }
+
+    if (retenus.includes('UTILISATEUR')) {
+      for (const utilisateur of collection<Utilisateur>('utilisateurs')) {
+        if (!contient(utilisateur.firstName, utilisateur.lastName, utilisateur.email)) continue
+        resultats.push({
+          type: 'UTILISATEUR',
+          id: utilisateur.id,
+          titre: `${utilisateur.lastName.toUpperCase()} ${utilisateur.firstName}`,
+          precision: utilisateur.isActive ? utilisateur.email : 'Compte désactivé',
+          route: `/utilisateurs/${utilisateur.id}`,
+        })
+      }
+    }
+
+    if (retenus.includes('DOCUMENT')) {
+      for (const document of collection<DocumentGenere>('documentsGeneres')) {
+        if (!contient(document.reference, document.targetId)) continue
+        resultats.push({
+          type: 'DOCUMENT',
+          id: document.id,
+          titre: document.reference,
+          precision: document.status === 'CANCELLED' ? 'Annulé' : document.targetId,
+          route: `/documents/${document.id}/apercu`,
+        })
+      }
+    }
+
+    // Plafond : au-delà, l'utilisateur doit préciser sa recherche plutôt que
+    // de faire remonter des milliers de lignes.
+    const plafonnes = resultats.slice(0, 50)
+    return [200, { resultats: plafonnes, total: plafonnes.length, typesAutorises }]
+  })
+
+  /* ── Rôles, permissions, fiche utilisateur ────────────── */
+
+  s.onPatch(/^\/users\/[\w-]+\/role$/).reply((config) => {
+    const id = (config.url ?? '').split('/')[2]
+    const { role } = JSON.parse(config.data ?? '{}')
+    const maj = majParId<Utilisateur>('utilisateurs', id, { role })
+    return maj ? [200, maj] : [404, { message: 'Utilisateur introuvable.' }]
+  })
+
+  s.onPut(/^\/users\/[\w-]+\/permissions$/).reply((config) => {
+    const id = (config.url ?? '').split('/')[2]
+    const { permissions } = JSON.parse(config.data ?? '{}')
+    const maj = majParId<Utilisateur>('utilisateurs', id, { permissions })
+    return maj ? [200, maj] : [404, { message: 'Utilisateur introuvable.' }]
+  })
+
+  s.onGet('/roles/permissions').reply(() => [200, collection<unknown>('matriceRoles')[0]])
+
+  s.onPut('/roles/permissions').reply((config) => {
+    const matrice = JSON.parse(config.data ?? '{}')
+    // Le Super Administrateur n'est pas éditable : sa ligne est ignorée même
+    // si le client l'envoie.
+    delete matrice.SCHOOL_ADMIN
+    remplacer('matriceRoles', [matrice])
+    return [200, matrice]
   })
 }

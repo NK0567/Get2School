@@ -99,6 +99,18 @@ export function donneesAdministration() {
   const annonces: Annonce[] = []
   const notifications: Notification[] = []
 
+  // Socle de permissions par rôle. Le Super Administrateur n'y figure pas :
+  // il détient toutes les permissions en permanence.
+  const matriceRoles = [
+    {
+      ADMIN: ['STUDENT_READ', 'STUDENT_WRITE', 'DOCUMENT_GENERATE', 'USER_MANAGE'],
+      ACADEMIC_HEAD: ['STUDENT_READ', 'GRADE_READ', 'GRADE_WRITE', 'DOCUMENT_GENERATE'],
+      SECRETARY: ['STUDENT_READ', 'STUDENT_WRITE', 'DOCUMENT_GENERATE'],
+      ACCOUNTANT: ['STUDENT_READ', 'PAYMENT_READ', 'PAYMENT_WRITE', 'DOCUMENT_GENERATE'],
+      TEACHER: ['STUDENT_READ', 'GRADE_READ', 'GRADE_WRITE'],
+    },
+  ]
+
   return {
     etablissements: [etablissement],
     utilisateurs,
@@ -108,6 +120,7 @@ export function donneesAdministration() {
     journalAudit,
     annonces,
     notifications,
+    matriceRoles,
   }
 }
 

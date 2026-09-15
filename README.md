@@ -12,14 +12,17 @@ npm install
 npm run dev
 ```
 
-Puis `direction@lyceebafoussam.cm` avec n'importe quel mot de passe.
 
 | Commande | Effet |
 |---|---|
 | `npm run dev` | Serveur de développement |
 | `npm run build` | Build de production |
-| `npm run verifier` | TypeScript + ESLint + Prettier |
+| `npm run verifier` | TypeScript, ESLint, Prettier et contrôle des écrans |
 | `npm run format` | Reformate le code |
+
+En développement, l'écran de connexion liste les comptes de démonstration : cliquez sur l'un d'eux
+pour remplir le formulaire. Le mot de passe n'est pas vérifié tant que l'API est simulée. Ce bloc
+disparaît automatiquement du bundle de production.
 
 **Lisez `CONTRIBUTING.md` avant votre premier commit.** Il contient la table de propriété des fichiers et la règle du jeu à trois.
 
@@ -110,6 +113,13 @@ Le découpage par lot des fichiers autrement partagés (routes, menu, modèles, 
 - Vérification publique : `/v/:reference`, sans authentification, cible des QR codes imprimés
 - Annonces : rédaction, ciblage avec comptage des destinataires, diffusion, retrait avec motif
 - Notifications : centre, compteur dans la barre haute, catalogue de types partagé entre les trois lots
+- Recherche globale : élèves, enseignants, classes, comptes et documents, cloisonnée par rôle côté serveur
+
+- Utilisateurs : fiche à trois onglets (identité, permissions, activité), matrice rôles × permissions
+- Annonces : écran de consultation ouvert à tous les rôles, distinct de l'administration des annonces
+
+**Le lot A est complet.** Ses douze modules sont livrés et routés. Les lots B et C affichent encore
+un écran « en construction » là où leurs écrans restent à écrire.
 
 **À construire**
 

@@ -121,7 +121,9 @@ npm run verifier
 
 `npm run verifier` lance TypeScript, ESLint, Prettier et le contrôle des écrans. Si ça ne passe pas chez toi, ça ne passera pas en relecture.
 
-Le contrôle des écrans (`outils/verifier-ecrans.mjs`) vérifie que chaque fichier de `pages/` est déclaré dans une table de routes, et que chaque entrée de menu pointe vers une route existante. Il existe parce qu'un module entier a été livré une fois sans être routé : le code compilait, le lint passait, et les écrans étaient inaccessibles. Un défaut invisible pour le compilateur doit être détecté par un contrôle explicite.
+Le contrôle des écrans (`outils/verifier-ecrans.mjs`) vérifie trois choses : chaque fichier de `pages/` est déclaré dans une table de routes, chaque entrée de menu pointe vers une route existante, et **chaque cible de navigation écrite dans le code** (`naviguer()`, `<Link to>`, `linkRoute`, `route`) correspond à une route déclarée. Ce troisième contrôle a révélé trois liens morts que les deux premiers laissaient passer.
+
+**Un chemin fixe se déclare toujours avant un chemin paramétré.** `utilisateurs/permissions` avant `utilisateurs/:id`, `announcements/received` avant `announcements/:id`. Dans le cas contraire, le segment fixe est interprété comme un identifiant et la route n'est jamais atteinte. La même règle vaut pour les expressions régulières de la simulation, qui doivent en outre être ancrées avec `^`. Il existe parce qu'un module entier a été livré une fois sans être routé : le code compilait, le lint passait, et les écrans étaient inaccessibles. Un défaut invisible pour le compilateur doit être détecté par un contrôle explicite.
 
 **Les chemins d'URL ne portent jamais d'accents.** `analyses/evolution`, pas `analyses/évolution`. Ils doivent rester copiables, saisissables au clavier et stables dans un lien partagé. Les libellés affichés, eux, sont accentués normalement.
 

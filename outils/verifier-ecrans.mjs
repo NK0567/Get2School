@@ -61,6 +61,47 @@ for (const chemin of cheminsMenu) {
   if (!declare) problemes.push(`Entrée de menu sans route : ${chemin}`)
 }
 
+
+/* 4. Chaque cible de navigation pointe-t-elle vers une route déclarée ? */
+const contenuSources = tousLesFichiers.map((f) => readFileSync(f, 'utf8')).join('\n')
+
+const cibles = new Set()
+const motifs = [
+  /naviguer\(\s*[`'"](\/[^`'"]+)[`'"]/g,
+  /to=\{?\s*[`'"](\/[^`'"]+)[`'"]/g,
+  /linkRoute:\s*[`'"](\/[^`'"]+)[`'"]/g,
+  /route:\s*[`'"](\/[^`'"]+)[`'"]/g,
+  /window\.open\(\s*[`'"](\/[^`'"]+)[`'"]/g,
+]
+for (const motif of motifs) {
+  for (const trouve of contenuSources.matchAll(motif)) cibles.add(trouve[1])
+}
+
+/** Remplace les interpolations par un segment générique. */
+const normaliser = (chemin) =>
+  chemin
+    .split('?')[0]
+    .replace(/\$\{[^}]+\}/g, ':param')
+    .replace(/\/$/, '')
+
+const routesNormalisees = cheminsRoutes.map((r) =>
+  ('/' + r.replace(/^\//, '')).replace(/:[^/]+/g, ':param'),
+)
+
+const correspond = (cible) => {
+  const segments = normaliser(cible).replace(/^\//, '').split('/')
+  return routesNormalisees.some((route) => {
+    const attendus = route.replace(/^\//, '').split('/')
+    if (attendus.length !== segments.length) return false
+    return attendus.every((a, i) => a === ':param' || a === segments[i] || a === '*')
+  })
+}
+
+for (const cible of cibles) {
+  if (normaliser(cible) === '') continue
+  if (!correspond(cible)) problemes.push(`Lien mort dans le code : ${cible}`)
+}
+
 /* Résultat */
 if (problemes.length > 0) {
   console.error('\nContrôle des écrans : échec\n')
@@ -70,7 +111,8 @@ if (problemes.length > 0) {
 }
 
 console.log(
-  `Contrôle des écrans : ${pages.length} écrans routés, ${cheminsMenu.length} entrées de menu valides` +
+  `Contrôle des écrans : ${pages.length} écrans routés, ${cheminsMenu.length} entrées de menu et ` +
+    `${cibles.size} cibles de navigation valides` +
     (enConstruction.length > 0
       ? `, ${enConstruction.length} en construction (${enConstruction.join(', ')})`
       : ''),

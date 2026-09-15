@@ -26,7 +26,7 @@ export const menuAdministration: GroupeMenu[] = [
         libelle: 'Recherche globale',
         chemin: '/recherche',
         icone: Search,
-        roles: ['SCHOOL_ADMIN', 'ADMIN', 'SECRETARY'],
+        roles: ['SCHOOL_ADMIN', 'ADMIN', 'SECRETARY', 'ACADEMIC_HEAD', 'ACCOUNTANT', 'TEACHER'],
       },
     ],
   },
@@ -66,6 +66,12 @@ export const menuAdministration: GroupeMenu[] = [
       },
       {
         libelle: 'Annonces',
+        chemin: '/annonces',
+        icone: Megaphone,
+        roles: ['SCHOOL_ADMIN', 'ADMIN', 'ACADEMIC_HEAD', 'SECRETARY', 'ACCOUNTANT', 'TEACHER'],
+      },
+      {
+        libelle: 'Gérer les annonces',
         chemin: '/communication/annonces',
         icone: Megaphone,
         roles: ['SCHOOL_ADMIN', 'ADMIN'],

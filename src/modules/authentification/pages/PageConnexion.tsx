@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router'
 import { Alerte, Bouton, Champ } from '../../../ui'
 import { useSession } from '../../../socle/etat/useSession'
 import { CadreAuthentification } from '../composants/CadreAuthentification'
+import { ComptesDemonstration } from '../composants/ComptesDemonstration'
 
 interface EtatNavigation {
   depuis?: string
@@ -86,6 +87,16 @@ export default function PageConnexion() {
           Se connecter
         </Bouton>
       </div>
+
+      {import.meta.env.DEV && (
+        <ComptesDemonstration
+          onChoisir={(adresse) => {
+            setEmail(adresse)
+            setMotDePasse('demonstration')
+            setErreur('')
+          }}
+        />
+      )}
     </CadreAuthentification>
   )
 }

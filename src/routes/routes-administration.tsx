@@ -2,7 +2,6 @@
 import { lazy } from 'react'
 import type { RouteObject } from 'react-router'
 import { ExigeRole } from '../socle/gardes/ExigeRole'
-import EnConstruction from '../modules/EnConstruction'
 
 const ListeUtilisateurs = lazy(() => import('../modules/utilisateurs/pages/ListeUtilisateurs'))
 const AssistantConfiguration = lazy(() => import('../modules/etablissement/pages/AssistantConfiguration'))
@@ -18,11 +17,39 @@ const ModelesDocuments = lazy(() => import('../modules/modeles-documents/pages/M
 const ListeAnnonces = lazy(() => import('../modules/annonces/pages/ListeAnnonces'))
 const RedigerAnnonce = lazy(() => import('../modules/annonces/pages/RedigerAnnonce'))
 const CentreNotifications = lazy(() => import('../modules/notifications/pages/CentreNotifications'))
+const RechercheGlobale = lazy(() => import('../modules/recherche/pages/RechercheGlobale'))
+const FicheUtilisateur = lazy(() => import('../modules/utilisateurs/pages/FicheUtilisateur'))
+const MatricePermissions = lazy(() => import('../modules/utilisateurs/pages/MatricePermissions'))
+const AnnoncesRecues = lazy(() => import('../modules/annonces/pages/AnnoncesRecues'))
 const TableauDeBord = lazy(() => import('../modules/tableaux-de-bord/pages/TableauDeBord'))
 
 export const routesAdministration: RouteObject[] = [
   { index: true, element: <TableauDeBord /> },
   { path: 'tableau-de-bord', element: <TableauDeBord /> },
+  {
+    // Ordre important : le chemin fixe doit précéder le chemin paramétré,
+    // sinon « permissions » serait interprété comme un identifiant.
+    path: 'utilisateurs/permissions',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN']}>
+        <MatricePermissions />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'utilisateurs/:id',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN', 'ADMIN']}>
+        <FicheUtilisateur />
+      </ExigeRole>
+    ),
+  },
+  {
+    // Consultation ouverte à tous les rôles : c'est la cible des
+    // notifications d'annonce.
+    path: 'annonces',
+    element: <AnnoncesRecues />,
+  },
   {
     path: 'utilisateurs',
     element: (
@@ -79,7 +106,7 @@ export const routesAdministration: RouteObject[] = [
       </ExigeRole>
     ),
   },
-  { path: 'recherche', element: <EnConstruction titre="Recherche globale" /> },
+  { path: 'recherche', element: <RechercheGlobale /> },
   {
     path: 'documents',
     element: (

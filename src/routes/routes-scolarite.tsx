@@ -8,7 +8,11 @@ export const routesScolarite: RouteObject[] = [
   { path: 'eleves/:id', element: <EnConstruction titre="Fiche élève" /> },
   { path: 'inscriptions', element: <EnConstruction titre="Inscriptions" /> },
   { path: 'enseignants', element: <EnConstruction titre="Enseignants" /> },
+  // Route ajoutée par l'intégrateur : la recherche globale renvoie ici.
+  { path: 'enseignants/:id', element: <EnConstruction titre="Fiche enseignant" /> },
   { path: 'classes', element: <EnConstruction titre="Classes" /> },
+  // Route ajoutée par l'intégrateur : la recherche globale renvoie ici.
+  { path: 'classes/:id', element: <EnConstruction titre="Fiche classe" /> },
   { path: 'matieres', element: <EnConstruction titre="Matieres" /> },
   { path: 'salles', element: <EnConstruction titre="Salles" /> },
   { path: 'affectations', element: <EnConstruction titre="Affectations" /> },
