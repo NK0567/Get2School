@@ -4,10 +4,10 @@ import type { GroupeMenu } from './types'
 
 export const menuAcademique: GroupeMenu[] = [
   {
-    titre: 'Academique',
+    titre: 'Académique',
     entrees: [
       {
-        libelle: 'Evaluations',
+        libelle: 'Évaluations',
         chemin: '/evaluations',
         icone: ClipboardList,
         roles: ['SCHOOL_ADMIN', 'ACADEMIC_HEAD', 'TEACHER'],
@@ -47,7 +47,7 @@ export const menuAcademique: GroupeMenu[] = [
     titre: 'Analyses',
     entrees: [
       {
-        libelle: 'Evolution',
+        libelle: 'Évolution',
         chemin: '/analyses/evolution',
         icone: LineChart,
         roles: ['SCHOOL_ADMIN', 'ACADEMIC_HEAD'],

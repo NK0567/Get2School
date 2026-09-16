@@ -97,7 +97,35 @@ export function donneesScolarite() {
     classes,
     matieres,
     salles,
-    affectations: [],
+    // Affectations minimales pour que le lot C (évaluations, notes) ait des
+    // données à afficher : Serge Mbala enseigne les mathématiques en
+    // Terminale D1 et C1, Claire Fotso le français en Terminale D1.
+    affectations: [
+      {
+        id: 'aff-1',
+        establishmentId: ETB,
+        schoolYearId: ANNEE,
+        teacherId: 'ens-1',
+        subjectId: 'mat-1',
+        classId: 'cls-1',
+      },
+      {
+        id: 'aff-2',
+        establishmentId: ETB,
+        schoolYearId: ANNEE,
+        teacherId: 'ens-1',
+        subjectId: 'mat-1',
+        classId: 'cls-2',
+      },
+      {
+        id: 'aff-3',
+        establishmentId: ETB,
+        schoolYearId: ANNEE,
+        teacherId: 'ens-2',
+        subjectId: 'mat-4',
+        classId: 'cls-1',
+      },
+    ],
     emploiDuTemps: [],
     frais: [],
     exonerations: [],

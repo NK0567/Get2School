@@ -118,8 +118,26 @@ Le découpage par lot des fichiers autrement partagés (routes, menu, modèles, 
 - Utilisateurs : fiche à trois onglets (identité, permissions, activité), matrice rôles × permissions
 - Annonces : écran de consultation ouvert à tous les rôles, distinct de l'administration des annonces
 
-**Le lot A est complet.** Ses douze modules sont livrés et routés. Les lots B et C affichent encore
-un écran « en construction » là où leurs écrans restent à écrire.
+**Le lot A est complet.** Ses douze modules sont livrés et routés.
+
+**Lot C, en cours** : Évaluations et Notes.
+
+- Évaluations : liste filtrable par classe, matière et période, création en brouillon,
+  publication (RG-09 : une évaluation non publiée n'entre jamais dans le calcul des moyennes).
+  Le cloisonnement par enseignant est appliqué côté serveur : un enseignant ne voit et ne peut
+  créer d'évaluations que sur les couples classe + matière où il est affecté — deux enseignants
+  d'une même classe restent cloisonnés par matière.
+- Notes : grille de saisie au clavier (Entrée passe à la ligne suivante), moyenne de la classe
+  affichée en direct, avertissement avant de quitter une saisie non enregistrée. Sanction d'une
+  note avec motif obligatoire (RG-07 : jamais de suppression). Blocage de toute saisie sur une
+  période verrouillée (RG-08), vérifié côté serveur. Moteur de calcul (`modules/notes/calculs.ts`)
+  isolé en fonctions pures et testé unitairement : moyenne pondérée, les deux politiques de note
+  sanctionnée (`EXCLUDE_COEFFICIENT` / `COUNT_AS_ZERO`), classement avec ex aequo (RG-10), taux de
+  réussite, appréciation automatique. Fonctions pures, sans accès au stockage — transposables
+  telles quelles en Java côté Spring Boot.
+
+Le reste des lots B et C affiche encore un écran « en construction » là où les écrans restent à
+écrire.
 
 **À construire**
 
