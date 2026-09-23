@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Bouton, Champ, Modale, Selecteur, useToast } from '../../../ui'
+import { ClipboardCopy } from 'lucide-react'
+import { Alerte, Bouton, Champ, Modale, Selecteur, useToast } from '../../../ui'
 import { LIBELLE_ROLE, ROLES } from '../../../socle/modeles/communs'
 import { useCreerUtilisateur } from '../hooks/useUtilisateurs'
 
@@ -24,21 +26,63 @@ export function ModaleNouvelUtilisateur({ ouverte, onFermer }: { ouverte: boolea
     defaultValues: { firstName: '', lastName: '', email: '', phone: '', role: 'SECRETARY' },
   })
 
+  // Une fois le compte créé, on affiche son mot de passe par défaut une
+  // seule fois — comme le ferait un courrier électronique dans un vrai
+  // backend — plutôt que de le laisser disparaître dans un toast.
+  const [cree, setCree] = useState<{ email: string; motDePasse: string } | null>(null)
+
   const fermer = () => {
     reset()
+    setCree(null)
     onFermer()
   }
 
   const envoyer = handleSubmit(async (valeurs) => {
     try {
-      await creer.mutateAsync(valeurs)
-      toast('succes', "L'utilisateur à été créé.")
-      fermer()
+      const reponse = await creer.mutateAsync(valeurs)
+      setCree({ email: reponse.utilisateur.email, motDePasse: reponse.motDePasseParDefaut })
     } catch (erreur) {
-      const message = (erreur as { message?: string })?.message ?? 'La création à échoué.'
+      const message = (erreur as { message?: string })?.message ?? 'La création a échoué.'
       toast('danger', message)
     }
   })
+
+  if (cree) {
+    return (
+      <Modale
+        ouverte={ouverte}
+        onFermer={fermer}
+        titre="Compte créé"
+        pied={<Bouton onClick={fermer}>Terminé</Bouton>}
+      >
+        <Alerte ton="info" titre="Communiquez ces identifiants à la personne concernée">
+          Ce mot de passe ne s'affichera plus jamais : notez-le maintenant. Il devra le changer dès sa
+          première connexion.
+        </Alerte>
+        <div className="border-line bg-canvas mt-4 flex flex-col gap-2 rounded-lg border p-4 text-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-muted">Identifiant</span>
+            <code className="font-medium">{cree.email}</code>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-muted">Mot de passe</span>
+            <code className="font-medium">{cree.motDePasse}</code>
+          </div>
+        </div>
+        <Bouton
+          variante="secondaire"
+          className="mt-3 w-full"
+          icone={<ClipboardCopy className="h-4 w-4" />}
+          onClick={() => {
+            navigator.clipboard?.writeText(`Identifiant : ${cree.email}\nMot de passe : ${cree.motDePasse}`)
+            toast('succes', 'Copié dans le presse-papiers.')
+          }}
+        >
+          Copier les identifiants
+        </Bouton>
+      </Modale>
+    )
+  }
 
   return (
     <Modale
@@ -58,7 +102,7 @@ export function ModaleNouvelUtilisateur({ ouverte, onFermer }: { ouverte: boolea
     >
       <div className="grid grid-cols-2 gap-4">
         <Champ
-          libelle="Prenom"
+          libelle="Prénom"
           requis
           {...register('firstName')}
           erreur={formState.errors.firstName?.message}
@@ -72,9 +116,9 @@ export function ModaleNouvelUtilisateur({ ouverte, onFermer }: { ouverte: boolea
           erreur={formState.errors.email?.message}
           className="col-span-2"
         />
-        <Champ libelle="Telephone" {...register('phone')} aide="Facultatif" />
+        <Champ libelle="Téléphone" {...register('phone')} aide="Facultatif" />
         <Selecteur
-          libelle="Role"
+          libelle="Rôle"
           requis
           {...register('role')}
           erreur={formState.errors.role?.message}

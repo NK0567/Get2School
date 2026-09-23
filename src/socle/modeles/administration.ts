@@ -8,10 +8,27 @@ export interface ParametresEtablissement {
   periodType: 'TRIMESTER' | 'SEMESTER'
   maxGrade: number
   passingGrade: number
-  /** Effet d'une note sanctionnée sur le calcul de la moyenne. */
-  penaltyPolicy: 'EXCLUDE_COEFFICIENT' | 'COUNT_AS_ZERO'
   currency: string
   riskWeights: { average: number; trend: number; absence: number; discipline: number }
+}
+
+export type RaisonFinEssai = 'PERIODE_VERROUILLEE' | 'BULLETINS_COMPLETS' | 'QUATRE_MOIS_ECOULES'
+
+/**
+ * Essai gratuit puis abonnement, RG explicite : un trimestre gratuit à
+ * compter de la création de l'établissement, qui se termine au premier de
+ * trois déclencheurs (voir modules/abonnement/calculs.ts pour le détail).
+ * L'abonnement, une fois pris, se termine avec l'année scolaire — jamais
+ * reconduit tacitement au-delà.
+ */
+export interface Abonnement {
+  statut: 'ESSAI' | 'ACTIF' | 'EXPIRE'
+  essaiDebute: string
+  essaiTermine?: string
+  essaiRaison?: RaisonFinEssai
+  planId?: 'PRIMARY' | 'SECONDARY'
+  abonneLe?: string
+  expireLe?: string
 }
 
 export interface Etablissement {
@@ -26,6 +43,21 @@ export interface Etablissement {
   email: string
   website?: string
   institutionalId: string
+  /**
+   * Catégorie de l'établissement. Détermine notamment le tarif d'abonnement
+   * (le primaire coûte moins cher que le secondaire) et pourra plus tard
+   * adapter certains écrans. Le supérieur n'est pas pris en charge pour
+   * l'instant — décision explicite, pas un oubli.
+   */
+  category: 'PRIMARY' | 'SECONDARY'
+  /**
+   * Couleur d'accent choisie parmi un jeu prédéfini à l'inscription, reprise
+   * sur les documents générés (GabaritDocument). Ce n'est pas un système de
+   * thématisation complet de l'application — celui-ci resterait un chantier
+   * à part entière — mais une personnalisation minimale et honnête.
+   */
+  theme: 'BLEU' | 'VERT' | 'BORDEAUX' | 'VIOLET'
+  abonnement: Abonnement
   status: 'PENDING' | 'ACTIVE' | 'SUSPENDED'
   settings: ParametresEtablissement
 }
@@ -38,6 +70,14 @@ export interface Utilisateur extends EntiteEtablissement {
   role: Role
   permissions: Permission[]
   isActive: boolean
+  /**
+   * Vrai pour un compte créé avec un mot de passe par défaut (à la
+   * constitution de l'équipe par le responsable). Bloque l'accès à tout
+   * écran autre que le changement de mot de passe tant qu'il n'est pas
+   * passé à faux — RG explicite : un mot de passe par défaut n'est jamais
+   * une autorisation d'usage normal du compte.
+   */
+  mustChangePassword?: boolean
   lastLoginAt?: string
   createdAt: string
 }
@@ -85,6 +125,7 @@ export type ActionAudit =
   | 'DISCIPLINE_DECISION'
   | 'DOCUMENT_GENERATE'
   | 'ANNOUNCEMENT_PUBLISH'
+  | 'ANNOUNCEMENT_WITHDRAW'
   | 'STUDENT_ARCHIVE'
   | 'ENROLLMENT_TRANSFER'
   | 'ACCESS_DENIED'
@@ -102,6 +143,22 @@ export interface EntreeAudit extends EntiteEtablissement {
   ipAddress: string
 }
 
+/**
+ * Une session active par connexion réussie. Contrairement au reste du
+ * projet, ce n'est pas une entité scolaire : elle vit à côté des comptes
+ * (voir base.ts), rattachée à un utilisateur, pas à un établissement au
+ * sens métier — mais reste partitionnée comme tout le reste, un compte
+ * d'un établissement ne devant jamais voir les sessions d'un autre.
+ */
+export interface SessionActive {
+  id: string
+  userId: string
+  appareil: string
+  adresseIp: string
+  ouvreLe: string
+  derniereActivite: string
+}
+
 export interface ModeleDocument extends EntiteEtablissement {
   type: string
   name: string
@@ -113,7 +170,10 @@ export interface DocumentGenere extends EntiteEtablissement {
   type: string
   templateId: string
   targetType: 'STUDENT' | 'CLASS' | 'LEVEL' | 'ESTABLISHMENT'
+  /** Identifiant réel de la cible (élève, classe...), jamais un texte mis en forme. */
   targetId: string
+  /** Libellé lisible de la cible, résolu par le serveur à la lecture — jamais stocké. */
+  targetLabel?: string
   schoolYearId: string
   periodId?: string
   generatedBy: string

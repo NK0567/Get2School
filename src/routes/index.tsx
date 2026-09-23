@@ -12,6 +12,9 @@ import { routesAcademique } from './routes-academique'
 import { routesCommunes } from './routes-communes'
 
 const PageConnexion = lazy(() => import('../modules/authentification/pages/PageConnexion'))
+const InscriptionEtablissement = lazy(
+  () => import('../modules/inscription-etablissement/pages/InscriptionEtablissement'),
+)
 const MotDePasseOublie = lazy(() => import('../modules/authentification/pages/MotDePasseOublie'))
 const ReinitialiserMotDePasse = lazy(
   () => import('../modules/authentification/pages/ReinitialiserMotDePasse'),
@@ -58,6 +61,14 @@ export const routeur = createBrowserRouter([
     element: (
       <Suspense fallback={<Attente />}>
         <ReinitialiserMotDePasse />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/inscription-etablissement',
+    element: (
+      <Suspense fallback={<Attente />}>
+        <InscriptionEtablissement />
       </Suspense>
     ),
   },

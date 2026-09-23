@@ -33,11 +33,18 @@ export function GabaritDocument({ reference, typeLibelle, anneeScolaire, childre
 
   return (
     <>
-      <div className="mb-4 flex justify-end print:hidden">
+      <div className="mb-2 flex items-center justify-end gap-3 print:hidden">
+        <span className="text-muted text-xs">
+          Choisissez « Enregistrer au format PDF » comme destination pour télécharger ce document.
+        </span>
         <Bouton icone={<Printer className="h-4 w-4" />} onClick={() => window.print()}>
-          Imprimer
+          Imprimer / Télécharger en PDF
         </Bouton>
       </div>
+      <p className="text-muted mb-2 text-right text-[11px] print:hidden">
+        Aucun service d'impression serveur n'existe encore : ceci utilise la fonction native du navigateur, la
+        même que Ctrl+P.
+      </p>
 
       <div className="text-ink mx-auto w-full max-w-[794px] bg-white p-10 shadow-sm print:max-w-none print:p-0 print:shadow-none">
         {/* En-tete institutionnel */}
@@ -61,7 +68,7 @@ export function GabaritDocument({ reference, typeLibelle, anneeScolaire, childre
         <div className="my-6 text-center">
           <h2 className="text-xl font-bold tracking-wide uppercase">{typeLibelle}</h2>
           {anneeScolaire && (
-            <div className="text-muted mt-0.5 text-[13px]">Annee scolaire {anneeScolaire}</div>
+            <div className="text-muted mt-0.5 text-[13px]">Année scolaire {anneeScolaire}</div>
           )}
         </div>
 
@@ -70,8 +77,8 @@ export function GabaritDocument({ reference, typeLibelle, anneeScolaire, childre
 
         {/* Pied */}
         <div className="border-line text-muted mt-8 flex items-end justify-between border-t pt-3 text-[10px]">
-          <span>Reference : {reference}</span>
-          <span>Emis le {formaterDate(new Date().toISOString())}</span>
+          <span>Référence : {reference}</span>
+          <span>Émis le {formaterDate(new Date().toISOString())}</span>
         </div>
       </div>
     </>

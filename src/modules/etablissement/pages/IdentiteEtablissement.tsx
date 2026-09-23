@@ -97,7 +97,7 @@ export default function IdentiteEtablissement() {
               erreur={formState.errors.address?.message}
             />
             <Champ
-              libelle="Telephone"
+              libelle="Téléphone"
               requis
               {...register('phone')}
               erreur={formState.errors.phone?.message}
@@ -126,8 +126,8 @@ export default function IdentiteEtablissement() {
             </code>
           </div>
           <p className="text-muted mt-3 text-xs">
-            Cet identifiant est genere a la creation de l'etablissement et ne peut pas etre modifie. Le QR
-            code ne contient qu'une adresse de verification, aucune donnee personnelle.
+            Cet identifiant est généré à la création de l'établissement et ne peut pas être modifié. Le QR
+            code ne contient qu'une adresse de vérification, aucune donnée personnelle.
           </p>
           <div className="border-line mt-4 border-t pt-3">
             <GrilleInfos colonnes={2}>

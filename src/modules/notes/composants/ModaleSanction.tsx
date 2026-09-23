@@ -14,9 +14,11 @@ interface Props {
  *
  * La correction change une valeur saisie par erreur, avec trace au journal.
  * La sanction juge une faute de l'élève (fraude, copie non rendue) : elle
- * exige un motif, la note reste visible et barrée, et son effet sur la
- * moyenne dépend de penaltyPolicy réglé par l'établissement — jamais une
- * suppression (RG-07).
+ * exige un motif, la note reste visible et barrée, jamais supprimée
+ * (RG-07), et vaut toujours 0 avec son coefficient compté — ce n'est pas un
+ * réglage d'établissement, c'est la définition même d'une sanction. Une
+ * absence avec motif valable relève d'un autre bouton (« Absent »), qui
+ * sort la note du calcul au lieu de la compter à zéro.
  */
 export function ModaleSanction({ ouverte, eleveNom, onFermer, onConfirmer, chargement }: Props) {
   const [motif, setMotif] = useState('')
@@ -58,9 +60,8 @@ export function ModaleSanction({ ouverte, eleveNom, onFermer, onConfirmer, charg
       }
     >
       <Alerte ton="alerte">
-        La note reste visible, barrée, avec le motif en infobulle. Elle n'est jamais supprimée. Selon le
-        réglage de l'établissement, elle comptera soit comme un zéro, soit sera retirée du calcul de la
-        moyenne avec son coefficient.
+        La note reste visible, barrée, avec le motif en infobulle. Elle n'est jamais supprimée. Elle comptera
+        comme un zéro dans la moyenne, coefficient compris.
       </Alerte>
       <ZoneTexte
         libelle="Motif"

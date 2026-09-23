@@ -1,5 +1,13 @@
 /** Menu du lot C · PROPRIETAIRE : Fabrice */
-import { ClipboardCheck, ClipboardList, FileBarChart, Gavel, LineChart, NotebookPen } from 'lucide-react'
+import {
+  CalendarRange,
+  ClipboardCheck,
+  ClipboardList,
+  FileBarChart,
+  Gavel,
+  LineChart,
+  NotebookPen,
+} from 'lucide-react'
 import type { GroupeMenu } from './types'
 
 export const menuAcademique: GroupeMenu[] = [
@@ -16,6 +24,12 @@ export const menuAcademique: GroupeMenu[] = [
         libelle: 'Saisie des notes',
         chemin: '/notes',
         icone: NotebookPen,
+        roles: ['SCHOOL_ADMIN', 'ACADEMIC_HEAD', 'TEACHER'],
+      },
+      {
+        libelle: 'Planning des évaluations',
+        chemin: '/planning-evaluations',
+        icone: CalendarRange,
         roles: ['SCHOOL_ADMIN', 'ACADEMIC_HEAD', 'TEACHER'],
       },
       {

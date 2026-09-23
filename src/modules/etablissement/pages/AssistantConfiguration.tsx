@@ -67,7 +67,6 @@ export default function AssistantConfiguration() {
       periodType: 'TRIMESTER',
       maxGrade: 20,
       passingGrade: 10,
-      penaltyPolicy: 'EXCLUDE_COEFFICIENT',
       currency: 'FCFA',
       riskWeights: { average: 40, trend: 20, absence: 25, discipline: 15 },
     }
@@ -136,7 +135,7 @@ export default function AssistantConfiguration() {
               onChange={(e) => setIdentite({ ...identite, address: e.target.value })}
             />
             <Champ
-              libelle="Telephone"
+              libelle="Téléphone"
               requis
               value={identite.phone}
               onChange={(e) => setIdentite({ ...identite, phone: e.target.value })}
@@ -154,14 +153,14 @@ export default function AssistantConfiguration() {
         {etape === 1 && (
           <div className="grid grid-cols-2 gap-4">
             <Champ
-              libelle="Libelle de l'année"
+              libelle="Libellé de l'année"
               requis
               aide="Format 2026-2027"
               value={academique.anneeLabel}
               onChange={(e) => setAcademique({ ...academique, anneeLabel: e.target.value })}
             />
             <Selecteur
-              libelle="Decoupage"
+              libelle="Découpage"
               requis
               value={academique.periodType}
               onChange={(e) =>
@@ -188,8 +187,8 @@ export default function AssistantConfiguration() {
             />
             <div className="col-span-2">
               <Alerte ton="alerte">
-                Le nombre de periodes est fige a l'ouverture de l'annee. Il ne pourra plus etre modifie
-                ensuite, car les notes et les bulletins y sont rattaches.
+                Le nombre de périodes est figé à l'ouverture de l'année. Il ne pourra plus être modifié
+                ensuite, car les notes et les bulletins y sont rattachés.
               </Alerte>
             </div>
           </div>
@@ -204,7 +203,7 @@ export default function AssistantConfiguration() {
               <GrilleInfos colonnes={3}>
                 <LigneInfo libelle="Nom">{identite.name}</LigneInfo>
                 <LigneInfo libelle="Sigle">{identite.acronym}</LigneInfo>
-                <LigneInfo libelle="Telephone">{identite.phone}</LigneInfo>
+                <LigneInfo libelle="Téléphone">{identite.phone}</LigneInfo>
                 <LigneInfo libelle="Adresse">{identite.address}</LigneInfo>
                 <LigneInfo libelle="Adresse électronique">{identite.email}</LigneInfo>
               </GrilleInfos>
@@ -212,10 +211,10 @@ export default function AssistantConfiguration() {
             <div className="border-line border-t pt-4">
               <h3 className="text-ink mb-1 text-sm font-semibold">Année scolaire</h3>
               <GrilleInfos colonnes={3}>
-                <LigneInfo libelle="Libelle">{academique.anneeLabel}</LigneInfo>
-                <LigneInfo libelle="Debut">{formaterDate(academique.startDate)}</LigneInfo>
+                <LigneInfo libelle="Libellé">{academique.anneeLabel}</LigneInfo>
+                <LigneInfo libelle="Début">{formaterDate(academique.startDate)}</LigneInfo>
                 <LigneInfo libelle="Fin">{formaterDate(academique.endDate)}</LigneInfo>
-                <LigneInfo libelle="Decoupage">
+                <LigneInfo libelle="Découpage">
                   {academique.periodType === 'TRIMESTER' ? '3 trimestres' : '2 semestres'}
                 </LigneInfo>
               </GrilleInfos>
@@ -223,14 +222,10 @@ export default function AssistantConfiguration() {
             <div className="border-line border-t pt-4">
               <h3 className="text-ink mb-1 text-sm font-semibold">Règles de calcul</h3>
               <GrilleInfos colonnes={3}>
-                <LigneInfo libelle="Bareme">{regles.maxGrade}</LigneInfo>
+                <LigneInfo libelle="Barème">{regles.maxGrade}</LigneInfo>
                 <LigneInfo libelle="Moyenne de passage">{regles.passingGrade}</LigneInfo>
                 <LigneInfo libelle="Devise">{regles.currency}</LigneInfo>
-                <LigneInfo libelle="Note sanctionnée">
-                  {regles.penaltyPolicy === 'EXCLUDE_COEFFICIENT'
-                    ? 'Coefficient retiré du calcul'
-                    : 'Comptée zéro, coefficient inclus'}
-                </LigneInfo>
+                <LigneInfo libelle="Note sanctionnée">Comptée zéro, coefficient inclus</LigneInfo>
               </GrilleInfos>
             </div>
             <div className="border-line border-t pt-4">
@@ -239,7 +234,7 @@ export default function AssistantConfiguration() {
                 <LigneInfo libelle="Titulaire">
                   {utilisateur?.firstName} {utilisateur?.lastName}
                 </LigneInfo>
-                <LigneInfo libelle="Role">{utilisateur ? LIBELLE_ROLE[utilisateur.role] : '—'}</LigneInfo>
+                <LigneInfo libelle="Rôle">{utilisateur ? LIBELLE_ROLE[utilisateur.role] : '—'}</LigneInfo>
                 <LigneInfo libelle="Adresse">{utilisateur?.email}</LigneInfo>
               </GrilleInfos>
               <p className="text-muted mt-2 text-xs">

@@ -66,7 +66,7 @@ export default function ParametresEtablissement() {
           },
           {
             cle: 'academique',
-            libelle: 'Découpage academique',
+            libelle: 'Découpage académique',
             contenu: (
               <div className="border-line bg-surface rounded-xl border p-5">
                 <div className="max-w-sm">
@@ -83,8 +83,8 @@ export default function ParametresEtablissement() {
                     ]}
                   />
                   <p className="text-muted mt-2 text-xs">
-                    Ce choix s'applique aux années scolaires creees ensuite. Le nombre de périodes d'une annee
-                    deja ouverte ne change plus.
+                    Ce choix s'applique aux années scolaires créées ensuite. Le nombre de périodes d'une année
+                    déjà ouverte ne change plus.
                   </p>
                 </div>
               </div>

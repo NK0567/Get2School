@@ -38,7 +38,7 @@ export function ModaleDeverrouillage({ periode, onFermer, onConfirmer, chargemen
     <Modale
       ouverte={periode !== null}
       onFermer={fermer}
-      titre={`Deverrouiller ${periode?.label ?? ''}`}
+      titre={`Déverrouiller ${periode?.label ?? ''}`}
       taille="sm"
       pied={
         <>
@@ -46,14 +46,14 @@ export function ModaleDeverrouillage({ periode, onFermer, onConfirmer, chargemen
             Annuler
           </Bouton>
           <Bouton variante="danger" chargement={chargement} onClick={valider}>
-            Deverrouiller la periode
+            Déverrouiller la période
           </Bouton>
         </>
       }
     >
       <Alerte ton="danger">
-        Les enseignants pourront de nouveau modifier les notes de cette periode. Les bulletins deja generes ne
-        refleteront plus forcement les notes en base.
+        Les enseignants pourront de nouveau modifier les notes de cette période. Les bulletins déjà générés ne
+        refléteront plus forcément les notes en base.
       </Alerte>
 
       <ZoneTexte
@@ -64,7 +64,7 @@ export function ModaleDeverrouillage({ periode, onFermer, onConfirmer, chargemen
         onChange={(e) => setMotif(e.target.value)}
         erreur={erreur}
         placeholder="Erreur de saisie signalée par le conseil de classe du 12 janvier"
-        aide="Ce motif apparaitra dans le journal d'audit."
+        aide="Ce motif apparaîtra dans le journal d'audit."
       />
     </Modale>
   )

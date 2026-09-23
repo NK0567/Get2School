@@ -86,7 +86,7 @@ export default function ListeUtilisateurs() {
         </div>
       ),
     },
-    { cle: 'role', entete: 'Role', triable: true, rendu: (u) => LIBELLE_ROLE[u.role] },
+    { cle: 'role', entete: 'Rôle', triable: true, rendu: (u) => LIBELLE_ROLE[u.role] },
     {
       cle: 'statut',
       entete: 'Statut',
@@ -114,7 +114,7 @@ export default function ListeUtilisateurs() {
     <>
       <GabaritListe
         titre="Utilisateurs"
-        sousTitre={`${requete.data?.total ?? 0} compte(s) dans l'etablissement`}
+        sousTitre={`${requete.data?.total ?? 0} compte(s) dans l'établissement`}
         filAriane={['Administration']}
         actions={
           <>
@@ -131,8 +131,8 @@ export default function ListeUtilisateurs() {
                       valeur: (u: Utilisateur) => formaterNomComplet(u.firstName, u.lastName),
                     },
                     { entete: 'Adresse', valeur: (u: Utilisateur) => u.email },
-                    { entete: 'Role', valeur: (u: Utilisateur) => LIBELLE_ROLE[u.role] },
-                    { entete: 'Statut', valeur: (u: Utilisateur) => (u.isActive ? 'Actif' : 'Desactive') },
+                    { entete: 'Rôle', valeur: (u: Utilisateur) => LIBELLE_ROLE[u.role] },
+                    { entete: 'Statut', valeur: (u: Utilisateur) => (u.isActive ? 'Actif' : 'Désactivé') },
                   ],
                   lignes ?? [],
                 )

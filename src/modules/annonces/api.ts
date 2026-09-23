@@ -65,7 +65,7 @@ export async function publierAnnonce(id: string) {
 export async function retirerAnnonce(annonce: Annonce, motif: string) {
   const { data } = await api.patch<Annonce>(`/announcements/${annonce.id}/withdraw`, { motif })
   await journaliser({
-    action: 'ANNOUNCEMENT_PUBLISH',
+    action: 'ANNOUNCEMENT_WITHDRAW',
     entityType: 'Annonce',
     entityId: annonce.id,
     entityLabel: `Retrait · ${annonce.title}`,

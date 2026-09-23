@@ -2,46 +2,46 @@ import { Badge } from '../../ui'
 import type { TonBadge } from '../../ui'
 
 /**
- * Correspondance statut / couleur / libelle · PROPRIETAIRE : Boris
+ * Correspondance statut / couleur / libellé · PROPRIÉTAIRE : Boris
  *
- * Imposee par la charte graphique. Aucun module ne recode cette table :
- * si un statut manque, on l'ajouté ici, pas ailleurs. C'est ce qui garantit
- * qu'un élève « Partiel » à la même couleur dans les trois lots.
+ * Imposée par la charte graphique. Aucun module ne recode cette table :
+ * si un statut manque, on l'ajoute ici, pas ailleurs. C'est ce qui garantit
+ * qu'un élève « Partiel » a la même couleur dans les trois lots.
  */
 const TABLE: Record<string, { ton: TonBadge; libelle: string }> = {
-  /* Situation financiere · lot B */
+  /* Situation financière · lot B */
   PAID: { ton: 'succes', libelle: 'Solvable' },
   PARTIAL: { ton: 'alerte', libelle: 'Partiel' },
   UNPAID: { ton: 'danger', libelle: 'Insolvable' },
-  EXEMPT: { ton: 'info', libelle: 'Exonere' },
+  EXEMPT: { ton: 'info', libelle: 'Exonéré' },
 
-  /* Presence · lot C */
-  PRESENT: { ton: 'succes', libelle: 'Present' },
-  ABSENCE_JUSTIFIEE: { ton: 'alerte', libelle: 'Absence justifiee' },
+  /* Présence · lot C */
+  PRESENT: { ton: 'succes', libelle: 'Présent' },
+  ABSENCE_JUSTIFIEE: { ton: 'alerte', libelle: 'Absence justifiée' },
   ABSENCE: { ton: 'danger', libelle: 'Absence' },
   LATE: { ton: 'alerte', libelle: 'Retard' },
 
-  /* Risque academique · lot C */
+  /* Risque académique · lot C */
   LOW: { ton: 'succes', libelle: 'Faible' },
   MEDIUM: { ton: 'alerte', libelle: 'Moyen' },
-  HIGH: { ton: 'danger', libelle: 'Eleve' },
+  HIGH: { ton: 'danger', libelle: 'Élevé' },
 
   /* Note · lot C */
   VALID: { ton: 'succes', libelle: 'Valide' },
-  PENALIZED: { ton: 'danger', libelle: 'Sanctionnee' },
+  PENALIZED: { ton: 'danger', libelle: 'Sanctionnée' },
 
   /* Évaluation · lot C */
   DRAFT: { ton: 'neutre', libelle: 'Brouillon' },
-  PUBLISHED: { ton: 'succes', libelle: 'Publiee' },
-  LOCKED: { ton: 'info', libelle: 'Verrouillee' },
+  PUBLISHED: { ton: 'succes', libelle: 'Publiée' },
+  LOCKED: { ton: 'info', libelle: 'Verrouillée' },
 
   /* Année scolaire · lot A */
   OPEN: { ton: 'succes', libelle: 'Ouverte' },
-  CLOSED: { ton: 'neutre', libelle: 'Cloturee' },
+  CLOSED: { ton: 'neutre', libelle: 'Clôturée' },
 
   /* Compte utilisateur · lot A */
   ACTIF: { ton: 'succes', libelle: 'Actif' },
-  INACTIF: { ton: 'neutre', libelle: 'Desactive' },
+  INACTIF: { ton: 'neutre', libelle: 'Désactivé' },
 
   /* Établissement · lot A */
   PENDING: { ton: 'alerte', libelle: 'En attente' },
@@ -49,14 +49,14 @@ const TABLE: Record<string, { ton: TonBadge; libelle: string }> = {
   SUSPENDED: { ton: 'danger', libelle: 'Suspendu' },
 
   /* Inscription · lot B */
-  TRANSFERRED: { ton: 'info', libelle: 'Transferee' },
+  TRANSFERRED: { ton: 'info', libelle: 'Transférée' },
   DROPPED: { ton: 'neutre', libelle: 'Abandon' },
-  COMPLETED: { ton: 'succes', libelle: 'Terminee' },
+  COMPLETED: { ton: 'succes', libelle: 'Terminée' },
 
   /* Document · lot A */
-  GENERATED: { ton: 'succes', libelle: 'Genere' },
-  FAILED: { ton: 'danger', libelle: 'Echec' },
-  CANCELLED: { ton: 'neutre', libelle: 'Annule' },
+  GENERATED: { ton: 'succes', libelle: 'Généré' },
+  FAILED: { ton: 'danger', libelle: 'Échec' },
+  CANCELLED: { ton: 'neutre', libelle: 'Annulé' },
 }
 
 export function BadgeStatut({ valeur, libelle }: { valeur: string; libelle?: string }) {

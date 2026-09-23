@@ -33,8 +33,10 @@ export async function enregistrerNotes(evaluationId: string, saisies: SaisieNote
 
 /**
  * Sanctionner une note avec motif obligatoire. Elle reste visible, barrée,
- * jamais supprimée — l'effet sur la moyenne dépend de penaltyPolicy, réglé
- * par l'établissement.
+ * jamais supprimée. Une note sanctionnée vaut toujours 0, coefficient
+ * compris : ce n'est pas un réglage d'établissement, c'est ce que signifie
+ * une sanction. Le cas d'une absence avec motif valable (maladie...) est
+ * différent et se déclare séparément (statut Absent), en dehors du calcul.
  */
 export async function sanctionnerNote(note: Note, motif: string) {
   const { data } = await api.patch<Note>(`/grades/${note.id}/penalize`, { motif })

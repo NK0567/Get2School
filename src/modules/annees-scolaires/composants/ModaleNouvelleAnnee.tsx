@@ -7,7 +7,7 @@ import { useCreerAnnee } from '../hooks/useAnneesScolaires'
 
 const schema = z
   .object({
-    label: z.string().regex(/^\d{4}-\d{4}$/, 'Le libelle doit avoir la forme 2026-2027.'),
+    label: z.string().regex(/^\d{4}-\d{4}$/, 'Le libellé doit avoir la forme 2026-2027.'),
     startDate: dateValide,
     endDate: dateValide,
     periodType: z.enum(['TRIMESTER', 'SEMESTER']),
@@ -65,14 +65,14 @@ export function ModaleNouvelleAnnee({ ouverte, onFermer }: { ouverte: boolean; o
     >
       <div className="grid grid-cols-2 gap-4">
         <Champ
-          libelle="Libelle"
+          libelle="Libellé"
           requis
           placeholder="2027-2028"
           {...register('label')}
           erreur={formState.errors.label?.message}
         />
         <Selecteur
-          libelle="Decoupage"
+          libelle="Découpage"
           requis
           {...register('periodType')}
           options={[
@@ -81,7 +81,7 @@ export function ModaleNouvelleAnnee({ ouverte, onFermer }: { ouverte: boolean; o
           ]}
         />
         <Champ
-          libelle="Debut"
+          libelle="Début"
           requis
           type="date"
           {...register('startDate')}
@@ -98,7 +98,7 @@ export function ModaleNouvelleAnnee({ ouverte, onFermer }: { ouverte: boolean; o
 
       <Alerte ton="alerte">
         L'année sera créée avec {decoupage === 'SEMESTER' ? 'deux semestres' : 'trois trimestres'}. Ce nombre
-        est fige a l'ouverture et ne pourra plus changer, car les notes et les bulletins y sont rattaches.
+        est figé à l'ouverture et ne pourra plus changer, car les notes et les bulletins y sont rattachés.
       </Alerte>
     </Modale>
   )

@@ -40,7 +40,7 @@ export default function ListeAnneesScolaires() {
           : annee.status === 'CLOSED'
             ? 'Une année clôturée ne se rouvre pas'
             : anneeOuverte
-              ? `L'annee ${anneeOuverte.label} est deja ouverte`
+              ? `L'année ${anneeOuverte.label} est déjà ouverte`
               : undefined,
     },
     {
@@ -55,7 +55,7 @@ export default function ListeAnneesScolaires() {
   const colonnes: Colonne<AnneeScolaire>[] = [
     {
       cle: 'label',
-      entete: 'Annee',
+      entete: 'Année',
       rendu: (a) => <span className="font-medium tabular-nums">{a.label}</span>,
     },
     {
@@ -69,13 +69,13 @@ export default function ListeAnneesScolaires() {
     },
     {
       cle: 'periodes',
-      entete: 'Decoupage',
+      entete: 'Découpage',
       rendu: (a) => {
         const verrouillees = a.periods.filter((p) => p.isLocked).length
         return (
           <span className="text-muted">
-            {a.periods.length} periode(s)
-            {verrouillees > 0 && ` · ${verrouillees} verrouillee(s)`}
+            {a.periods.length} période(s)
+            {verrouillees > 0 && ` · ${verrouillees} verrouillée(s)`}
           </span>
         )
       },
@@ -97,14 +97,14 @@ export default function ListeAnneesScolaires() {
         filAriane={['Administration']}
         actions={
           <Bouton icone={<Plus className="h-4 w-4" />} onClick={() => setCreationOuverte(true)}>
-            Nouvelle annee
+            Nouvelle année
           </Bouton>
         }
         alerte={
           !anneeOuverte && annees.length > 0 ? (
             <Alerte ton="alerte" titre="Aucune année ouverte">
-              Tant qu'aucune année n'est ouverte, les inscriptions, les evaluations et les paiements ne
-              peuvent pas etre enregistres.
+              Tant qu'aucune année n'est ouverte, les inscriptions, les évaluations et les paiements ne
+              peuvent pas être enregistrés.
             </Alerte>
           ) : undefined
         }
@@ -116,7 +116,7 @@ export default function ListeAnneesScolaires() {
         onLigneCliquee={(a) => naviguer(`/annees-scolaires/${a.id}/periodes`)}
         vide={{
           titre: 'Aucune année scolaire',
-          description: 'Creez la première année pour commencer à inscrire des élèves.',
+          description: 'Créez la première année pour commencer à inscrire des élèves.',
           icone: <CalendarRange className="h-8 w-8" />,
           action: <Bouton onClick={() => setCreationOuverte(true)}>Nouvelle année</Bouton>,
         }}
@@ -129,7 +129,7 @@ export default function ListeAnneesScolaires() {
         onFermer={confirmationOuverture.annuler}
         titre="Ouvrir cette année scolaire"
         destructif={false}
-        message={`L'année ${confirmationOuverture.cible?.label ?? ''} deviendra l'annee de travail. Son nombre de periodes sera fige definitivement.`}
+        message={`L'année ${confirmationOuverture.cible?.label ?? ''} deviendra l'année de travail. Son nombre de périodes sera figé définitivement.`}
         libelleAction="Ouvrir l'année"
         chargement={ouvrir.isPending}
         onConfirmer={async () => {
@@ -138,9 +138,9 @@ export default function ListeAnneesScolaires() {
           try {
             await ouvrir.mutateAsync(cible)
             definirAnnee(cible.id)
-            toast('succes', `L'annee ${cible.label} est ouverte.`)
+            toast('succes', `L'année ${cible.label} est ouverte.`)
           } catch (erreur) {
-            toast('danger', (erreur as { message?: string })?.message ?? "L'ouverture à échoué.")
+            toast('danger', (erreur as { message?: string })?.message ?? "L'ouverture a échoué.")
           }
           confirmationOuverture.annuler()
         }}
@@ -150,7 +150,7 @@ export default function ListeAnneesScolaires() {
         ouverte={confirmationCloture.ouverte}
         onFermer={confirmationCloture.annuler}
         titre="Clôturer cette année scolaire"
-        message={`Toutes les periodes de ${confirmationCloture.cible?.label ?? ''} seront verrouillees et l'année passera en consultation seule. Aucune donnée n'est supprimee.`}
+        message={`Toutes les périodes de ${confirmationCloture.cible?.label ?? ''} seront verrouillées et l'année passera en consultation seule. Aucune donnée n'est supprimée.`}
         libelleAction="Clôturer l'année"
         chargement={cloturer.isPending}
         onConfirmer={async () => {
@@ -158,9 +158,9 @@ export default function ListeAnneesScolaires() {
           if (!cible) return
           try {
             await cloturer.mutateAsync(cible)
-            toast('succes', `L'annee ${cible.label} est cloturee et archivee.`)
+            toast('succes', `L'année ${cible.label} est clôturée et archivée.`)
           } catch (erreur) {
-            toast('danger', (erreur as { message?: string })?.message ?? 'La clôture à échoué.')
+            toast('danger', (erreur as { message?: string })?.message ?? 'La clôture a échoué.')
           }
           confirmationCloture.annuler()
         }}

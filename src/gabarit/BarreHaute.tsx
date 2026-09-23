@@ -42,7 +42,7 @@ export function BarreHaute() {
         value={periodeId ?? ''}
         onChange={(e) => definirPeriode(e.target.value)}
         className="border-line bg-surface text-ink h-9 rounded-lg border px-2.5 text-[13px]"
-        title="Periode"
+        title="Période"
       >
         <option value="">Toutes les périodes</option>
         {anneeCourante?.periods.map((p) => (

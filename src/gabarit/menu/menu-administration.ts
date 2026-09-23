@@ -2,6 +2,7 @@
 import {
   Bell,
   Building2,
+  CalendarDays,
   CalendarRange,
   FileText,
   LayoutDashboard,
@@ -35,6 +36,12 @@ export const menuAdministration: GroupeMenu[] = [
     entrees: [
       { libelle: 'Utilisateurs', chemin: '/utilisateurs', icone: Users, roles: ['SCHOOL_ADMIN', 'ADMIN'] },
       {
+        libelle: "Identité de l'établissement",
+        chemin: '/etablissement/identite',
+        icone: Building2,
+        roles: ['SCHOOL_ADMIN', 'ADMIN'],
+      },
+      {
         libelle: 'Établissement',
         chemin: '/etablissement/parametres',
         icone: Building2,
@@ -47,6 +54,12 @@ export const menuAdministration: GroupeMenu[] = [
         roles: ['SCHOOL_ADMIN', 'ADMIN'],
       },
       { libelle: "Journal d'audit", chemin: '/journal-audit', icone: ScrollText, roles: ['SCHOOL_ADMIN'] },
+      {
+        libelle: 'Chronogramme',
+        chemin: '/chronogramme',
+        icone: CalendarDays,
+        roles: ['SCHOOL_ADMIN', 'ADMIN', 'ACADEMIC_HEAD'],
+      },
     ],
   },
   {

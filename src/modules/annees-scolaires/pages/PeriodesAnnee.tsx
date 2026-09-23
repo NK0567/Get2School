@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Lock, LockOpen } from 'lucide-react'
-import { useParams } from 'react-router'
+import { ArrowLeft, Lock, LockOpen } from 'lucide-react'
+import { Link, useParams } from 'react-router'
 import { Alerte, Bouton, DialogueConfirmation, EnteteDePage, SqueletteTableau, useToast } from '../../../ui'
 import { BadgeStatut, formaterDate } from '../../../communs'
 import type { Periode } from '../../../socle/modeles/administration'
@@ -24,8 +24,16 @@ export default function PeriodesAnnee() {
 
   return (
     <>
+      <Link
+        to="/annees-scolaires"
+        className="text-muted hover:text-ink mb-3 inline-flex items-center gap-1.5 text-[13px] transition"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Retour aux années scolaires
+      </Link>
+
       <EnteteDePage
-        titre={`Periodes · ${annee.label}`}
+        titre={`Périodes · ${annee.label}`}
         sousTitre={`${formaterDate(annee.startDate)} au ${formaterDate(annee.endDate)}`}
         filAriane={['Administration', 'Années scolaires']}
         actions={<BadgeStatut valeur={annee.status} />}
@@ -33,7 +41,7 @@ export default function PeriodesAnnee() {
 
       {cloturee && (
         <Alerte ton="info">
-          Cette annee est cloturee. Ses periodes restent verrouillees et ses donnees sont consultables mais
+          Cette année est clôturée. Ses périodes restent verrouillées et ses données sont consultables mais
           non modifiables.
         </Alerte>
       )}
@@ -65,7 +73,7 @@ export default function PeriodesAnnee() {
             <div className="flex items-center gap-3">
               <BadgeStatut
                 valeur={periode.isLocked ? 'CLOSED' : 'OPEN'}
-                libelle={periode.isLocked ? 'Verrouillee' : 'Ouverte'}
+                libelle={periode.isLocked ? 'Verrouillée' : 'Ouverte'}
               />
               <Bouton
                 variante={periode.isLocked ? 'danger' : 'secondaire'}
@@ -82,8 +90,8 @@ export default function PeriodesAnnee() {
       </div>
 
       <p className="text-muted mt-4 text-xs">
-        Une periode verrouillee interdit toute creation et toute modification de note. Seul le Super
-        Administrateur peut la rouvrir, avec un motif enregistre dans le journal d'audit.
+        Une période verrouillée interdit toute création et toute modification de note. Seul le Super
+        Administrateur peut la rouvrir, avec un motif enregistré dans le journal d'audit.
       </p>
 
       <DialogueConfirmation
@@ -97,7 +105,7 @@ export default function PeriodesAnnee() {
         onConfirmer={async () => {
           if (!aVerrouiller) return
           await basculer.mutateAsync({ periode: aVerrouiller, anneeLabel: annee.label })
-          toast('succes', `${aVerrouiller.label} est verrouillee.`)
+          toast('succes', `${aVerrouiller.label} est verrouillée.`)
           setAVerrouiller(null)
         }}
       />

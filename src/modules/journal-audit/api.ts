@@ -70,7 +70,7 @@ export const CATEGORIES_ACTION: { libelle: string; actions: ActionAudit[] }[] = 
   },
   {
     libelle: 'Documents et communication',
-    actions: ['DOCUMENT_GENERATE', 'ANNOUNCEMENT_PUBLISH'],
+    actions: ['DOCUMENT_GENERATE', 'ANNOUNCEMENT_PUBLISH', 'ANNOUNCEMENT_WITHDRAW'],
   },
 ]
 
@@ -100,6 +100,7 @@ export const LIBELLE_ACTION: Record<ActionAudit, string> = {
   DISCIPLINE_DECISION: 'Décision disciplinaire',
   DOCUMENT_GENERATE: "Génération d'un document",
   ANNOUNCEMENT_PUBLISH: "Publication d'une annonce",
+  ANNOUNCEMENT_WITHDRAW: "Retrait d'une annonce",
   STUDENT_ARCHIVE: "Archivage d'un élève",
   ENROLLMENT_TRANSFER: "Transfert d'une inscription",
 }

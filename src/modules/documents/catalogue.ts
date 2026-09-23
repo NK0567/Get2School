@@ -115,6 +115,28 @@ export const TYPES_DOCUMENT: TypeDocument[] = [
     parPeriode: true,
     fourniPar: 'Académique',
   },
+  {
+    code: 'CHRONOGRAMME',
+    libelle: "Chronogramme de l'année",
+    categorie: 'Administratif',
+    cible: 'ESTABLISHMENT',
+    roles: ['SCHOOL_ADMIN', 'ADMIN', 'ACADEMIC_HEAD'],
+  },
+  {
+    code: 'LISTE_PERSONNEL',
+    libelle: 'Liste du personnel',
+    categorie: 'Administratif',
+    cible: 'ESTABLISHMENT',
+    roles: ['SCHOOL_ADMIN', 'ADMIN'],
+  },
+  {
+    code: 'EMPLOI_DU_TEMPS_CLASSE',
+    libelle: "Emploi du temps d'une classe",
+    categorie: 'Administratif',
+    cible: 'CLASS',
+    roles: ['SCHOOL_ADMIN', 'ADMIN', 'ACADEMIC_HEAD', 'SECRETARY'],
+    fourniPar: 'Scolarité',
+  },
 ]
 
 export function typeDocument(code: string) {

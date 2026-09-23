@@ -4,12 +4,14 @@ import type { RouteObject } from 'react-router'
 import { ExigeRole } from '../socle/gardes/ExigeRole'
 
 const ListeUtilisateurs = lazy(() => import('../modules/utilisateurs/pages/ListeUtilisateurs'))
+const EquipeFondatrice = lazy(() => import('../modules/inscription-etablissement/pages/EquipeFondatrice'))
 const AssistantConfiguration = lazy(() => import('../modules/etablissement/pages/AssistantConfiguration'))
 const IdentiteEtablissement = lazy(() => import('../modules/etablissement/pages/IdentiteEtablissement'))
 const ParametresEtablissement = lazy(() => import('../modules/etablissement/pages/ParametresEtablissement'))
 const ListeAnneesScolaires = lazy(() => import('../modules/annees-scolaires/pages/ListeAnneesScolaires'))
 const PeriodesAnnee = lazy(() => import('../modules/annees-scolaires/pages/PeriodesAnnee'))
 const JournalAudit = lazy(() => import('../modules/journal-audit/pages/JournalAudit'))
+const Chronogramme = lazy(() => import('../modules/chronogramme/pages/Chronogramme'))
 const CentreDocumentaire = lazy(() => import('../modules/documents/pages/CentreDocumentaire'))
 const GenerationLot = lazy(() => import('../modules/documents/pages/GenerationLot'))
 const ApercuDocument = lazy(() => import('../modules/documents/pages/ApercuDocument'))
@@ -59,6 +61,17 @@ export const routesAdministration: RouteObject[] = [
     ),
   },
   {
+    // Affiché juste après l'inscription d'un établissement : pas dans le
+    // menu, jamais recherché — on y arrive uniquement par la redirection
+    // de InscriptionEtablissement.tsx.
+    path: 'equipe-fondatrice',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN']}>
+        <EquipeFondatrice />
+      </ExigeRole>
+    ),
+  },
+  {
     path: 'etablissement/configuration',
     element: (
       <ExigeRole roles={['SCHOOL_ADMIN']}>
@@ -103,6 +116,14 @@ export const routesAdministration: RouteObject[] = [
     element: (
       <ExigeRole roles={['SCHOOL_ADMIN']}>
         <JournalAudit />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'chronogramme',
+    element: (
+      <ExigeRole roles={['SCHOOL_ADMIN', 'ADMIN', 'ACADEMIC_HEAD']}>
+        <Chronogramme />
       </ExigeRole>
     ),
   },

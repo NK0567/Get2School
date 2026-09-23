@@ -8,15 +8,15 @@ interface Props {
 }
 
 const FACTEURS: { cle: keyof ParametresEtablissement['riskWeights']; libelle: string; aide: string }[] = [
-  { cle: 'average', libelle: 'Moyenne generale', aide: 'Poids de la moyenne dans le score' },
-  { cle: 'trend', libelle: 'Tendance', aide: 'Baisse entre deux périodes consecutives' },
-  { cle: 'absence', libelle: "Taux d'absence", aide: 'Sature a 20 % de seances manquees' },
-  { cle: 'discipline', libelle: 'Incidents disciplinaires', aide: 'Sature a 5 incidents' },
+  { cle: 'average', libelle: 'Moyenne générale', aide: 'Poids de la moyenne dans le score' },
+  { cle: 'trend', libelle: 'Tendance', aide: 'Baisse entre deux périodes consécutives' },
+  { cle: 'absence', libelle: "Taux d'absence", aide: 'Sature à 20 % de séances manquées' },
+  { cle: 'discipline', libelle: 'Incidents disciplinaires', aide: 'Sature à 5 incidents' },
 ]
 
 /**
- * Ponderations de l'indicateur de risque academique, lues par le lot C.
- * Le total doit faire 100 pour que le score reste interpretable sur 100.
+ * Pondérations de l'indicateur de risque académique, lues par le lot C.
+ * Le total doit faire 100 pour que le score reste interprétable sur 100.
  */
 export function PoidsRisque({ valeurs, onChange }: Props) {
   const total = FACTEURS.reduce((somme, f) => somme + valeurs[f.cle], 0)
@@ -46,14 +46,14 @@ export function PoidsRisque({ valeurs, onChange }: Props) {
 
       {total !== 100 && (
         <Alerte ton="alerte" titre={`Total actuel : ${formaterPourcentage(total)}`}>
-          Les ponderations doivent totaliser 100 pour que le score de risque reste lisible sur 100. Ajustez
+          Les pondérations doivent totaliser 100 pour que le score de risque reste lisible sur 100. Ajustez
           avant d'enregistrer.
         </Alerte>
       )}
 
       <Alerte ton="info">
-        Ce score signale les dossiers a examiner. Il ne prononce aucune decision : toute mesure concernant un
-        eleve releve des responsables habilites, conformement au reglement de l'etablissement.
+        Ce score signale les dossiers à examiner. Il ne prononce aucune décision : toute mesure concernant un
+        élève relève des responsables habilités, conformément au règlement de l'établissement.
       </Alerte>
     </div>
   )

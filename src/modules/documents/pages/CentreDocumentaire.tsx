@@ -50,7 +50,7 @@ export default function CentreDocumentaire() {
       rendu: (d) => <code className="text-[12px] tabular-nums">{d.reference}</code>,
     },
     { cle: 'type', entete: 'Type', rendu: (d) => libelleType(d.type) },
-    { cle: 'cible', entete: 'Concerne', rendu: (d) => d.targetId },
+    { cle: 'cible', entete: 'Concerne', rendu: (d) => d.targetLabel ?? d.targetId },
     {
       cle: 'date',
       entete: 'Généré le',

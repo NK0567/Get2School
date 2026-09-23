@@ -1,4 +1,4 @@
-import { Alerte, Champ, Selecteur } from '../../../ui'
+import { Alerte, Champ } from '../../../ui'
 import type { ParametresEtablissement } from '../../../socle/modeles/administration'
 
 interface Props {
@@ -7,11 +7,13 @@ interface Props {
 }
 
 /**
- * Règles de calcul partagees avec le lot C.
+ * Règles de calcul partagées avec le lot C.
  *
- * penaltyPolicy est le reglage le plus important du produit : il decide si le
- * coefficient d'une évaluation sanctionnée reste compte au dénominateur de la
- * moyenne, ou s'il en sort. Le moteur de calcul de Fabrice lit ce paramètre.
+ * L'effet d'une sanction sur la moyenne n'est pas un réglage : une note
+ * sanctionnée vaut toujours 0, coefficient compris. Une absence avec motif
+ * valable est un cas distinct (statut « Absent »), qui sort la note du
+ * calcul entièrement — elle se déclare séparément dans la grille de saisie,
+ * pas ici.
  */
 export function ReglesCalcul({ valeurs, onChange }: Props) {
   const maj = (modifs: Partial<ParametresEtablissement>) => onChange({ ...valeurs, ...modifs })
@@ -46,31 +48,11 @@ export function ReglesCalcul({ valeurs, onChange }: Props) {
         />
       </div>
 
-      <div>
-        <Selecteur
-          libelle="Effet d'une note sanctionnée sur la moyenne"
-          requis
-          value={valeurs.penaltyPolicy}
-          onChange={(e) => maj({ penaltyPolicy: e.target.value as ParametresEtablissement['penaltyPolicy'] })}
-          options={[
-            { valeur: 'EXCLUDE_COEFFICIENT', libelle: 'Retirer la note et son coefficient du calcul' },
-            { valeur: 'COUNT_AS_ZERO', libelle: 'Compter la note comme un zéro, coefficient inclus' },
-          ]}
-        />
-        <Alerte ton="info">
-          {valeurs.penaltyPolicy === 'EXCLUDE_COEFFICIENT' ? (
-            <>
-              La moyenne sera calculee sur les autres evaluations de la matiere. La sanction reste visible
-              dans le dossier de l'eleve mais ne fait pas chuter sa moyenne.
-            </>
-          ) : (
-            <>
-              La note vaudra zero et son coefficient restera au denominateur. La moyenne de la matiere chutera
-              d'autant, proportionnellement au coefficient de l'evaluation.
-            </>
-          )}
-        </Alerte>
-      </div>
+      <Alerte ton="info">
+        Une note sanctionnée vaut toujours 0, coefficient compris dans la moyenne. Une absence justifiée par
+        un motif valable (maladie, etc.) se déclare séparément dans la grille de saisie des notes : elle sort
+        entièrement du calcul, coefficient exclu.
+      </Alerte>
     </div>
   )
 }

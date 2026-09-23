@@ -82,3 +82,25 @@ export const LIBELLE_STATUT_EVALUATION: Record<Evaluation['status'], string> = {
   PUBLISHED: 'Publiée',
   LOCKED: 'Verrouillée',
 }
+
+/* ── File de saisie ──────────────────────────────────────── */
+
+export interface EvaluationANoter extends Evaluation {
+  /** Élèves inscrits dans la classe concernée, pour juger l'avancement. */
+  effectif: number
+  /** Notes déjà enregistrées pour cette évaluation. */
+  saisies: number
+}
+
+/**
+ * Vue de travail : mes évaluations, triées pour mettre en avant ce qui
+ * réclame une action (brouillons à publier, évaluations publiées dont la
+ * saisie n'est pas terminée). Distincte de la liste de gestion
+ * (listerEvaluations), qui sert à filtrer et créer sur n'importe quelle
+ * classe ; celle-ci répond à une seule question : qu'est-ce qu'il me reste
+ * à faire.
+ */
+export async function listerMesEvaluationsANoter() {
+  const { data } = await api.get<EvaluationANoter[]>('/evaluations/grading-queue')
+  return data
+}

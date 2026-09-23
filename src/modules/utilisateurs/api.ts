@@ -45,14 +45,25 @@ export interface CreationUtilisateur {
   permissions?: Permission[]
 }
 
+export interface CreationCompteEtMotDePasse {
+  utilisateur: Utilisateur
+  /**
+   * Visible une seule fois, au moment de la création — comme le ferait un
+   * courrier électronique envoyé au personnel dans un vrai backend. Le
+   * compte porte mustChangePassword: true : ce mot de passe ne sert qu'à
+   * la première connexion.
+   */
+  motDePasseParDefaut: string
+}
+
 export async function creerUtilisateur(corps: CreationUtilisateur) {
-  const { data } = await api.post<Utilisateur>('/users', corps)
+  const { data } = await api.post<CreationCompteEtMotDePasse>('/users', corps)
   await journaliser({
     action: 'USER_CREATE',
     entityType: 'Utilisateur',
-    entityId: data.id,
-    entityLabel: `${data.firstName} ${data.lastName}`,
-    after: { email: data.email, role: data.role },
+    entityId: data.utilisateur.id,
+    entityLabel: `${data.utilisateur.firstName} ${data.utilisateur.lastName}`,
+    after: { email: data.utilisateur.email, role: data.utilisateur.role },
   })
   return data
 }

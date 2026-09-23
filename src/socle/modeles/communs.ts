@@ -17,11 +17,11 @@ export type Role = (typeof ROLES)[number]
 
 export const LIBELLE_ROLE: Record<Role, string> = {
   PLATFORM_ADMIN: 'Super Administrateur plateforme',
-  SCHOOL_ADMIN: "Super Administrateur d'établissement",
+  SCHOOL_ADMIN: 'Directeur / Proviseur',
   ADMIN: 'Administrateur',
-  ACADEMIC_HEAD: 'Responsable pédagogique',
-  SECRETARY: 'Secretaire',
-  ACCOUNTANT: 'Comptable',
+  ACADEMIC_HEAD: 'Censeur / Directeur des études',
+  SECRETARY: 'Secrétaire',
+  ACCOUNTANT: 'Intendant (comptabilité)',
   TEACHER: 'Enseignant',
 }
 

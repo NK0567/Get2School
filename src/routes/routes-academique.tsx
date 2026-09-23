@@ -1,23 +1,118 @@
 /** Routes du lot C · PROPRIÉTAIRE : Fabrice */
 import { lazy } from 'react'
-import { Navigate } from 'react-router'
 import type { RouteObject } from 'react-router'
-import EnConstruction from '../modules/EnConstruction'
+import { ExigeRole } from '../socle/gardes/ExigeRole'
 
 const ListeEvaluations = lazy(() => import('../modules/evaluations/pages/ListeEvaluations'))
+const SaisieNotes = lazy(() => import('../modules/notes/pages/SaisieNotes'))
 const GrilleSaisieNotes = lazy(() => import('../modules/notes/pages/GrilleSaisieNotes'))
+const ListeBulletins = lazy(() => import('../modules/bulletins/pages/ListeBulletins'))
+const ApercuBulletin = lazy(() => import('../modules/bulletins/pages/ApercuBulletin'))
+const ListeAbsences = lazy(() => import('../modules/absences/pages/ListeAbsences'))
+const FeuilleAppel = lazy(() => import('../modules/absences/pages/FeuilleAppel'))
+const RegistreDiscipline = lazy(() => import('../modules/discipline/pages/RegistreDiscipline'))
+const ElevesARisque = lazy(() => import('../modules/analyses/pages/ElevesARisque'))
+const EvolutionApprenants = lazy(() => import('../modules/analyses/pages/EvolutionApprenants'))
+const PlanningEvaluations = lazy(() => import('../modules/planning/pages/PlanningEvaluations'))
+
+// Rôles repris de menu-academique.ts, appliqués ici pour de vrai : un menu
+// qui cache une entrée n'empêche personne d'atteindre l'URL directement.
+// planning-evaluations n'était dans aucun menu (voir menu-academique.ts,
+// corrigé dans le même geste) : rôles alignés sur Évaluations, dont c'est
+// la vue transversale.
+const ROLES_EVALUATIONS = ['SCHOOL_ADMIN', 'ACADEMIC_HEAD', 'TEACHER'] as const
+const ROLES_BULLETINS = ['SCHOOL_ADMIN', 'ACADEMIC_HEAD'] as const
+const ROLES_ABSENCES = ['SCHOOL_ADMIN', 'ACADEMIC_HEAD', 'TEACHER'] as const
+const ROLES_DISCIPLINE = ['SCHOOL_ADMIN', 'ACADEMIC_HEAD'] as const
+const ROLES_ANALYSES = ['SCHOOL_ADMIN', 'ACADEMIC_HEAD'] as const
 
 export const routesAcademique: RouteObject[] = [
-  { path: 'evaluations', element: <ListeEvaluations /> },
-  { path: 'evaluations/:id/notes', element: <GrilleSaisieNotes /> },
-  // « Saisie des notes » du menu renvoie vers la liste : on choisit
-  // l'évaluation à noter avant d'ouvrir sa grille.
-  { path: 'notes', element: <Navigate to="/evaluations" replace /> },
-  { path: 'bulletins', element: <EnConstruction titre="Bulletins" /> },
-  { path: 'absences', element: <EnConstruction titre="Absences et retards" /> },
-  { path: 'absences/appel', element: <EnConstruction titre="Feuille d'appel" /> },
-  { path: 'discipline', element: <EnConstruction titre="Discipline" /> },
-  { path: 'planning-evaluations', element: <EnConstruction titre="Planning des évaluations" /> },
-  { path: 'analyses/evolution', element: <EnConstruction titre="Évolution des apprenants" /> },
-  { path: 'analyses/eleves-a-risque', element: <EnConstruction titre="Élèves à risque" /> },
+  {
+    path: 'evaluations',
+    element: (
+      <ExigeRole roles={[...ROLES_EVALUATIONS]}>
+        <ListeEvaluations />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'evaluations/:id/notes',
+    element: (
+      <ExigeRole roles={[...ROLES_EVALUATIONS]}>
+        <GrilleSaisieNotes />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'notes',
+    element: (
+      <ExigeRole roles={[...ROLES_EVALUATIONS]}>
+        <SaisieNotes />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'bulletins',
+    element: (
+      <ExigeRole roles={[...ROLES_BULLETINS]}>
+        <ListeBulletins />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'bulletins/:enrollmentId/:periodId',
+    element: (
+      <ExigeRole roles={[...ROLES_BULLETINS]}>
+        <ApercuBulletin />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'absences',
+    element: (
+      <ExigeRole roles={[...ROLES_ABSENCES]}>
+        <ListeAbsences />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'absences/appel',
+    element: (
+      <ExigeRole roles={[...ROLES_ABSENCES]}>
+        <FeuilleAppel />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'discipline',
+    element: (
+      <ExigeRole roles={[...ROLES_DISCIPLINE]}>
+        <RegistreDiscipline />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'planning-evaluations',
+    element: (
+      <ExigeRole roles={[...ROLES_EVALUATIONS]}>
+        <PlanningEvaluations />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'analyses/evolution',
+    element: (
+      <ExigeRole roles={[...ROLES_ANALYSES]}>
+        <EvolutionApprenants />
+      </ExigeRole>
+    ),
+  },
+  {
+    path: 'analyses/eleves-a-risque',
+    element: (
+      <ExigeRole roles={[...ROLES_ANALYSES]}>
+        <ElevesARisque />
+      </ExigeRole>
+    ),
+  },
 ]

@@ -8,8 +8,8 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { AlertTriangle, Ban, Save } from 'lucide-react'
-import { useParams } from 'react-router'
+import { AlertTriangle, ArrowLeft, Ban, Save } from 'lucide-react'
+import { useNavigate, useParams } from 'react-router'
 import { Alerte, Bouton, EnteteDePage, MenuActions, Squelette, useToast } from '../../../ui'
 import type { ActionMenu } from '../../../ui'
 import { formaterMoyenne, formaterNomComplet } from '../../../communs'
@@ -35,6 +35,7 @@ type LigneGrille = {
 
 export default function GrilleSaisieNotes() {
   const { id } = useParams<{ id: string }>()
+  const naviguer = useNavigate()
   const toast = useToast()
 
   const evaluation = useEvaluation(id)
@@ -156,6 +157,14 @@ export default function GrilleSaisieNotes() {
 
   return (
     <>
+      <button
+        onClick={() => naviguer(-1)}
+        className="text-muted hover:text-ink mb-3 inline-flex items-center gap-1.5 text-[13px] transition"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Retour
+      </button>
+
       <EnteteDePage
         titre={ev.title}
         sousTitre={`${LIBELLE_TYPE[ev.type]} · barème /${ev.maxGrade} · coefficient ×${ev.coefficient}`}

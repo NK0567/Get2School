@@ -48,9 +48,15 @@ export default function PageConnexion() {
       titre="Connexion"
       sousTitre="Accédez à votre espace établissement."
       pied={
-        <Link to="/mot-de-passe-oublie" className="text-primary hover:underline">
-          Mot de passe oublié
-        </Link>
+        <>
+          <Link to="/mot-de-passe-oublie" className="text-primary hover:underline">
+            Mot de passe oublié
+          </Link>
+          <span className="text-muted mx-2">·</span>
+          <Link to="/inscription-etablissement" className="text-primary hover:underline">
+            Inscrire mon établissement
+          </Link>
+        </>
       }
     >
       {motifFermeture === 'EXPIRATION' && (

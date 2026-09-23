@@ -24,6 +24,8 @@ interface EtatSession {
   deconnecter: (motif?: 'EXPIRATION' | 'INACTIVITE') => void
   changerRole: (role: Role) => void
   effacerMotif: () => void
+  /** Après un changement de mot de passe réussi : le compte n'est plus en attente de premier changement. */
+  marquerMotDePasseAJour: () => void
 }
 
 export const useSession = create<EtatSession>()(
@@ -52,6 +54,10 @@ export const useSession = create<EtatSession>()(
 
       changerRole: (role) => set({ roleActif: role }),
       effacerMotif: () => set({ motifFermeture: null }),
+      marquerMotDePasseAJour: () =>
+        set((etat) =>
+          etat.utilisateur ? { utilisateur: { ...etat.utilisateur, mustChangePassword: false } } : {},
+        ),
     }),
     { name: 'g2s_session' },
   ),

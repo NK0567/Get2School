@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { CircleCheck, CircleX, Layers } from 'lucide-react'
+import { ArrowLeft, CircleCheck, CircleX, Layers } from 'lucide-react'
+import { Link } from 'react-router'
 import { Alerte, Bouton, EnteteDePage, Selecteur, Squelette, useToast } from '../../../ui'
 import { BadgeStatut, SelecteurClasse, SelecteurPeriode } from '../../../communs'
 import { api } from '../../../socle/api/client'
@@ -84,6 +85,14 @@ export default function GenerationLot() {
 
   return (
     <>
+      <Link
+        to="/documents"
+        className="text-muted hover:text-ink mb-3 inline-flex items-center gap-1.5 text-[13px] transition"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Retour au Centre documentaire
+      </Link>
+
       <EnteteDePage
         titre="Génération en lot"
         sousTitre="Produire un même document pour tous les élèves d'une classe."
@@ -150,20 +159,26 @@ export default function GenerationLot() {
         <div className="border-line bg-surface mt-5 rounded-xl border p-5">
           <h2 className="mb-3 text-base font-semibold">Récapitulatif</h2>
           <div className="divide-line flex flex-col divide-y">
-            {resultats.map((document) => (
-              <div key={document.id} className="flex items-center justify-between py-2.5 text-[13px]">
-                <div className="flex items-center gap-2">
-                  {document.status === 'GENERATED' ? (
-                    <CircleCheck className="text-success h-4 w-4" />
-                  ) : (
-                    <CircleX className="text-danger h-4 w-4" />
-                  )}
-                  <code className="tabular-nums">{document.reference}</code>
-                  <span className="text-muted">{document.targetId}</span>
+            {resultats.map((document) => {
+              const eleveCible = eleves?.contenu.find((e) => e.id === document.targetId)
+              const libelleCible = eleveCible
+                ? `${eleveCible.matricule} · ${eleveCible.lastName.toUpperCase()} ${eleveCible.firstName}`
+                : document.targetId
+              return (
+                <div key={document.id} className="flex items-center justify-between py-2.5 text-[13px]">
+                  <div className="flex items-center gap-2">
+                    {document.status === 'GENERATED' ? (
+                      <CircleCheck className="text-success h-4 w-4" />
+                    ) : (
+                      <CircleX className="text-danger h-4 w-4" />
+                    )}
+                    <code className="tabular-nums">{document.reference}</code>
+                    <span className="text-muted">{libelleCible}</span>
+                  </div>
+                  <BadgeStatut valeur={document.status} />
                 </div>
-                <BadgeStatut valeur={document.status} />
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}

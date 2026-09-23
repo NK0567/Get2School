@@ -4,6 +4,7 @@ import {
   CalendarClock,
   DoorOpen,
   GraduationCap,
+  Link2,
   Receipt,
   School,
   UserCog,
@@ -13,10 +14,10 @@ import type { GroupeMenu } from './types'
 
 export const menuScolarite: GroupeMenu[] = [
   {
-    titre: 'Scolarite',
+    titre: 'Scolarité',
     entrees: [
       {
-        libelle: 'Eleves',
+        libelle: 'Élèves',
         chemin: '/eleves',
         icone: GraduationCap,
         roles: ['SCHOOL_ADMIN', 'ADMIN', 'SECRETARY'],
@@ -44,8 +45,14 @@ export const menuScolarite: GroupeMenu[] = [
         icone: School,
         roles: ['SCHOOL_ADMIN', 'ADMIN', 'ACADEMIC_HEAD', 'SECRETARY'],
       },
-      { libelle: 'Matieres', chemin: '/matieres', icone: BookOpen, roles: ['SCHOOL_ADMIN', 'ACADEMIC_HEAD'] },
+      { libelle: 'Matières', chemin: '/matieres', icone: BookOpen, roles: ['SCHOOL_ADMIN', 'ACADEMIC_HEAD'] },
       { libelle: 'Salles', chemin: '/salles', icone: DoorOpen, roles: ['SCHOOL_ADMIN', 'ADMIN'] },
+      {
+        libelle: 'Affectations',
+        chemin: '/affectations',
+        icone: Link2,
+        roles: ['SCHOOL_ADMIN', 'ADMIN', 'ACADEMIC_HEAD'],
+      },
       {
         libelle: 'Emploi du temps',
         chemin: '/emploi-du-temps',
@@ -65,7 +72,7 @@ export const menuScolarite: GroupeMenu[] = [
         roles: ['SCHOOL_ADMIN', 'ACCOUNTANT'],
       },
       {
-        libelle: 'Listes financieres',
+        libelle: 'Listes financières',
         chemin: '/finance/listes',
         icone: Wallet,
         roles: ['SCHOOL_ADMIN', 'ACCOUNTANT'],

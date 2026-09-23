@@ -24,12 +24,20 @@ export function donneesAdministration() {
     phone: '+237 699 00 00 00',
     email: 'contact@lyceebafoussam.cm',
     institutionalId: 'G2S-CM-2026-8F4K2',
+    category: 'SECONDARY',
+    theme: 'BLEU',
+    abonnement: {
+      statut: 'ACTIF',
+      essaiDebute: '2026-09-01',
+      planId: 'SECONDARY',
+      abonneLe: '2026-09-15',
+      expireLe: '2027-07-15',
+    },
     status: 'ACTIVE',
     settings: {
       periodType: 'TRIMESTER',
       maxGrade: 20,
       passingGrade: 10,
-      penaltyPolicy: 'EXCLUDE_COEFFICIENT',
       currency: 'FCFA',
       riskWeights: { average: 40, trend: 20, absence: 25, discipline: 15 },
     },
@@ -77,6 +85,9 @@ export function donneesAdministration() {
     tpl('tpl-8', 'RECU_PAIEMENT', 'Reçu de paiement', true),
     tpl('tpl-9', 'LISTE_SOLVABILITE', 'Liste de solvabilité', true),
     tpl('tpl-10', 'ETAT_EFFECTIFS', 'État des effectifs', true),
+    tpl('tpl-11', 'CHRONOGRAMME', "Chronogramme de l'année", true),
+    tpl('tpl-12', 'LISTE_PERSONNEL', 'Liste du personnel', true),
+    tpl('tpl-13', 'EMPLOI_DU_TEMPS_CLASSE', "Emploi du temps d'une classe", true),
   ]
 
   const journalAudit: EntreeAudit[] = [

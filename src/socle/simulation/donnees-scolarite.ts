@@ -6,6 +6,7 @@
  * statuts financiers. Le squelette ci-dessous est a completer.
  */
 import type { Classe, Eleve, Enseignant, Inscription, Matiere, Salle } from '../modeles/scolarite'
+import type { Exoneration, Frais, Paiement, Recu } from '../modeles/finances'
 
 const ETB = 'etb-1'
 const ANNEE = 'an-2026'
@@ -15,7 +16,7 @@ export function donneesScolarite() {
     m('mat-1', 'Mathématiques', 'MATH', 5),
     m('mat-2', 'Physique-Chimie', 'PC', 4),
     m('mat-3', 'Sciences de la Vie et de la Terre', 'SVT', 3),
-    m('mat-4', 'Francais', 'FR', 3),
+    m('mat-4', 'Français', 'FR', 3),
     m('mat-5', 'Anglais', 'ANG', 2),
     m('mat-6', 'Histoire-Géographie', 'HG', 2),
     m('mat-7', 'Philosophie', 'PHILO', 2),
@@ -127,10 +128,100 @@ export function donneesScolarite() {
       },
     ],
     emploiDuTemps: [],
-    frais: [],
-    exonerations: [],
-    paiements: [],
-    recus: [],
+    // Un frais à trois tranches, portée établissement, et des paiements qui
+    // produisent chacun des quatre statuts financiers : elv-1 soldé,
+    // elv-2 partiel, elv-3 impayé, elv-4 exonéré. Sert de démonstration au
+    // module Finance et de cas réel pour ses tests.
+    frais: [
+      {
+        id: 'fr-1',
+        establishmentId: ETB,
+        schoolYearId: ANNEE,
+        label: 'Frais de scolarité annuel',
+        scope: 'ALL',
+        amount: 150000,
+        isMandatory: true,
+        installments: [
+          {
+            id: 'tr-1',
+            feeItemId: 'fr-1',
+            label: '1re tranche',
+            amount: 50000,
+            dueDate: `${ANNEE.split('-')[1]}-09-30`,
+          },
+          {
+            id: 'tr-2',
+            feeItemId: 'fr-1',
+            label: '2e tranche',
+            amount: 50000,
+            dueDate: `${ANNEE.split('-')[1]}-12-15`,
+          },
+          { id: 'tr-3', feeItemId: 'fr-1', label: '3e tranche', amount: 50000, dueDate: '2027-03-15' },
+        ],
+      } satisfies Frais,
+    ],
+    exonerations: [
+      {
+        id: 'exo-1',
+        establishmentId: ETB,
+        studentId: 'elv-4',
+        schoolYearId: ANNEE,
+        reason: 'Bourse de mérite académique',
+        grantedBy: 'usr-1',
+        grantedAt: `${ANNEE}-09-05`,
+      } satisfies Exoneration,
+    ],
+    paiements: [
+      pay('pay-1', 'elv-1', 'ins-1', 150000, 'CASH', `${ANNEE}-09-10`),
+      pay('pay-2', 'elv-2', 'ins-2', 60000, 'MOBILE_MONEY', `${ANNEE}-09-12`),
+    ],
+    recus: [
+      {
+        id: 'rec-1',
+        establishmentId: ETB,
+        number: 'LBK-REC-00001',
+        paymentId: 'pay-1',
+        studentId: 'elv-1',
+        amount: 150000,
+        issuedAt: `${ANNEE}-09-10`,
+        issuedBy: 'usr-4',
+        status: 'VALID',
+      } satisfies Recu,
+      {
+        id: 'rec-2',
+        establishmentId: ETB,
+        number: 'LBK-REC-00002',
+        paymentId: 'pay-2',
+        studentId: 'elv-2',
+        amount: 60000,
+        issuedAt: `${ANNEE}-09-12`,
+        issuedBy: 'usr-4',
+        status: 'VALID',
+      } satisfies Recu,
+    ],
+  }
+}
+
+function pay(
+  id: string,
+  studentId: string,
+  enrollmentId: string,
+  amount: number,
+  method: Paiement['method'],
+  paidAt: string,
+): Paiement {
+  return {
+    id,
+    establishmentId: ETB,
+    reference: `LBK-PAY-${id.split('-')[1].padStart(5, '0')}`,
+    studentId,
+    enrollmentId,
+    feeItemId: 'fr-1',
+    amount,
+    method,
+    paidAt,
+    recordedBy: 'usr-4',
+    status: 'VALID',
   }
 }
 
