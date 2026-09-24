@@ -520,6 +520,20 @@ export function routesAcademique(s: MockAdapter) {
     const periodId = p.get('periodId')
     if (!classId || !periodId) return [200, []]
 
+    // Le classement de toute une classe correspond au privilège du prof
+    // titulaire (RG explicite du cahier des charges), plus strict que la
+    // simple affectation à une matière qui suffit pour consulter UN
+    // bulletin (voir le contrôle juste au-dessus) : ici, seul le titulaire
+    // désigné de cette classe précise (Classe.headTeacherId) y a accès.
+    const moi = utilisateurCourant(config)
+    if (moi?.role === 'TEACHER') {
+      const classe = parId<Classe>('classes', classId)
+      const monFicheEnseignant = collection<Enseignant>('enseignants').find((e) => e.userId === moi.id)
+      if (!classe || classe.headTeacherId !== monFicheEnseignant?.id) {
+        return [403, { message: "Vous n'êtes pas le professeur titulaire de cette classe." }]
+      }
+    }
+
     const { inscriptions, generalesParEleve, classement } = calculerMoyennesClasse(classId, periodId)
     const eleves = collection<Eleve>('eleves')
 

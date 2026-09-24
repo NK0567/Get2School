@@ -12,11 +12,20 @@ import type { Abonnement } from '../../socle/modeles/administration'
 import type { StatutEssai } from './calculs'
 
 export async function chargerStatutEssai() {
-  const { data } = await api.get<{ abonnement: Abonnement; evaluation: StatutEssai }>('/subscription/status')
+  const { data } = await api.get<{
+    abonnement: Abonnement
+    evaluation: StatutEssai
+    categorie: 'PRIMARY' | 'SECONDARY'
+  }>('/subscription/status')
   return data
 }
 
-export async function sabonner(planId: 'PRIMARY' | 'SECONDARY') {
-  const { data } = await api.post<Abonnement>('/subscription/subscribe', { planId })
+/**
+ * Le plan n'est jamais choisi par l'appelant : il est dérivé côté serveur de
+ * la catégorie réelle de l'établissement, pour que la différence de tarif
+ * primaire/secondaire ne puisse jamais être contournée par un appel direct.
+ */
+export async function sabonner() {
+  const { data } = await api.post<Abonnement>('/subscription/subscribe')
   return data
 }

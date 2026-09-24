@@ -16,7 +16,7 @@ export function useStatutEssai() {
 export function useSabonner() {
   const client = useQueryClient()
   return useMutation({
-    mutationFn: (planId: 'PRIMARY' | 'SECONDARY') => sabonner(planId),
+    mutationFn: () => sabonner(),
     onSuccess: () => client.invalidateQueries({ queryKey: ['abonnement'] }),
   })
 }

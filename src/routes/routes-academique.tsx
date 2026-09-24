@@ -21,7 +21,7 @@ const PlanningEvaluations = lazy(() => import('../modules/planning/pages/Plannin
 // corrigé dans le même geste) : rôles alignés sur Évaluations, dont c'est
 // la vue transversale.
 const ROLES_EVALUATIONS = ['SCHOOL_ADMIN', 'ACADEMIC_HEAD', 'TEACHER'] as const
-const ROLES_BULLETINS = ['SCHOOL_ADMIN', 'ACADEMIC_HEAD'] as const
+const ROLES_BULLETINS = ['SCHOOL_ADMIN', 'ACADEMIC_HEAD', 'TEACHER'] as const
 const ROLES_ABSENCES = ['SCHOOL_ADMIN', 'ACADEMIC_HEAD', 'TEACHER'] as const
 const ROLES_DISCIPLINE = ['SCHOOL_ADMIN', 'ACADEMIC_HEAD'] as const
 const ROLES_ANALYSES = ['SCHOOL_ADMIN', 'ACADEMIC_HEAD'] as const

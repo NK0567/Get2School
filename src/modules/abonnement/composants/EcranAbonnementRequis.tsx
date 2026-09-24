@@ -29,13 +29,16 @@ export function EcranAbonnementRequis() {
   const sabonner = useSabonner()
 
   const raison = requete.data?.abonnement.essaiRaison
-  const plan = (requete.data?.abonnement.planId ?? 'SECONDARY') as 'PRIMARY' | 'SECONDARY'
+  // Avant tout abonnement, planId n'existe pas encore : c'est la catégorie
+  // réelle de l'établissement, renvoyée par le serveur, qui détermine le
+  // tarif affiché — jamais une valeur par défaut arbitraire.
+  const plan = requete.data?.categorie ?? 'SECONDARY'
   const tarif = TARIFS[plan]
   const peutSabonner = utilisateur?.role === 'SCHOOL_ADMIN'
 
   const valider = async () => {
     try {
-      await sabonner.mutateAsync(plan)
+      await sabonner.mutateAsync()
       toast('succes', "L'abonnement est actif. Bienvenue de nouveau.")
     } catch (e) {
       toast('danger', (e as { message?: string })?.message ?? "L'abonnement a échoué.")

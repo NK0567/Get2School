@@ -677,7 +677,14 @@ export function routesAdministration(s: MockAdapter) {
 
     return [
       200,
-      { abonnement: parId<Etablissement>('etablissements', etablissement.id)?.abonnement, evaluation },
+      {
+        abonnement: parId<Etablissement>('etablissements', etablissement.id)?.abonnement,
+        evaluation,
+        // La catégorie réelle de l'établissement, pas le plan choisi par le
+        // client : c'est elle qui doit déterminer le tarif affiché, avant
+        // même qu'un abonnement n'existe.
+        categorie: etablissement.category,
+      },
     ]
   })
 
@@ -686,10 +693,6 @@ export function routesAdministration(s: MockAdapter) {
     if (moi?.role !== 'SCHOOL_ADMIN') {
       return [403, { message: "Seul le Directeur ou Proviseur peut activer l'abonnement." }]
     }
-    const { planId } = JSON.parse(config.data ?? '{}')
-    if (planId !== 'PRIMARY' && planId !== 'SECONDARY') {
-      return [422, { message: "Le type d'établissement choisi est invalide." }]
-    }
     const etablissement = etablissementCourantDonnees<Etablissement>()
     const anneeOuverte = collection<AnneeScolaire>('anneesScolaires').find((a) => a.status === 'OPEN')
 
@@ -697,7 +700,11 @@ export function routesAdministration(s: MockAdapter) {
       abonnement: {
         ...etablissement.abonnement,
         statut: 'ACTIF',
-        planId,
+        // Le plan est TOUJOURS dérivé de la catégorie réelle de
+        // l'établissement, jamais accepté du client : la différence de
+        // tarif primaire/secondaire n'aurait aucune valeur si n'importe
+        // quel appel pouvait choisir son propre prix.
+        planId: etablissement.category,
         abonneLe: new Date().toISOString(),
         // RG explicite : l'abonnement se termine avec l'année scolaire, pas
         // un an calendaire glissant.

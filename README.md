@@ -555,6 +555,51 @@ Total cumulé : 78 vérifications, toutes avec une assertion réelle sur le rés
 
 Total cumulé : 89 vérifications.
 
+## Un défaut majeur trouvé en revérifiant contre la spécification initiale, pas contre le code
+
+En revenant au tout premier cahier des charges plutôt qu'en continuant à tester le code existant,
+une règle explicite n'avait jamais été construite : « le responsable peut désigner un enseignant
+titulaire d'une classe, qui pourra générer les bulletins de cette classe ». `Classe.headTeacherId`
+existait, réglable depuis la fiche classe — mais sans aucune conséquence. La route Bulletins
+excluait purement et simplement les enseignants, et l'endpoint de classement par classe entière ne
+vérifiait rien du tout.
+
+```
+avant désignation : Serge Mbala n'est titulaire d'aucune classe → refusé, correct
+après désignation : Serge Mbala peut consulter SA classe → 2 élève(s) classé(s)
+                     Serge Mbala ne peut toujours pas consulter cls-2 → refusé, correct
+```
+
+Corrigé aux trois niveaux : le menu, la route, et surtout le serveur — un enseignant ne peut
+consulter et générer les bulletins que des classes dont il est le titulaire désigné, jamais une
+autre. En creusant, un contrôle DIFFÉRENT existait déjà, dormant, sur le bulletin d'un seul élève
+(basé sur l'affectation à une matière, pas le titulariat) : je l'ai laissé tel quel plutôt que de
+l'uniformiser à tort, les deux relevant de règles distinctes et toutes les deux légitimes — voir/
+générer le classement d'une classe entière est le privilège du titulaire ; consulter le bulletin
+d'un élève qu'on note dans une matière est une chose plus large, déjà correcte.
+
+Total cumulé : 95 vérifications.
+
+## Un défaut de tarification, et une vraie faille de manipulation
+
+En vérifiant si le tarif différencié primaire/secondaire fonctionnait vraiment, deux problèmes
+empilés : `abonnement.planId` n'était jamais renseigné à l'inscription, donc l'écran d'abonnement
+retombait sur le tarif SECONDARY par défaut — une école primaire aurait payé le tarif le plus cher
+sans que rien ne le signale. Et l'endpoint d'abonnement acceptait `planId` directement du corps de
+la requête envoyée par le client, sans jamais le comparer à la catégorie réelle de l'établissement.
+
+```
+un établissement secondaire envoie { planId: 'PRIMARY' } →
+planId=SECONDARY, la tentative de manipulation a été ignorée, correct
+```
+
+Corrigé à la racine : le plan n'est plus jamais un choix du client, il est toujours dérivé côté
+serveur de la catégorie réelle de l'établissement — la même règle appliquée partout ailleurs dans
+ce projet pour tout ce qui touche à l'argent (jamais faire confiance à ce qu'envoie le client pour
+un montant ou un tarif).
+
+Total cumulé : 100 vérifications.
+
 **Journalisation RG-14.** Croisement de tous les appels `journaliser()` avec la liste complète des
 codes `ActionAudit`. Deux opérations sensibles ne journalisaient pas alors que leur code d'action
 existait précisément pour elles : `accorderExoneration` (EXEMPTION_GRANT) et `transfererVersClasse`

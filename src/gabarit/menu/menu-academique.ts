@@ -36,7 +36,11 @@ export const menuAcademique: GroupeMenu[] = [
         libelle: 'Bulletins',
         chemin: '/bulletins',
         icone: FileBarChart,
-        roles: ['SCHOOL_ADMIN', 'ACADEMIC_HEAD'],
+        // TEACHER : uniquement pour ses classes dont il est titulaire, filtré
+        // à l'écran et vérifié côté serveur — pas un accès à toutes les
+        // classes (voir ListeBulletins.tsx et le contrôle sur
+        // GET /report-cards, GET /report-cards/:enrollmentId/:periodId).
+        roles: ['SCHOOL_ADMIN', 'ACADEMIC_HEAD', 'TEACHER'],
       },
     ],
   },
